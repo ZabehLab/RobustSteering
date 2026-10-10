@@ -176,10 +176,17 @@
     { weight: .09, x: -.4, y: -2.4, sx: 1.15, sy: .55, rho: .1 },
   ], "#919191");
   makeStateContours(find("field-chinese"), 2028, [
-    { weight: .48, x: 3.4, y: 1.3, sx: .6, sy: 1.7, rho: .35 },
-    { weight: .24, x: 1.3, y: 3.5, sx: 1.3, sy: .55, rho: -.35 },
-    { weight: .18, x: -2.7, y: -2.7, sx: .55, sy: .6, rho: -.15 },
-    { weight: .1, x: 3.4, y: -2.5, sx: .7, sy: .6, rho: .2 },
+    { weight: .3, x: 0, y: 0, sx: 2.9, sy: 2.9, rho: .08 },
+    { weight: .13, x: -1.7, y: 2.1, sx: .85, sy: 1.0, rho: .5 },
+    { weight: .16, x: 1.2, y: -1.6, sx: 1.1, sy: .8, rho: .5 },
+    { weight: .1, x: .7, y: 1.3, sx: .8, sy: .55, rho: -.45 },
+    { weight: .07, x: -1.6, y: -1.7, sx: .9, sy: .5, rho: -.2 },
+    { weight: .06, x: 2.8, y: 1.8, sx: .55, sy: .9, rho: -.3 },
+    { weight: .05, x: -3.1, y: -.1, sx: .7, sy: .85, rho: .2 },
+    { weight: .04, x: -.2, y: -.2, sx: .4, sy: .4, rho: -.1 },
+    { weight: .035, x: -2.9, y: 2.5, sx: .4, sy: .4, rho: .2 },
+    { weight: .03, x: 2.1, y: -3, sx: .7, sy: .45, rho: .15 },
+    { weight: .025, x: 2.7, y: -.1, sx: .45, sy: .6, rho: -.2 },
   ], "#8B1E1E");
 
   function characterNodes(node, count) {
