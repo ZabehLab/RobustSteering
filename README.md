@@ -1,6 +1,6 @@
 # Robust Steering
 
-![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white) ![PyTorch 2.9.1](https://img.shields.io/badge/PyTorch-2.9.1-EE4C2C?logo=pytorch&logoColor=white) ![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-007C7C)
+![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white) ![PyTorch 2.9.1](https://img.shields.io/badge/PyTorch-2.9.1-EE4C2C?logo=pytorch&logoColor=white) ![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-007C7C) ![arXiv: XXXX](https://img.shields.io/badge/arXiv-XXXX-B31B1B?logo=arxiv&logoColor=white)
 
 <p align="center">
   <img src="assets/steering-demo.gif" alt="Illustration of closed-loop activation steering under a language distribution shift." width="776">
