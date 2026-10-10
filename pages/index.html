@@ -11,6 +11,8 @@
   <script src="mathjax-config.js" defer></script>
   <script src="assets/vendor/mathjax/tex-svg.js" defer></script>
   <script src="site.js" defer></script>
+  <link rel="stylesheet" href="steering-demo.css">
+  <script src="steering-demo.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -70,11 +72,28 @@
 
     <section class="section concept-section" id="concept" aria-label="Interactive examples">
       <div class="container">
-        <div class="demo-reservation" role="note" aria-label="Reserved space for the upcoming benchmark animations">
-          <div class="demo-benchmarks" aria-label="Benchmarks for the planned examples"><span>TruthfulQA</span><span>HarmBench</span><span>MGSM</span><span>L-CiteEval</span></div>
-          <div class="demo-reservation-body">
-            <span>Interactive examples — coming soon</span>
+        <div class="steering-demo" data-phase="waiting" aria-label="Illustrative animation of a question, an original answer, and a steered answer">
+          <div class="steering-demo-scene" aria-hidden="true">
+            <div class="steering-demo-question">
+              <svg class="steering-demo-asker" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="32" cy="20" r="10"/><path d="M12 54v-5c0-12 9-18 20-18s20 6 20 18v5" stroke-linecap="round"/></svg>
+              <div class="steering-demo-copy"><span class="steering-demo-label">Question:</span><p class="steering-demo-question-text"></p></div>
+            </div>
+            <div class="steering-demo-answer">
+              <div class="steering-demo-copy"><span class="steering-demo-label">Response:</span><p class="steering-demo-answer-text"></p></div>
+              <div class="steering-demo-model">
+                <div class="steering-demo-stimulation">
+                  <svg class="steering-demo-bolt" viewBox="0 0 60 76"><path d="M36 4 56 15 37 28 45 33 26 45 32 50 6 71 23 43 18 39 31 24 26 20Z" fill="#8B1E1E" stroke="#111111" stroke-width="2.5" stroke-linejoin="round"/></svg>
+                  <svg class="steering-demo-vibration" viewBox="0 0 110 76" fill="none" stroke="#8B1E1E" stroke-width="2" stroke-linecap="round"><path d="M17 22q-8 13 0 26M9 17q-12 18 0 36M93 22q8 13 0 26M101 17q12 18 0 36"/></svg>
+                </div>
+                <svg class="steering-demo-robot" viewBox="0 0 100 94" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 26V16"/><circle cx="50" cy="11" r="5" stroke-width="3"/><rect x="15" y="29" width="70" height="57" rx="13"/><path d="M15 44H8v23h7M85 44h7v23h-7"/><ellipse cx="35" cy="51" rx="7" ry="9"/><ellipse cx="65" cy="51" rx="7" ry="9"/><path d="M40 70q10 5 20 0" stroke-width="4"/><path d="M27 10h10M32 5v10M65 18h8M69 14v8" stroke="#999999" stroke-width="2.5"/></svg>
+              </div>
+            </div>
           </div>
+          <div class="steering-demo-controls">
+            <span class="steering-demo-placeholder">Illustrative placeholder text</span>
+            <div><button class="steering-demo-pause" type="button" aria-label="Pause animation">Pause</button><button class="steering-demo-replay" type="button">Replay <span aria-hidden="true">↻</span></button></div>
+          </div>
+          <p class="sr-only steering-demo-description" aria-live="polite"></p>
         </div>
       </div>
     </section>

@@ -1,0 +1,56 @@
+/* Isolated animation styles: no selectors outside this box. */
+.steering-demo { position: relative; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: #111; font-family: Arial, Helvetica, sans-serif; }
+.steering-demo-scene { display: flex; flex-direction: column; justify-content: center; gap: 66px; min-height: 450px; padding: 52px 70px 36px; }
+.steering-demo-question, .steering-demo-answer { display: flex; align-items: flex-start; gap: 28px; }
+.steering-demo-question { opacity: 0; }
+.steering-demo-answer { opacity: 0; align-items: center; padding-left: 92px; }
+.steering-demo[data-phase]:not([data-phase="waiting"]) .steering-demo-question { opacity: 1; }
+.steering-demo[data-phase="baseline"] .steering-demo-answer,
+.steering-demo[data-phase="baseline-hold"] .steering-demo-answer,
+.steering-demo[data-phase="steering"] .steering-demo-answer,
+.steering-demo[data-phase="steered"] .steering-demo-answer { opacity: 1; }
+.steering-demo-copy { min-width: 0; flex: 1; }
+.steering-demo-label { display: block; margin-bottom: 12px; font-size: 14px; color: var(--muted); }
+.steering-demo-copy p { margin: 0; min-height: 2.7em; font-size: clamp(23px, 2.4vw, 30px); line-height: 1.45; font-weight: 400; overflow-wrap: anywhere; white-space: pre-wrap; }
+.steering-demo-copy .steering-demo-answer-text { min-height: 3.5em; }
+.steering-demo-char { visibility: hidden; }
+.steering-demo-char.is-visible { visibility: visible; }
+.steering-demo-char.is-glitch { color: #8B1E1E; display: inline-block; transform: translateY(-2px); text-shadow: 2px 0 rgba(0,124,124,.3); }
+.steering-demo-asker { width: 64px; height: 64px; flex: 0 0 64px; margin-top: 16px; }
+.steering-demo-model { position: relative; width: 92px; flex: 0 0 92px; margin-top: 32px; }
+.steering-demo-robot { display: block; width: 92px; height: 86px; }
+.steering-demo-stimulation { position: absolute; width: 110px; height: 70px; left: -9px; bottom: calc(100% + 12px); }
+.steering-demo-bolt { position: absolute; left: 29px; width: 52px; height: 66px; opacity: .12; transform-origin: 50% 65%; }
+.steering-demo-vibration { position: absolute; inset: 0; width: 110px; height: 70px; opacity: 0; }
+.steering-demo[data-phase="steering"] .steering-demo-bolt,
+.steering-demo[data-phase="steered"] .steering-demo-bolt { opacity: 1; }
+.steering-demo[data-phase="steering"] .steering-demo-bolt { animation: steering-demo-shake .14s linear infinite; }
+.steering-demo[data-phase="steering"] .steering-demo-vibration { opacity: .8; }
+.steering-demo[data-paused="true"] .steering-demo-bolt { animation-play-state: paused; }
+.steering-demo-controls { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 24px 18px; font-size: 12px; }
+.steering-demo-placeholder { color: var(--muted); }
+.steering-demo-controls > div { display: flex; gap: 18px; }
+.steering-demo-controls button { border: 0; padding: 4px 0; color: var(--muted); background: transparent; font: inherit; }
+.steering-demo-controls button:hover { color: var(--teal); }
+@keyframes steering-demo-shake { 0%,100% { transform: translateX(-2px) rotate(-9deg); } 50% { transform: translateX(2px) rotate(9deg); } }
+@media (max-width: 780px) {
+  .steering-demo-scene { min-height: 420px; padding: 38px 26px 30px; gap: 50px; }
+  .steering-demo-question, .steering-demo-answer { gap: 18px; }
+  .steering-demo-answer { padding-left: 0; }
+  .steering-demo-asker { width: 44px; height: 44px; flex-basis: 44px; }
+  .steering-demo-model { width: 66px; flex-basis: 66px; }
+  .steering-demo-robot { width: 66px; height: 62px; }
+  .steering-demo-stimulation { left: -22px; transform: scale(.8); transform-origin: bottom center; }
+}
+@media (max-width: 480px) {
+  .steering-demo-scene { min-height: 450px; padding-inline: 20px; }
+  .steering-demo-copy p { font-size: 23px; min-height: 3.5em; }
+  .steering-demo-copy .steering-demo-answer-text { min-height: 6em; }
+  .steering-demo-label { font-size: 12px; }
+  .steering-demo-controls { padding-inline: 20px; gap: 12px; }
+  .steering-demo-controls > div { gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .steering-demo .steering-demo-bolt { animation: none !important; }
+  .steering-demo .steering-demo-vibration { display: none; }
+}
