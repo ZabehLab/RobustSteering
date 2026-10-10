@@ -13,7 +13,7 @@
 .steering-demo-controller rect { fill: var(--demo-controller-fill, #fff); }
 .steering-demo-controller text { fill: var(--demo-controller-ink, #111); }
 .steering-demo-stored-bolt { fill: var(--demo-controller-bolt, #fff); stroke: var(--demo-controller-ink, #919191); }
-.steering-demo-scene { min-width: 0; opacity: 0; display: flex; flex-direction: column; gap: 22px; padding: 4px 0; }
+.steering-demo-scene { min-width: 0; opacity: 0; display: flex; flex-direction: column; gap: 14px; padding: 4px 0; }
 .steering-demo .steering-demo-benchmark { font-family: Arial, Helvetica, sans-serif; font-size: 28px; line-height: 1.35; font-weight: 600; margin: 0; padding: 0 44px; }
 .steering-demo-question, .steering-demo-answer { display: flex; align-items: flex-start; gap: 18px; }
 .steering-demo-question { opacity: 0; }
@@ -24,14 +24,14 @@
 .steering-demo[data-phase="steering"] .steering-demo-answer,
 .steering-demo[data-phase="steered"] .steering-demo-answer { opacity: 1; }
 .steering-demo-copy { min-width: 0; flex: 1; }
-.steering-demo-label { display: block; margin-bottom: 8px; font-size: var(--demo-text-size); color: var(--muted); }
-.steering-demo-copy p { margin: 0; min-height: 2.2em; font-size: var(--demo-text-size); line-height: 1.45; font-weight: 400; overflow-wrap: anywhere; white-space: pre-wrap; }
-.steering-demo-copy .steering-demo-answer-text { min-height: var(--demo-response-height, 5.8em); }
+.steering-demo-label { display: block; margin-bottom: 6px; font-size: var(--demo-text-size); color: var(--muted); }
+.steering-demo-copy p { margin: 0; min-height: 1.45em; font-size: var(--demo-text-size); line-height: 1.45; font-weight: 400; overflow-wrap: anywhere; white-space: pre-wrap; }
+.steering-demo-copy .steering-demo-answer-text { min-height: var(--demo-response-height, 2.9em); }
 .steering-demo-char { visibility: hidden; }
 .steering-demo-char.is-visible { visibility: visible; }
 .steering-demo-char.is-glitch { color: var(--teal); display: inline-block; transform: translateY(-2px); text-shadow: 2px 0 rgba(0,124,124,.3); }
 .steering-demo-asker { width: 44px; height: 44px; flex: 0 0 44px; margin-top: 16px; }
-.steering-demo-model { position: relative; width: 68px; flex: 0 0 68px; margin-top: 69px; }
+.steering-demo-model { position: relative; width: 68px; flex: 0 0 68px; margin-top: 38px; }
 .steering-demo-robot { display: block; width: 68px; height: 64px; }
 .steering-demo-stimulation { position: absolute; width: 90px; height: 60px; left: 0; top: 0; opacity: 0; pointer-events: none; }
 .steering-demo-bolt { position: absolute; left: 23px; width: 44px; height: 56px; opacity: 1; transform-origin: 50% 65%; }
@@ -42,7 +42,7 @@
 .steering-demo[data-phase="steering"] .steering-demo-vibration { opacity: .8; }
 .steering-demo[data-paused="true"] .steering-demo-bolt { animation-play-state: paused; }
 .steering-demo-travel-bolt { position: absolute; left: 0; top: 0; width: 44px; height: 56px; opacity: 0; pointer-events: none; }
-.steering-demo-metrics { display: flex; flex-wrap: wrap; gap: 14px 26px; padding-left: 62px; min-height: 36px; margin-top: -8px; font-size: var(--demo-text-size); }
+.steering-demo-metrics { display: flex; flex-direction: column; align-self: flex-start; gap: 12px; margin-left: 62px; padding: 12px 16px; max-width: calc(100% - 62px); border: 1px solid #d1d1d1; border-radius: 9px; background: rgba(0,124,124,.12); color: var(--teal); opacity: 0; font-size: var(--demo-text-size); }
 .steering-demo-metric { display: inline-flex; align-items: center; gap: 9px; }
 .steering-demo-metric > span { opacity: 0; }
 .steering-demo-truth-arrow, .steering-demo-info-arrow { color: var(--teal); font-size: 27px; line-height: 1; }
@@ -54,14 +54,17 @@
 @media (max-width: 1050px) and (min-width: 781px) {
   .steering-demo-layout { padding-inline: 26px; gap: 26px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); }
   .steering-demo .steering-demo-benchmark { padding-inline: 26px; }
-  .steering-demo-answer, .steering-demo-metrics { padding-left: 0; }
+  .steering-demo-answer { padding-left: 0; }
+  .steering-demo-metrics { margin-left: 0; max-width: 100%; }
 }
 @media (max-width: 780px) {
   .steering-demo-layout { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 26px; padding: 28px 24px; }
   .steering-demo .steering-demo-benchmark { padding-inline: 24px; }
   .steering-demo-state { max-width: 260px; }
-  .steering-demo-scene { gap: 18px; }
-  .steering-demo-answer, .steering-demo-metrics { padding-left: 0; }
+  .steering-demo-scene { gap: 14px; }
+  .steering-demo-model { margin-top: 69px; }
+  .steering-demo-answer { padding-left: 0; }
+  .steering-demo-metrics { margin-left: 0; max-width: 100%; }
 }
 @media (max-width: 480px) {
   .steering-demo-layout { padding-inline: 20px; }
@@ -69,7 +72,6 @@
   .steering-demo-question, .steering-demo-answer { gap: 14px; }
   .steering-demo-model { width: 58px; flex-basis: 58px; }
   .steering-demo-robot { width: 58px; height: 55px; }
-  .steering-demo-metrics { gap: 12px 18px; }
   .steering-demo-controls { padding-inline: 20px; align-items: flex-end; gap: 12px; }
   .steering-demo-controls > div { gap: 12px; }
 }

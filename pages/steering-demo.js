@@ -214,7 +214,7 @@
       sample.textContent = text;
       return sample.getBoundingClientRect().height;
     }));
-    response.style.setProperty("--demo-response-height", (height + parseFloat(getComputedStyle(response).lineHeight)) + "px");
+    response.style.setProperty("--demo-response-height", height + "px");
     sample.remove();
     measureFlight();
   }
@@ -330,6 +330,7 @@
       span.classList.toggle("is-glitch", changing);
     });
     // Each label appears before its arrow; these are qualitative schematic indicators.
+    find("metrics").style.opacity = ease(progress(timing.steeringEnd + 350, 300));
     [350, 850, 1350, 1850].forEach((offset, i) => {
       reveal(metricNodes[i], ease(progress(timing.steeringEnd + offset, 300)), i % 2 ? 9 : 5);
     });
