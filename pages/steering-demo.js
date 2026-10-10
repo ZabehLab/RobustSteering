@@ -29,6 +29,7 @@
   const ripple = find("state-ripple");
   const travelBolt = find("travel-bolt");
   const metricNodes = [find("truth-label"), find("truth-arrow"), find("info-label"), find("info-arrow")];
+  const metricBoxes = [...box.querySelectorAll(".steering-demo-metric")];
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const glyphs = Array.from("▓▒░<>/\\#¿!?");
   // All times refer to this one pausable timeline (milliseconds).
@@ -330,7 +331,9 @@
       span.classList.toggle("is-glitch", changing);
     });
     // Each label appears before its arrow; these are qualitative schematic indicators.
-    find("metrics").style.opacity = ease(progress(timing.steeringEnd + 350, 300));
+    metricBoxes.forEach((node, i) => {
+      node.style.opacity = ease(progress(timing.steeringEnd + 350 + i * 1000, 300));
+    });
     [350, 850, 1350, 1850].forEach((offset, i) => {
       reveal(metricNodes[i], ease(progress(timing.steeringEnd + offset, 300)), i % 2 ? 9 : 5);
     });
