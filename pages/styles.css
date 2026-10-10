@@ -92,9 +92,10 @@ h2 { margin: 0 0 16px; font-size: var(--section-size); font-weight: 600; line-he
 .paper-copy { max-width: 1000px; }
 .paper-copy p { margin: 0 0 16px; font-size: var(--body-size); line-height: 1.65; }
 .paper-copy p:last-child { margin-bottom: 0; }
-.method-panels { display: grid; gap: 16px; margin-bottom: 20px; }
-.method-panel { padding: 24px; border: 1px solid var(--line); border-radius: 4px; background: #fff; }
-.method-panel .equation { margin: 16px 0; }
+.method-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin-bottom: 24px; }
+.method-panel { min-width: 0; padding: 0 28px 0 0; }
+.method-panel + .method-panel { padding: 0 0 0 28px; border-left: 1px solid var(--line); }
+.method-panel .equation { margin: 20px 0; font-size: 15px; }
 .method-inference { margin-bottom: 16px; }
 .paper-link { display: inline-block; margin-top: 4px; color: var(--teal); text-decoration: underline; text-underline-offset: 4px; }
 .equation { max-width: 100%; margin: 20px 0; overflow-x: auto; font-size: 20px; }
@@ -167,6 +168,9 @@ mjx-container[display="true"] { margin: .5em 0 !important; }
   .contents-links { gap: 8px 20px; }
   .narrative-grid { grid-template-columns: 1fr; row-gap: 10px; }
   .narrative-grid > p { padding-bottom: 16px; font-size: 15px; }
+  .method-panels { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .method-panel { padding: 0; }
+  .method-panel + .method-panel { padding: 24px 0 0; border-left: 0; border-top: 1px solid var(--line); }
   .demo-benchmarks { padding: 15px 20px; gap: 12px 24px; font-size: 12px; }
   .demo-reservation-body { min-height: 200px; }
   .demo-reservation-footer { padding: 12px 20px; font-size: 10px; }
@@ -184,7 +188,6 @@ mjx-container[display="true"] { margin: .5em 0 !important; }
 @media (max-width: 480px) {
   .motivation-points li { grid-template-columns: 28px minmax(0, 1fr); gap: 12px; }
   .motivation-points li::before { font-size: 32px; }
-  .method-panel { padding: 18px; }
   .container, .reading-column { width: calc(100% - 36px); }
   h1 { font-size: clamp(28px, 7.5vw, 35px); }
   .authors { font-size: 13px; column-gap: 16px; }
