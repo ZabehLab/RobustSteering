@@ -73,45 +73,36 @@
     <section class="section concept-section" id="concept" aria-label="Interactive examples">
       <div class="container">
         <div class="steering-demo" data-phase="waiting" aria-label="Illustrative animation of a question, an original answer, and a steered answer">
+          <h2 class="steering-demo-benchmark">MGSM</h2>
           <div class="steering-demo-layout" aria-hidden="true">
             <div class="steering-demo-state">
-              <div class="steering-demo-language"><div><span>English</span><span>Spanish</span></div></div>
+              <div class="steering-demo-language"><div><span>English</span><span>Chinese</span></div></div>
               <svg class="steering-demo-state-map" viewBox="0 0 340 420">
                 <defs><clipPath id="demo-state-clip"><rect x="30" y="18" width="280" height="280"/></clipPath><clipPath id="demo-shift-clip"><rect class="steering-demo-shift-mask" x="30" y="18" width="0" height="280"/></clipPath></defs>
                 <g clip-path="url(#demo-state-clip)">
-                  <g class="steering-demo-field-english">
-                    <rect x="30" y="18" width="280" height="280" fill="#f7f7f7"/>
-                    <g transform="rotate(-32 171 157)" fill="#c9c9c9" stroke="#919191" stroke-width="1.1">
-                      <ellipse cx="171" cy="157" rx="145" ry="94" fill-opacity=".08"/><ellipse cx="171" cy="157" rx="120" ry="78" fill-opacity=".1"/><ellipse cx="171" cy="157" rx="95" ry="61" fill-opacity=".12"/><ellipse cx="171" cy="157" rx="70" ry="45" fill-opacity=".15"/><ellipse cx="171" cy="157" rx="45" ry="29" fill-opacity=".18"/><ellipse cx="171" cy="157" rx="21" ry="13" fill-opacity=".25"/>
-                    </g>
-                  </g>
+                  <g class="steering-demo-field-english"></g>
                   <g clip-path="url(#demo-shift-clip)">
-                    <rect x="30" y="18" width="280" height="280" fill="#fbf4f4"/>
-                    <g transform="rotate(24 188 130)" fill="#8B1E1E" stroke="#8B1E1E" stroke-opacity=".55" stroke-width="1.1">
-                      <ellipse cx="188" cy="130" rx="137" ry="95" fill-opacity=".025"/><ellipse cx="188" cy="130" rx="111" ry="77" fill-opacity=".04"/><ellipse cx="188" cy="130" rx="85" ry="59" fill-opacity=".055"/><ellipse cx="188" cy="130" rx="59" ry="41" fill-opacity=".075"/><ellipse cx="188" cy="130" rx="33" ry="23" fill-opacity=".1"/>
-                    </g>
-                    <g fill="none" stroke="#8B1E1E" stroke-opacity=".35" stroke-width="1"><ellipse cx="73" cy="258" rx="72" ry="42"/><ellipse cx="73" cy="258" rx="49" ry="28"/><ellipse cx="73" cy="258" rx="26" ry="14"/></g>
+                    <rect x="30" y="18" width="280" height="280" fill="white"/>
+                    <g class="steering-demo-field-chinese"></g>
                   </g>
                   <circle class="steering-demo-state-ripple" cx="226" cy="196" r="5" fill="#8B1E1E" fill-opacity=".1" stroke="#8B1E1E"/>
                 </g>
-                <rect x="30" y="18" width="280" height="280" fill="none" stroke="#c9c9c9"/>
-                <path d="M30 18V298H310" fill="none" stroke="#111111" stroke-width="1.4"/>
+                <path d="M30 18V298H310" fill="none" stroke="#c9c9c9" stroke-width="1"/>
+                <g class="steering-demo-axis-labels" fill="#111111"><text x="170" y="327" text-anchor="middle">Dim 1</text><text x="9" y="158" text-anchor="middle" transform="rotate(-90 9 158)">Dim 2</text></g>
                 <g class="steering-demo-direction">
-                  <path class="steering-demo-direction-line" d="M84 247 254 72" fill="none" stroke="#111111" stroke-width="3" pathLength="1"/>
-                  <path class="steering-demo-direction-head" d="m237 75 17-3-2 17" fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path class="steering-demo-direction-line" d="M84 247 254 72" fill="none" stroke="#007C7C" stroke-width="3" pathLength="1"/>
+                  <path class="steering-demo-direction-head" d="m237 75 17-3-2 17" fill="none" stroke="#007C7C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 </g>
-                <g class="steering-demo-direction-labels" fill="#111111" font-size="13"><text x="50" y="272">Less truthful</text><text x="182" y="55">More truthful</text></g>
+                <g class="steering-demo-direction-labels" fill="#111111"><text x="50" y="272">Less Spanish</text><text x="177" y="55">More Spanish</text></g>
                 <circle class="steering-demo-state-dot" cx="226" cy="196" r="5" fill="#8B1E1E" stroke="white" stroke-width="2"/>
-                <path class="steering-demo-store-path" d="M170 306V337" fill="none" stroke="#c9c9c9" stroke-width="1.2" stroke-dasharray="3 4"/>
                 <g class="steering-demo-controller">
-                  <rect x="102" y="342" width="136" height="58" rx="8" stroke="#c9c9c9" stroke-width="1.2"/>
-                  <g transform="translate(112 349) scale(.52)"><path class="steering-demo-stored-bolt" d="M36 4 56 15 37 28 45 33 26 45 32 50 6 71 23 43 18 39 31 24 26 20Z" stroke-width="2.5" stroke-linejoin="round"/></g>
-                  <text x="151" y="376" font-size="14">Controller</text>
+                  <rect x="82" y="342" width="176" height="58" rx="8" stroke="#c9c9c9" stroke-width="1.2"/>
+                  <g transform="translate(92 349) scale(.52)"><path class="steering-demo-stored-bolt" d="M36 4 56 15 37 28 45 33 26 45 32 50 6 71 23 43 18 39 31 24 26 20Z" stroke-width="2.5" stroke-linejoin="round"/></g>
+                  <text x="132" y="376">Controller</text>
                 </g>
               </svg>
             </div>
             <div class="steering-demo-scene">
-            <div class="steering-demo-benchmark">TruthfulQA</div>
             <div class="steering-demo-question">
               <svg class="steering-demo-asker" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="32" cy="20" r="10"/><path d="M12 54v-5c0-12 9-18 20-18s20 6 20 18v5" stroke-linecap="round"/></svg>
               <div class="steering-demo-copy"><span class="steering-demo-label">Question:</span><p class="steering-demo-question-text"></p></div>
@@ -119,19 +110,18 @@
             <div class="steering-demo-answer">
               <div class="steering-demo-copy"><span class="steering-demo-label">Response:</span><p class="steering-demo-answer-text"></p></div>
               <div class="steering-demo-model">
-                <div class="steering-demo-stimulation">
-                  <svg class="steering-demo-bolt" viewBox="0 0 60 76"><path d="M36 4 56 15 37 28 45 33 26 45 32 50 6 71 23 43 18 39 31 24 26 20Z" fill="#007C7C" stroke="#111111" stroke-width="2.5" stroke-linejoin="round"/></svg>
-                  <svg class="steering-demo-vibration" viewBox="0 0 110 76" fill="none" stroke="#007C7C" stroke-width="2" stroke-linecap="round"><path d="M17 22q-8 13 0 26M9 17q-12 18 0 36M93 22q8 13 0 26M101 17q12 18 0 36"/></svg>
-                </div>
                 <svg class="steering-demo-robot" viewBox="0 0 100 94" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 26V16"/><circle cx="50" cy="11" r="5" stroke-width="3"/><rect x="15" y="29" width="70" height="57" rx="13"/><path d="M15 44H8v23h7M85 44h7v23h-7"/><ellipse cx="35" cy="51" rx="7" ry="9"/><ellipse cx="65" cy="51" rx="7" ry="9"/><path d="M40 70q10 5 20 0" stroke-width="4"/><path d="M27 10h10M32 5v10M65 18h8M69 14v8" stroke="#999999" stroke-width="2.5"/></svg>
               </div>
             </div>
-            <div class="steering-demo-metrics"><span class="steering-demo-metric"><span class="steering-demo-truth-label">Truthfulness</span><span class="steering-demo-truth-arrow">↑</span></span><span class="steering-demo-metric"><span class="steering-demo-info-label">Informativeness</span><span class="steering-demo-info-arrow">↑</span></span></div>
+            <div class="steering-demo-metrics"><span class="steering-demo-metric"><span class="steering-demo-truth-label">Mathematical accuracy</span><span class="steering-demo-truth-arrow">=</span></span><span class="steering-demo-metric"><span class="steering-demo-info-label">Spanish output</span><span class="steering-demo-info-arrow">↑</span></span></div>
             </div>
+          </div>
+          <div class="steering-demo-stimulation" aria-hidden="true">
+            <svg class="steering-demo-bolt" viewBox="0 0 60 76"><path d="M36 4 56 15 37 28 45 33 26 45 32 50 6 71 23 43 18 39 31 24 26 20Z" fill="#007C7C" stroke="#111111" stroke-width="2.5" stroke-linejoin="round"/></svg>
+            <svg class="steering-demo-vibration" viewBox="0 0 110 76" fill="none" stroke="#007C7C" stroke-width="2" stroke-linecap="round"><path d="M17 22q-8 13 0 26M9 17q-12 18 0 36M93 22q8 13 0 26M101 17q12 18 0 36"/></svg>
           </div>
           <svg class="steering-demo-travel-bolt" viewBox="0 0 60 76" aria-hidden="true"><path d="M36 4 56 15 37 28 45 33 26 45 32 50 6 71 23 43 18 39 31 24 26 20Z" fill="#007C7C" stroke="#111111" stroke-width="2.5" stroke-linejoin="round"/></svg>
           <div class="steering-demo-controls">
-            <span class="steering-demo-placeholder">Schematic · placeholder text and indicators</span>
             <div><button class="steering-demo-pause" type="button" aria-label="Pause animation">Pause</button><button class="steering-demo-replay" type="button">Replay <span aria-hidden="true">↻</span></button></div>
           </div>
           <p class="sr-only steering-demo-description" aria-live="polite"></p>

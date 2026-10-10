@@ -6,11 +6,12 @@
   // Schematic example only: these are not recorded benchmark/model outputs.
   // Replace this data with approved question/response pairs in the next iteration.
   let example = {
-    benchmark: "TruthfulQA",
-    question: "¿Los murciélagos son ciegos?",
-    baseline: "Yes, bats are blind.",
-    steered: "No. Bats can see; they also use echolocation to navigate.",
-    metrics: ["Truthfulness", "Informativeness"],
+    benchmark: "MGSM",
+    question: "阿米娜有3盒铅笔，每盒有12支。她一共有多少支铅笔？",
+    baseline: "阿米娜一共有36支铅笔。",
+    steered: "Amina tiene 36 lápices en total.",
+    metrics: ["Mathematical accuracy", "Spanish output"],
+    symbols: ["=", "↑"],
   };
   const find = (name) => box.querySelector(".steering-demo-" + name);
   const question = find("question-text");
@@ -50,6 +51,121 @@
     node.style.transform = "translateY(" + ((1 - amount) * distance) + "px)";
   };
 
+  function makeStateContours(node, seed, components, color) {
+    // Seeded Gaussian-mixture samples and a Gaussian KDE, not hand-drawn ellipses.
+    // Synthetic illustration only: these are not recorded model activations.
+    const random = () => {
+      seed |= 0;
+      seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+    const samples = Array.from({ length: 260 }, () => {
+      const c = components[random() < components[0].weight ? 0 : 1];
+      const radius = Math.sqrt(-2 * Math.log(Math.max(random(), 1e-10)));
+      const theta = 2 * Math.PI * random();
+      const a = radius * Math.cos(theta);
+      const b = radius * Math.sin(theta);
+      return [c.x + c.sx * a, c.y + c.sy * (c.rho * a + Math.sqrt(1 - c.rho * c.rho) * b)];
+    });
+    const n = 96;
+    const density = new Float64Array(n * n);
+    const bandwidth = .36;
+    let peak = 0;
+    for (let y = 0; y < n; y++) {
+      for (let x = 0; x < n; x++) {
+        const px = -3.5 + x * 7 / (n - 1);
+        const py = 3.5 - y * 7 / (n - 1);
+        let value = 0;
+        for (const [sx, sy] of samples) {
+          const distance = ((px - sx) ** 2 + (py - sy) ** 2) / (2 * bandwidth * bandwidth);
+          if (distance < 18) value += Math.exp(-distance);
+        }
+        density[y * n + x] = value;
+        peak = Math.max(peak, value);
+      }
+    }
+    const cases = [[], [[3, 0]], [[0, 1]], [[3, 1]], [[1, 2]], [[3, 0], [1, 2]], [[0, 2]], [[3, 2]], [[2, 3]], [[0, 2]], [[0, 1], [2, 3]], [[1, 2]], [[1, 3]], [[0, 1]], [[3, 0]], []];
+    const paths = [];
+    for (const fraction of [.10, .20, .33, .47, .62, .77, .9]) {
+      const threshold = peak * fraction;
+      const vertices = new Map();
+      const adjacency = new Map();
+      const segments = [];
+      for (let y = 0; y < n - 1; y++) {
+        for (let x = 0; x < n - 1; x++) {
+          const values = [density[y * n + x], density[y * n + x + 1], density[(y + 1) * n + x + 1], density[(y + 1) * n + x]];
+          const mask = values.reduce((code, v, i) => code | (v >= threshold ? 1 << i : 0), 0);
+          if (!cases[mask].length) continue;
+          const corners = [[x, y], [x + 1, y], [x + 1, y + 1], [x, y + 1]];
+          const keys = ["h:" + x + ":" + y, "v:" + (x + 1) + ":" + y, "h:" + x + ":" + (y + 1), "v:" + x + ":" + y];
+          const vertex = (edge) => {
+            const key = keys[edge];
+            if (!vertices.has(key)) {
+              const next = (edge + 1) % 4;
+              const t = (threshold - values[edge]) / (values[next] - values[edge]);
+              const [ax, ay] = corners[edge];
+              const [bx, by] = corners[next];
+              vertices.set(key, [30 + (ax + (bx - ax) * t) * 280 / (n - 1), 18 + (ay + (by - ay) * t) * 280 / (n - 1)]);
+            }
+            return key;
+          };
+          for (const [a, b] of cases[mask]) {
+            const pair = [vertex(a), vertex(b)];
+            const index = segments.push(pair) - 1;
+            for (const key of pair) {
+              if (!adjacency.has(key)) adjacency.set(key, []);
+              adjacency.get(key).push(index);
+            }
+          }
+        }
+      }
+      const used = new Set();
+      let d = "";
+      segments.forEach(([start, end], index) => {
+        if (used.has(index)) return;
+        const points = [vertices.get(start), vertices.get(end)];
+        used.add(index);
+        let key = end;
+        while (key !== start) {
+          const nextIndex = adjacency.get(key).find((i) => !used.has(i));
+          if (nextIndex === undefined) break;
+          used.add(nextIndex);
+          const pair = segments[nextIndex];
+          key = pair[0] === key ? pair[1] : pair[0];
+          points.push(vertices.get(key));
+        }
+        // Closed rings get a very light density fill; open boundary contours stay unfilled.
+        if (key !== start) return;
+        d += "M" + points.map(([x, y]) => x.toFixed(2) + "," + y.toFixed(2)).join("L") + "Z";
+      });
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", d);
+      path.setAttribute("fill", color);
+      path.setAttribute("fill-opacity", ".055");
+      path.setAttribute("fill-rule", "evenodd");
+      path.setAttribute("stroke", color);
+      path.setAttribute("stroke-opacity", ".6");
+      path.setAttribute("stroke-width", "1.1");
+      path.setAttribute("stroke-linejoin", "round");
+      paths.push(path);
+    }
+    node.replaceChildren(...paths);
+    node.dataset.sampleCount = samples.length;
+    node.dataset.method = "Seeded Gaussian-mixture sampling; Gaussian KDE; marching-squares contours";
+  }
+
+  // Compute once, then reuse exactly the same fields for every replay.
+  makeStateContours(find("field-english"), 2027, [
+    { weight: .65, x: -.5, y: -.4, sx: .85, sy: .68, rho: .55 },
+    { x: .95, y: 1.05, sx: .55, sy: .52, rho: .2 },
+  ], "#919191");
+  makeStateContours(find("field-chinese"), 2028, [
+    { weight: .72, x: .55, y: .65, sx: .9, sy: .7, rho: -.55 },
+    { x: -1.3, y: -1.3, sx: .42, sy: .5, rho: .15 },
+  ], "#8B1E1E");
+
   function characterNodes(node, count) {
     const nodes = Array.from({ length: count }, () => {
       const span = document.createElement("span");
@@ -62,6 +178,9 @@
 
   function measureFlight() {
     const bounds = box.getBoundingClientRect();
+    box.style.setProperty("--demo-svg-scale-inverse", 340 / find("state-map").clientWidth);
+    const model = find("robot").getBoundingClientRect();
+    find("stimulation").style.transform = "translate(" + (model.x + model.width / 2 - bounds.x - 45) + "px," + (model.y - bounds.y - 72) + "px)";
     const from = find("stored-bolt").getBoundingClientRect();
     const to = find("bolt").getBoundingClientRect();
     flightStart = { x: from.x + from.width / 2 - bounds.x, y: from.y + from.height / 2 - bounds.y };
@@ -93,6 +212,8 @@
     find("benchmark").textContent = example.benchmark;
     metricNodes[0].textContent = example.metrics[0];
     metricNodes[2].textContent = example.metrics[1];
+    metricNodes[1].textContent = example.symbols[0];
+    metricNodes[3].textContent = example.symbols[1];
     const questionStart = intro.chat + 250;
     const questionEnd = questionStart + q.length * 55;
     const baselineStart = questionEnd + 450;
@@ -122,7 +243,7 @@
     if (time < intro.stored) return "store";
     if (time < intro.shift) return "stored";
     if (time < intro.shifted) return "shift";
-    if (time < intro.expand) return "spanish";
+    if (time < intro.expand) return "chinese";
     if (time < intro.chat) return "expand";
     return "conversation";
   }
@@ -138,7 +259,7 @@
     box.style.setProperty("--demo-direction", drawn);
     const scale = 1 - stored * .94;
     // Collapse around the vector midpoint, then carry it down into the controller.
-    direction.setAttribute("transform", "translate(" + (169 * (1 - scale)) + " " + (160 * (1 - scale) + 210 * stored) + ") scale(" + scale + ")");
+    direction.setAttribute("transform", "translate(" + (169 * (1 - scale) - 61 * stored) + " " + (160 * (1 - scale) + 210 * stored) + ") scale(" + scale + ")");
     const fill = progress(intro.store + 650, 450);
     box.style.setProperty("--demo-controller-fill", "rgba(0,124,124," + fill * .12 + ")");
     box.style.setProperty("--demo-controller-ink", fill > .5 ? "#007C7C" : "#919191");
@@ -260,7 +381,10 @@
       if (next.metrics && (!Array.isArray(next.metrics) || next.metrics.length !== 2 || !next.metrics.every((s) => typeof s === "string" && s.trim()))) {
         throw new TypeError("Metrics must be two nonempty labels.");
       }
-      example = { ...example, question: next.question, baseline: next.baseline, steered: next.steered, benchmark: next.benchmark || example.benchmark, metrics: next.metrics || example.metrics };
+      if (next.symbols && (!Array.isArray(next.symbols) || next.symbols.length !== 2 || !next.symbols.every((s) => typeof s === "string"))) {
+        throw new TypeError("Symbols must be two strings.");
+      }
+      example = { ...example, question: next.question, baseline: next.baseline, steered: next.steered, benchmark: next.benchmark || example.benchmark, metrics: next.metrics || example.metrics, symbols: next.symbols || example.symbols };
       prepare();
       replay();
     },
