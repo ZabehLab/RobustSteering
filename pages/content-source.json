@@ -39,9 +39,9 @@
   },
   "linearization_section": {
     "source": "paper/ICRL2027/arXiv_AppleStyle.tex",
-    "displayed_figure": "Figure 2: Method Schematic (closedloopVertical2.png)",
+    "displayed_figure": "BrainLLMVertical.png: the paper's Figure 3 residual composite, labeled Figure 2 on the website at the user's request",
     "framing_sources": ["Introduction: robustness and feedback motivation", "Figure 3 caption", "Problem formulation: empirical model-mismatch motivation"],
-    "scope": "The text frames the shared local-model mismatch problem rather than reporting individual panels. At the user's request, Figure 2's conceptual method schematic is displayed instead of Figure 3's empirical composite; the schematic is not presented as residual data."
+    "scope": "The text frames the shared local-model mismatch problem rather than reporting individual panels. The empirical brain/GPT residual composite is displayed, not the controller schematic; the original asset is unmodified."
   },
   "asset_policy": "Final figures copied verbatim from Overleaf; no PDF extraction or replotting",
   "teal": {"hex": "#007C7C", "source": "StateTeal definition in arXiv_AppleStyle.tex"},
