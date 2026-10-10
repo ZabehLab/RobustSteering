@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#007C7C">
+  <meta name="description" content="Mind Control of LLMs via Closed-Loop Stimulation: Out-of-Distribution Robustness. Research by Kasra Fallah, Rudramani Singha, Hannah Ghanei, Paul Sajda, James Anderson, and Erfan Zabeh.">
+  <title>Mind Control of LLMs · Robust Steering</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script src="mathjax-config.js" defer></script>
+  <script src="assets/vendor/mathjax/tex-svg.js" defer></script>
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="paper-title">
+      <div class="container">
+        <h1 id="paper-title"><span>Mind Control of LLMs</span> via Closed-Loop Stimulation: Out-of-Distribution Robustness</h1>
+        <div class="authors" aria-label="Paper authors">
+          <span>Kasra Fallah<sup>1,*</sup></span>
+          <span>Rudramani Singha<sup>2,*</sup></span>
+          <span>Hannah Ghanei<sup>3</sup></span>
+          <span>Paul Sajda<sup>4</sup></span>
+          <span>James Anderson<sup>1</sup></span>
+          <span>Erfan Zabeh<sup>5,†</sup></span>
+        </div>
+        <div class="affiliations">
+          <p><sup>1</sup> Electrical Engineering, Columbia University <span class="affiliation-divider">·</span> <sup>2</sup> Peter O’Donnell Jr. Brain Institute, UT Southwestern Medical Center</p>
+          <p><sup>3</sup> Computer Science and Electronic Engineering, University of Surrey <span class="affiliation-divider">·</span> <sup>4</sup> Biomedical Engineering, Columbia University</p>
+          <p><sup>5</sup> Center for Theoretical Neuroscience, Zuckerman Institute, Columbia University</p>
+        </div>
+        <p class="author-notes"><span>* Equal contribution</span><span>† Correspondence: <a href="mailto:ez2290@columbia.edu">ez2290@columbia.edu</a></span></p>
+        <div class="resource-links" aria-label="Paper resources">
+          <!-- Local preview placeholder: replace this GitHub destination with the released arXiv URL. -->
+          <a class="button button-primary arxiv-link" href="https://github.com/rgs2151/controller" target="_blank" rel="noopener" title="Preview placeholder: temporarily links to GitHub until the arXiv release." aria-label="arXiv paper — temporary GitHub link"><img class="arxiv-logo" src="assets/arxiv.svg" alt="arXiv" width="44" height="20"></a>
+          <a class="button" href="https://github.com/rgs2151/controller" target="_blank" rel="noopener"><img class="resource-icon github-icon" src="assets/github.svg" width="20" height="20" alt=""> Code</a>
+          <a class="button" href="#citation"><span aria-hidden="true">{ }</span> BibTeX</a>
+        </div>
+        <figure class="overview-figure">
+          <button class="figure-open" type="button" data-figure="assets/figure-1.png" data-caption="Figure 1. Borrowing from closed-loop neurostimulation, we steer LLMs with robust H∞ feedback and derive a score characterizing steering reliability under distribution shift." aria-label="Expand Figure 1: conceptual overview">
+            <img src="assets/figure-1.png" width="2940" height="898" alt="Figure 1 from the paper: conceptual connection between closed-loop neurostimulation, robust language-model steering, and robust steerability." fetchpriority="high">
+          </button>
+          <figcaption><span class="figure-number">Figure 1.</span> Borrowing from closed-loop neurostimulation, we steer LLMs with robust \(H_\infty\) feedback and derive a score characterizing steering reliability under distribution shift.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="abstract-section section" id="abstract" aria-labelledby="abstract-title">
+      <div class="reading-column">
+        <h2 id="abstract-title">Abstract</h2>
+        <div class="abstract-copy">
+          <p>Brains and large language models need not be considered equivalent systems to reveal an interpretable commonality: both exhibit high-dimensional, nonlinear dynamics whose behavior can only be modeled imperfectly. This creates a shared challenge whenever we seek to intervene in their dynamics. A controller may either rely on a model identified around a particular operating regime and risk failure as the system moves away from that regime, or explicitly account for uncertainty and a changing internal state. Neurostimulation has confronted an analogous problem for decades. The limitations of fixed, open-loop stimulation have motivated closed-loop and state-dependent approaches that condition intervention on the ongoing state of the neural system. Inspired by this principle, we formulate LLM steering as a feedback-control problem in which the network’s internal state, rather than a fixed intervention alone, determines how the system is perturbed.</p>
+          <p>We further account for the inevitable mismatch between tractable dynamical models and the nonlinear transformer they approximate by adopting a robust control approach. As one principled realization of this framework, we develop an \(H_\infty\)-based steering controller that explicitly limits sensitivity to disturbances and linearization mismatches. Across multiple steering benchmarks, the resulting controller improves performance over existing steering baselines, with particularly pronounced gains under out-of-distribution conditions and varying length complexities—regimes in which the assumptions underlying locally identified dynamics are increasingly challenged. Beyond controller performance, we introduce robust steerability, \(S_{\mathrm{rob}}\), a pre-deployment measure of tolerance to dynamics mismatch; across model–task pairs, it exhibits task-specific structure and varies systematically with model scale. Beyond robust LLM steering, our measure asks not merely whether control is possible, but how much uncertainty it can survive—a principle that may span artificial and biological neural systems.</p>
+        </div>
+      </div>
+    </section>
+
+    <nav class="page-contents container" aria-label="On this page">
+      <span class="contents-label">On this page</span>
+      <div class="contents-links">
+        <a href="#motivation">Why closed-loop?</a>
+        <a href="#method">Robust activation steering</a>
+        <a href="#results">Results</a>
+        <a href="#steerability">Robust steerability</a>
+        <a href="#citation">Citation</a>
+      </div>
+    </nav>
+
+    <section class="section concept-section" id="concept" aria-label="Interactive examples">
+      <div class="container">
+        <div class="demo-reservation" role="note" aria-label="Reserved space for the upcoming benchmark animations">
+          <div class="demo-benchmarks" aria-label="Benchmarks for the planned examples"><span>TruthfulQA</span><span>HarmBench</span><span>MGSM</span><span>L-CiteEval</span></div>
+          <div class="demo-reservation-body">
+            <span>Interactive examples — coming soon</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section motivation-section" id="motivation" aria-labelledby="motivation-title">
+      <div class="container">
+        <div class="section-intro">
+          <h2 id="motivation-title">A successful perturbation is not the same as <span>reliable control</span>.</h2>
+        </div>
+        <ol class="motivation-points" role="list">
+          <li><p>First, the effect of stimulation depends on the state in which it is delivered: across invasive and non-invasive paradigms, state alters the magnitude, direction and behavioral consequence of otherwise identical stimulation.</p></li>
+          <li><p>At deployment, shifts in prompt, context, or activation trajectory alter the network’s local Jacobians and therefore how the same intervention propagates. Distribution shift thus changes not only the state being controlled but also the dynamics of control itself.</p></li>
+          <li><p>Language models and biological circuits are not equivalent systems, but both are high-dimensional, nonlinear and imperfectly modeled, and intervention in both inherits the same reliability problem.</p></li>
+        </ol>
+        <blockquote class="research-question">Can a language model’s internal dynamics tell us, before deployment, whether a representation will remain reliably steerable as those dynamics change?</blockquote>
+      </div>
+    </section>
+
+    <section class="section method-section" id="method" aria-labelledby="method-title">
+      <div class="container">
+        <div class="section-intro">
+          <h2 id="method-title">Robust activation steering</h2>
+        </div>
+        <div class="method-copy paper-copy">
+          <div class="method-panels">
+            <div class="method-panel">
+              <p>We treat transformer depth as a finite control horizon, hidden representations as states, and activation interventions as control inputs. Given a target behavior, desired and undesired calibration activations define reduced behavior coordinates. Projected Jacobians estimate local dynamics, while empirical residuals identify the directions and scales of model mismatch:</p>
+              <div class="equation">\[\xkp = \Ak\xk + \Bk\uk + \Dk\wk.\]</div>
+              <p>Here, \(\Ak\) describes nominal layer dynamics, \(\Bk\uk\) the activation intervention, and \(\Dk\wk\) the structured mismatch. Rather than assuming that mismatch is negligible or isotropic, we design the controller against its amplification through the network.</p>
+            </div>
+            <div class="method-panel">
+              <p>For a candidate attenuation \(\gamma\), robust feedback solves a finite-horizon dynamic game subject to the local dynamics above:</p>
+              <div class="equation">\[\min_{\pi}\max_{w_{1:L}}\;x_{L+1}^{\top}Q_f x_{L+1}+\sum_{k=1}^{L}\left(\lVert\zk\rVert_2^2-\gamma^2\lVert\wk\rVert_2^2\right).\]</div>
+              <p>The controller minimizes steering error and intervention cost; the adversary acts through the empirical mismatch channels. The regulated output \(\zk\) combines target-tracking error, intervention effort, and optional off-target representation change. A backward \(H_\infty\) recursion and attenuation search produce the layer-wise policy \(\uk=-\steervar{K_k^\star}\xk.\)</p>
+              <p>Feedback makes the intervention depend on the current activation state; robustness accounts for the fact that the local model is imperfect. Model weights remain unchanged, and dynamics estimation and controller synthesis are performed offline.</p>
+            </div>
+          </div>
+          <a class="paper-link" href="assets/paper.pdf#search=Methodology" target="_blank" rel="noopener">Read the methodology in the paper <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section results-section" id="results" aria-labelledby="results-title">
+      <div class="container">
+        <div class="section-intro">
+          <h2 id="results-title">Benchmark results</h2>
+          <p class="lead">We ask whether feedback controllers identified at calibration time remain effective when the deployment distribution changes.</p>
+        </div>
+
+        <article class="benchmark-result" id="truthfulqa" aria-labelledby="truthfulqa-title">
+          <div class="benchmark-heading"><h3 id="truthfulqa-title">Prompt-language shift (TruthfulQA)</h3></div>
+          <p class="result-summary">Across all four model families, \(\mathrm{H}_{\infty}\) attains the highest T×I under both ID and OOD evaluation.</p>
+          <figure class="result-figure"><button class="figure-open" type="button" data-figure="assets/figure-4.png" data-caption="Figure 4. TruthfulQA under prompt-language shift." aria-label="Expand TruthfulQA results"><img src="assets/figure-4.png" width="2876" height="816" loading="lazy" alt="TruthfulQA truthfulness–informativeness frontiers for English and Spanish input, with GPT-2 XL category-level comparisons."></button><figcaption><span class="figure-number">Figure 4.</span> TruthfulQA under prompt-language shift. Left: truthfulness–informativeness frontiers for matched English (ID) and Spanish-input, English-output transfer (OOD). Right: category-level GPT-2 XL performance for the original model, strongest competitor, and \(\mathrm{H}_{\infty}\).</figcaption></figure>
+          <div class="overall-table">
+          <div class="table-heading"><h4>Overall performance</h4><span>T×I ↑ · Table 1(a)</span></div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="TruthfulQA overall results"><table><thead><tr><th scope="col" rowspan="2">Model</th><th scope="colgroup" colspan="2">English (ID)</th><th scope="colgroup" colspan="2" class="group-start">Spanish (OOD)</th></tr><tr><th scope="col">Baseline</th><th scope="col" class="ours">\(H_\infty\)</th><th scope="col" class="group-start">Baseline</th><th scope="col" class="ours">\(H_\infty\)</th></tr></thead><tbody><tr><th scope="row">GPT-2 XL</th><td>34.91<span class="uncertainty"> ± 2.58</span></td><td class="ours">35.18<span class="uncertainty"> ± 0.43</span></td><td class="group-start">9.93<span class="uncertainty"> ± 0.95</span></td><td class="ours">18.14<span class="uncertainty"> ± 1.31</span></td></tr><tr><th scope="row">Llama-3-8B</th><td>57.81<span class="uncertainty"> ± 0.29</span></td><td class="ours">61.42<span class="uncertainty"> ± 1.15</span></td><td class="group-start">52.81<span class="uncertainty"> ± 0.69</span></td><td class="ours">55.29<span class="uncertainty"> ± 0.35</span></td></tr><tr><th scope="row">Qwen-2.5-14B</th><td>69.66<span class="uncertainty"> ± 0.62</span></td><td class="ours">76.27<span class="uncertainty"> ± 0.42</span></td><td class="group-start">80.40<span class="uncertainty"> ± 0.52</span></td><td class="ours">82.57<span class="uncertainty"> ± 0.50</span></td></tr><tr><th scope="row">OLMo-2-32B</th><td>81.74<span class="uncertainty"> ± 0.65</span></td><td class="ours">86.31<span class="uncertainty"> ± 0.42</span></td><td class="group-start">82.70<span class="uncertainty"> ± 1.14</span></td><td class="ours">91.50<span class="uncertainty"> ± 1.07</span></td></tr></tbody></table></div>
+          </div>
+        </article>
+
+        <article class="benchmark-result" id="harmbench" aria-labelledby="harmbench-title">
+          <div class="benchmark-heading"><h3 id="harmbench-title">Adversarial prompt shift (HarmBench)</h3></div>
+          <p class="result-summary">Across the three models and six prompt conditions, \(\mathrm{H}_{\infty}\) has lower ASR than both the unsteered model and A-LQR (the strongest competing method) in all 18 model–condition comparisons.</p>
+          <figure class="result-figure"><button class="figure-open" type="button" data-figure="assets/figure-5.png" data-caption="Figure 5. Robust refusal under adversarial prompting." aria-label="Expand HarmBench results"><img src="assets/figure-5.png" width="2884" height="946" loading="lazy" alt="HarmBench attack success rates, safe-concept relevance, and response-type comparisons."></button><figcaption><span class="figure-number">Figure 5.</span> Robust refusal under adversarial prompting. Left: ASR across direct requests and five frozen jailbreak templates for three Llama scales. Center: mean ASR versus safe-concept relevance. Right: response-type decomposition. Lower ASR is better.</figcaption></figure>
+          <div class="overall-table">
+          <div class="table-heading"><h4>Overall performance</h4><span>Attack success (%) ↓ · Table 1(b)</span></div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="HarmBench overall results"><table><thead><tr><th scope="col" rowspan="2">Model</th><th scope="colgroup" colspan="2">Direct (ID)</th><th scope="colgroup" colspan="2" class="group-start">Jailbreak (OOD)</th></tr><tr><th scope="col">Baseline</th><th scope="col" class="ours">\(H_\infty\)</th><th scope="col" class="group-start">Baseline</th><th scope="col" class="ours">\(H_\infty\)</th></tr></thead><tbody><tr><th scope="row">Llama-3.2-1B</th><td>9.58<span class="uncertainty"> ± 1.76</span></td><td class="ours">2.92<span class="uncertainty"> ± 1.40</span></td><td class="group-start">5.50<span class="uncertainty"> ± 0.25</span></td><td class="ours">0.92<span class="uncertainty"> ± 0.26</span></td></tr><tr><th scope="row">Llama-3.2-3B</th><td>16.67<span class="uncertainty"> ± 2.48</span></td><td class="ours">8.33<span class="uncertainty"> ± 1.86</span></td><td class="group-start">11.59<span class="uncertainty"> ± 1.32</span></td><td class="ours">3.67<span class="uncertainty"> ± 0.43</span></td></tr><tr><th scope="row">Llama-3.1-8B</th><td>15.83<span class="uncertainty"> ± 4.02</span></td><td class="ours">3.33<span class="uncertainty"> ± 1.84</span></td><td class="group-start">10.83<span class="uncertainty"> ± 1.99</span></td><td class="ours">0.50<span class="uncertainty"> ± 0.36</span></td></tr></tbody></table></div>
+          </div>
+        </article>
+
+        <article class="benchmark-result" id="mgsm" aria-labelledby="mgsm-title">
+          <div class="benchmark-heading"><h3 id="mgsm-title">Multilingual input shift (MGSM)</h3></div>
+          <p class="result-summary">At the individual language level, \(\mathrm{H}_{\infty}\) exceeds A-LQR accuracy in 13 of 15 model–language pairs.</p>
+          <figure class="result-figure"><button class="figure-open" type="button" data-figure="assets/figure-6.png" data-caption="Figure 6. Cross-lingual transfer on MGSM." aria-label="Expand MGSM results"><img src="assets/figure-6.png" width="2824" height="904" loading="lazy" alt="MGSM capability loss versus response quality and accuracy retained across transfer languages."></button><figcaption><span class="figure-number">Figure 6.</span> Cross-lingual transfer on MGSM. Left: capability loss relative to the unsteered model versus response quality. Right: accuracy retained relative to the original model across transfer languages. Controllers are calibrated in English and frozen before multilingual evaluation.</figcaption></figure>
+          <div class="overall-table">
+          <div class="table-heading"><h4>Overall performance</h4><span>Accuracy (%) / Spanish relevance · Table 1(c)</span></div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="MGSM overall results"><table><thead><tr><th scope="col" rowspan="2">Model</th><th scope="colgroup" colspan="3">Accuracy (%)</th><th scope="colgroup" colspan="2" class="group-start">Spanish relevance</th></tr><tr><th scope="col">Original</th><th scope="col">A-LQR</th><th scope="col" class="ours">\(H_\infty\)</th><th scope="col" class="group-start">A-LQR</th><th scope="col" class="ours">\(H_\infty\)</th></tr></thead><tbody><tr><th scope="row">Qwen-3-4B</th><td>41.6<span class="uncertainty"> ± 2.5</span></td><td>22.4<span class="uncertainty"> ± 2.3</span></td><td class="ours">32.2<span class="uncertainty"> ± 2.4</span></td><td class="group-start">1.81<span class="uncertainty"> ± 0.02</span></td><td class="ours">1.44<span class="uncertainty"> ± 0.03</span></td></tr><tr><th scope="row">Phi-4-mini</th><td>45.4<span class="uncertainty"> ± 2.6</span></td><td>0.0<span class="uncertainty"> ± 0.0</span></td><td class="ours">35.2<span class="uncertainty"> ± 2.6</span></td><td class="group-start">1.09<span class="uncertainty"> ± 0.04</span></td><td class="ours">1.21<span class="uncertainty"> ± 0.04</span></td></tr><tr><th scope="row">Granite-3.3-2B</th><td>22.2<span class="uncertainty"> ± 2.0</span></td><td>18.8<span class="uncertainty"> ± 2.0</span></td><td class="ours">21.2<span class="uncertainty"> ± 1.9</span></td><td class="group-start">0.04<span class="uncertainty"> ± 0.02</span></td><td class="ours">0.00<span class="uncertainty"> ± 0.00</span></td></tr></tbody></table></div>
+          </div>
+        </article>
+
+        <article class="benchmark-result" id="lciteeval" aria-labelledby="lciteeval-title">
+          <div class="benchmark-heading"><h3 id="lciteeval-title">Context-length shift (L-CiteEval)</h3></div>
+          <p class="result-summary">Controllers are calibrated at 8K context and evaluated at both 8K and 16K using matched question identities.</p>
+          <figure class="result-figure"><button class="figure-open" type="button" data-figure="assets/figure-7.png" data-caption="Figure 7. Context-length transfer and residual growth." aria-label="Expand long-context results"><img src="assets/figure-7.png" width="2916" height="480" loading="lazy" alt="L-CiteEval context-length transfer and local-model residual growth."></button><figcaption><span class="figure-number">Figure 7.</span> Context-length transfer and residual growth. A: answer recall and citation F1 at matched 8K and shifted 16K context for Qwen2.5-3B. B: growth of local-model residuals with prediction horizon in language-model representations and an illustrative nonlinear biological network.</figcaption></figure>
+          <div class="overall-table">
+          <div class="table-heading"><h4>Overall performance</h4><span>Answer recall (%) ↑ · Table 1(d)</span></div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="L-CiteEval overall results"><table><thead><tr><th scope="col" rowspan="2">Model</th><th scope="colgroup" colspan="2">8K (ID)</th><th scope="colgroup" colspan="2" class="group-start">16K (OOD)</th></tr><tr><th scope="col">Baseline</th><th scope="col" class="ours">\(H_\infty\)</th><th scope="col" class="group-start">Baseline</th><th scope="col" class="ours">\(H_\infty\)</th></tr></thead><tbody><tr><th scope="row">Qwen-2.5-3B</th><td>72.1<span class="uncertainty"> ± 9.3</span></td><td class="ours">66.4<span class="uncertainty"> ± 7.9</span></td><td class="group-start">65.2<span class="uncertainty"> ± 7.6</span></td><td class="ours">65.2<span class="uncertainty"> ± 8.6</span></td></tr><tr><th scope="row">Llama-3.2-1B</th><td>59.8<span class="uncertainty"> ± 9.3</span></td><td class="ours">61.7<span class="uncertainty"> ± 7.8</span></td><td class="group-start">50.1<span class="uncertainty"> ± 8.0</span></td><td class="ours">47.9<span class="uncertainty"> ± 7.8</span></td></tr></tbody></table></div>
+          </div>
+        </article>
+        <p class="table-note">Baseline denotes the strongest non-\(H_\infty\) result. Full results are available in the paper.</p>
+      </div>
+    </section>
+
+    <section class="section steerability-section" id="steerability" aria-labelledby="steerability-title">
+      <div class="container">
+        <div class="section-intro">
+          <h2 id="steerability-title">Robust steerability</h2>
+          <p class="lead">Intuitively, it characterizes how much deviation from the identified dynamics can be tolerated before the same model is no longer sufficient for reliable intervention.</p>
+        </div>
+        <div class="steerability-definition"><div class="equation">\[\Srob = \frac{1}{\gammastar}, \qquad \gammastar = \inf_{\steervar{K}} \lVert T_{w\to z}(\steervar{K})\rVert_\infty.\]</div><p>A larger \(\Srob\) therefore corresponds to a regime in which steering is less sensitive to modeling error and uncertainty.</p></div>
+        <figure class="result-figure"><button class="figure-open" type="button" data-figure="assets/figure-8.png" data-caption="Figure 8. Robust steerability across models and tasks." aria-label="Expand robust steerability results"><img src="assets/figure-8.png" width="5630" height="1885" loading="lazy" alt="Robust steerability across model–task pairs and its relationship with model scale within tasks."></button><figcaption><span class="figure-number">Figure 8.</span> Robust steerability across models and tasks. \(S_{\mathrm{rob}}\) exhibits task-dependent structure across model–benchmark pairs, while within a fixed task it also varies systematically with model scale.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="section citation-section" id="citation" aria-labelledby="citation-title">
+      <div class="reading-column">
+        <div class="citation-heading"><h2 id="citation-title">Citation</h2><button class="button copy-button" type="button" id="copy-citation">Copy BibTeX</button></div>
+        <pre class="citation-code"><code id="bibtex">@unpublished{fallah2026mindcontrol,
+  title = {Mind Control of {LLMs} via Closed-Loop Stimulation:
+           Out-of-Distribution Robustness},
+  author = {Fallah, Kasra and Singha, Rudramani and Ghanei, Hannah
+            and Sajda, Paul and Anderson, James and Zabeh, Erfan},
+  year = {2026},
+  note = {Manuscript}
+}</code></pre>
+        <span class="sr-only" id="copy-status" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p>Mind Control of LLMs via Closed-Loop Stimulation</p><a href="#top">Back to top ↑</a></div></footer>
+
+  <dialog id="figure-dialog" class="figure-dialog" aria-label="Expanded paper figure"><button class="dialog-close" type="button" aria-label="Close expanded figure">Close <span aria-hidden="true">×</span></button><img id="dialog-image" alt=""><p id="dialog-caption"></p></dialog>
+</body>
+</html>

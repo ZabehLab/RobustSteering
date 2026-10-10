@@ -1,0 +1,205 @@
+\begin{table*}[t]
+\centering
+\definecolor{projectdarkred}{RGB}{0,128,128}
+
+\caption{
+\textbf{Performance under distribution shift.}
+TruthfulQA: T$\times$I; HarmBench: ASR (\%, $\downarrow$);
+MGSM: accuracy / Spanish relevance; L-CiteEval: answer recall (\%).
+``Base'' is the strongest non-$H_\infty$ baseline. Full results are in the appendix.
+}
+\vspace{-0.4cm}
+\label{tab:main-results-summary}
+
+{\fontsize{6.4}{6.9}\selectfont
+\renewcommand{\arraystretch}{0.98}
+\setlength{\tabcolsep}{2.4pt}
+
+% ============================================================
+% TOP ROW
+% ============================================================
+
+\begin{minipage}[t]{0.49\textwidth}
+\centering
+\textbf{(a) TruthfulQA: T$\times$I $\uparrow$}
+\vspace{1pt}
+
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Model}
+&
+\textbf{ID Base}
+&
+\cellcolor{projectdarkred!10}\textbf{ID $H_\infty$}
+&
+\textbf{OOD Base}
+&
+\cellcolor{projectdarkred!10}\textbf{OOD $H_\infty$}
+\\
+\midrule
+GPT2-XL
+& 34.91
+& \cellcolor{projectdarkred!10}\textbf{35.18}
+& 9.93
+& \cellcolor{projectdarkred!10}\textbf{18.14}
+\\
+Llama3-8B
+& 57.81
+& \cellcolor{projectdarkred!10}\textbf{61.42}
+& 52.81
+& \cellcolor{projectdarkred!10}\textbf{55.29}
+\\
+Qwen2.5-14B
+& 69.66
+& \cellcolor{projectdarkred!10}\textbf{76.27}
+& 80.40
+& \cellcolor{projectdarkred!10}\textbf{82.57}
+\\
+OLMo2-32B
+& 81.74
+& \cellcolor{projectdarkred!10}\textbf{86.31}
+& 82.70
+& \cellcolor{projectdarkred!10}\textbf{91.50}
+\\
+\bottomrule
+\end{tabular}%
+}
+\end{minipage}
+\hfill
+%
+\begin{minipage}[t]{0.49\textwidth}
+\centering
+\textbf{(b) HarmBench: ASR $\downarrow$}
+\vspace{1pt}
+
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Model}
+&
+\textbf{Direct Base}
+&
+\cellcolor{projectdarkred!10}\textbf{Direct $H_\infty$}
+&
+\textbf{JB Base}
+&
+\cellcolor{projectdarkred!10}\textbf{JB $H_\infty$}
+\\
+\midrule
+Llama3.2-1B
+& 9.58
+& \cellcolor{projectdarkred!10}\textbf{2.92}
+& 5.50
+& \cellcolor{projectdarkred!10}\textbf{0.92}
+\\
+Llama3.2-3B
+& 16.67
+& \cellcolor{projectdarkred!10}\textbf{8.33}
+& 11.59
+& \cellcolor{projectdarkred!10}\textbf{3.67}
+\\
+Llama3.1-8B
+& 15.83
+& \cellcolor{projectdarkred!10}\textbf{3.33}
+& 10.83
+& \cellcolor{projectdarkred!10}\textbf{0.50}
+\\
+\bottomrule
+\end{tabular}%
+}
+\end{minipage}
+
+\vspace{2pt}
+
+% ============================================================
+% BOTTOM ROW
+% ============================================================
+
+\begin{minipage}[t]{0.49\textwidth}
+\centering
+\textbf{(c) MGSM: multilingual transfer}
+\vspace{1pt}
+
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model}
+&
+\textbf{Acc-O}
+&
+\textbf{Acc-L}
+&
+\cellcolor{projectdarkred!10}\textbf{Acc-$H_\infty$}
+&
+\textbf{SR-L}
+&
+\cellcolor{projectdarkred!10}\textbf{SR-$H_\infty$}
+\\
+\midrule
+Qwen3-4B
+& \textbf{41.6}
+& 22.4
+& \cellcolor{projectdarkred!10}32.2
+& \textbf{1.81}
+& \cellcolor{projectdarkred!10}1.44
+\\
+Phi4-mini
+& \textbf{45.4}
+& 0.0
+& \cellcolor{projectdarkred!10}35.2
+& 1.09
+& \cellcolor{projectdarkred!10}\textbf{1.21}
+\\
+Granite3.3-2B
+& \textbf{22.2}
+& 18.8
+& \cellcolor{projectdarkred!10}21.2
+& \textbf{0.04}
+& \cellcolor{projectdarkred!10}0.00
+\\
+\bottomrule
+\end{tabular}%
+}
+\end{minipage}
+\hfill
+%
+\begin{minipage}[t]{0.49\textwidth}
+\centering
+\textbf{(d) L-CiteEval: answer recall $\uparrow$}
+\vspace{7.35pt}
+
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Model}
+&
+\textbf{8K Base}
+&
+\cellcolor{projectdarkred!10}\textbf{8K $H_\infty$}
+&
+\textbf{16K Base}
+&
+\cellcolor{projectdarkred!10}\textbf{16K $H_\infty$}
+\\
+\midrule
+Qwen2.5-3B
+& \textbf{72.1}
+& \cellcolor{projectdarkred!10}66.4
+& \textbf{65.2}
+& \cellcolor{projectdarkred!10}\textbf{65.2}
+\\
+Llama3.2-1B
+& 59.8
+& \cellcolor{projectdarkred!10}\textbf{61.7}
+& \textbf{50.1}
+& \cellcolor{projectdarkred!10}47.9
+\\
+\bottomrule
+\end{tabular}%
+}
+\end{minipage}
+
+}
+\vspace{-3pt}
+\end{table*}

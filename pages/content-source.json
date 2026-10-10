@@ -1,0 +1,53 @@
+{
+  "authoritative_manuscript": "paper/ICRL2027/arXiv_AppleStyle.tex",
+  "source_bundle": "LLM_Robust_Stimulation__ICLR_2027_.zip",
+  "source_bundle_sha256": "e9fa5759f862abc29c3cfe3a9d13544f5c2c0b919a326303ed764060e7b6ebe9",
+  "content_sections": ["Apple-style title card", "Introduction", "Methodology: Robust Activation Steering", "Experiments", "Robust Steerability as a Property of Large Networks: Conclusion and Future Work"],
+  "table": {
+    "label": "tab:main-results-summary",
+    "source": "paper/ICRL2027/arXiv_AppleStyle.tex",
+    "retained_tex": "assets/overview-table.tex",
+    "presentation": "Four accessible HTML tables with grouped headers and existing reported uncertainties. TruthfulQA and HarmBench show Baseline and H-infinity only; Original columns removed at the user's request.",
+    "display_values_and_uncertainty_sources": "assets/table-values.json",
+    "original_columns_shown": false,
+    "original_columns": {
+      "truthfulqa": {
+        "source": "paper/final_tables/truthfulqa.tex",
+        "metric": "T×I",
+        "conditions": ["English", "Spanish"],
+        "values": {"GPT-2 XL": [27.22, 7.60], "Llama-3-8B": [47.79, 40.51], "Qwen-2.5-14B": [53.92, 66.29], "OLMo-2-32B": [56.22, 61.01]}
+      },
+      "harmbench": {
+        "source": "paper/final_tables/harmbench_full.tex",
+        "metric": "ASR (%)",
+        "conditions": ["Direct", "Jailbreak"],
+        "aggregation": "Direct is reported as-is; Jailbreak is the equal-weight mean over five reported template means, rounded to two decimals.",
+        "original_template_means": {"Llama-3.2-1B": [10.00, 5.83, 6.25, 4.58, 8.33, 2.92], "Llama-3.2-3B": [16.67, 11.67, 10.83, 14.17, 11.25, 10.83], "Llama-3.1-8B": [15.83, 23.33, 14.17, 9.17, 15.00, 11.67]},
+        "values": {"Llama-3.2-1B": [10.00, 5.58], "Llama-3.2-3B": [16.67, 11.75], "Llama-3.1-8B": [15.83, 14.67]}
+      }
+    }
+  },
+  "figures": {
+    "assets/figure-1.png": "paper/Final_Figures/abstract_box.png",
+    "assets/figure-4.png": "paper/Final_Figures/ThruthfulQA.png",
+    "assets/figure-5.png": "paper/Final_Figures/HarmBench.png",
+    "assets/figure-6.png": "paper/Final_Figures/MGSM.png",
+    "assets/figure-7.png": "paper/Final_Figures/LCiteEval.png",
+    "assets/figure-8.png": "paper/Final_Figures/srob.png"
+  },
+  "asset_policy": "Final figures copied verbatim from Overleaf; no PDF extraction or replotting",
+  "teal": {"hex": "#007C7C", "source": "StateTeal definition in arXiv_AppleStyle.tex"},
+  "paper_reference": {
+    "file": "assets/paper.pdf",
+    "source": "User-supplied current PDF, not a new compilation of the bundle",
+    "sha256": "6a9a474126314bf1764f6f7255a0b25b3a7f05a661e33f9eaabd571473b49959"
+  },
+  "public_paper_link": {"provider": "arXiv", "url": "https://github.com/rgs2151/controller", "status": "User-requested local preview placeholder; replace with arXiv release URL before publication"},
+  "code_link": "https://github.com/rgs2151/controller",
+  "math_renderer": {"name": "MathJax", "version": "3.2.2", "component": "Local TeX/SVG bundle"},
+  "excluded_content_sources": ["alternate manuscript drafts", "rudra.tex", "old benchmark exports"],
+  "arxiv_logo_source": "https://info.arxiv.org/assets/arxiv-logo-one-color-white.svg",
+  "copy_policy": "Abstract retained. Exact motivation copy restored from the earlier paragraph version; only its layout changes to large teal numbers beside the three statements. Current method presentation is frozen at the user's request. Existing baseline means unchanged; reported uncertainties added without recalculation.",
+  "equation_colors": {"state": "#007C7C", "steering": "#8B1E1E", "source": "StateTeal / SteerRed semantic wrappers in arXiv_AppleStyle.tex"},
+  "demo": "Untitled interactive-example placeholder; no Animation link in the contents row; content and interaction to be supplied in a later iteration"
+}
