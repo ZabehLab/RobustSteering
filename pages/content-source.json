@@ -29,11 +29,18 @@
   },
   "figures": {
     "assets/figure-1.png": "paper/Final_Figures/abstract_box.png",
+    "assets/figure-3.png": "paper/Final_Figures/BrainLLMVertical.png",
     "assets/figure-4.png": "paper/Final_Figures/ThruthfulQA.png",
     "assets/figure-5.png": "paper/Final_Figures/HarmBench.png",
     "assets/figure-6.png": "paper/Final_Figures/MGSM.png",
     "assets/figure-7.png": "paper/Final_Figures/LCiteEval.png",
     "assets/figure-8.png": "paper/Final_Figures/srob.png"
+  },
+  "linearization_section": {
+    "source": "paper/ICRL2027/arXiv_AppleStyle.tex",
+    "figure_label": "fig:human_linearization",
+    "framing_sources": ["Introduction: robustness and feedback motivation", "Figure 3 caption", "Problem formulation: empirical model-mismatch motivation"],
+    "scope": "Qualitative motivation for state-dependent feedback and robustness to local-model mismatch; the human stimulation comparison is presented as an illustration, not a brain–LLM equivalence or a population-level causal estimate."
   },
   "asset_policy": "Final figures copied verbatim from Overleaf; no PDF extraction or replotting",
   "teal": {"hex": "#007C7C", "source": "StateTeal definition in arXiv_AppleStyle.tex"},
