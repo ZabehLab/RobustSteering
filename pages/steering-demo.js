@@ -6,7 +6,7 @@
   // Schematic example only: these are not recorded benchmark/model outputs.
   // Replace this data with approved question/response pairs in the next iteration.
   let example = {
-    benchmark: "Multilingual Grade-School Math Example",
+    benchmark: "An Example of Multilingual Grade-School Mathematics",
     question: "阿米娜有3盒铅笔，每盒有12支。她一共有多少支铅笔？",
     baseline: "阿米娜一共有36支铅笔。",
     steered: "Amina tiene 36 lápices en total.",
