@@ -57,15 +57,15 @@ SHORT_MODEL = {
 }
 
 TRUTHFULNESS_EXTRA_CALIBRATIONS = {
-    "pythia_14m": "selected",
-    "pythia_31m": "selected",
-    "distilgpt2": "selected",
-    "gpt2_small": "selected",
-    "smollm2_135m": "selected",
-    "pythia_160m": "selected",
-    "gpt2_medium": "selected",
-    "qwen25_05b": "selected",
-    "gpt2_large": "selected",
+    "pythia_14m": "lambda_txi_n200_r1",
+    "pythia_31m": "lambda_txi_n200_r1",
+    "distilgpt2": "lambda_txi_n200_r1",
+    "gpt2_small": "lambda_txi_n200_r1",
+    "smollm2_135m": "lambda_txi_n200_r1",
+    "pythia_160m": "lambda_txi_n200_r1",
+    "gpt2_medium": "lambda_txi_n200_r1",
+    "qwen25_05b": "lambda_txi_n200_r1",
+    "gpt2_large": "lambda_txi_n200_r1",
     "gemma2_2b": "fixed_q0p1_qf0p31622777_r1",
     "qwen25_32b": "selected",
 }
@@ -324,6 +324,11 @@ def truthfulness_extended_rows(rows: list[dict[str, object]]) -> list[dict[str, 
     for row in all_selections:
         expected = TRUTHFULNESS_EXTRA_CALIBRATIONS.get(row["model_key"])
         if row["benchmark"] != "truthfulness" or row["calibration_id"] != expected:
+            continue
+        # A lambda-first run contains an intermediate lambda-sweep selection
+        # and the final Q/Qf selection.  Only the latter defines the controller
+        # represented in the SROB figure.
+        if "/lambda_sweep/" in row["selection_path"]:
             continue
         parameters = row["parameter_count"] or parameter_fallback[row["model_key"]]
         selected.append({
@@ -941,7 +946,11 @@ def render_overall_summary(
     parameters = np.asarray([float(row["parameter_billions"]) for row in truthfulness])
     truth_s_rob = np.asarray([float(row["s_rob_value"]) for row in truthfulness])
     fit = linregress(np.log10(parameters), np.log10(truth_s_rob))
-    fit_x = np.logspace(np.log10(0.01), np.log10(62), 200)
+    # The filtered variant no longer contains the very small Pythia points.
+    # Start its scaling axis just before the smallest retained model rather
+    # than inheriting the full figure's otherwise empty 0.01--0.1B decade.
+    scale_x_min = 0.01 if included_new_model_keys is None else 0.10
+    fit_x = np.logspace(np.log10(scale_x_min), np.log10(62), 200)
     fit_y = 10 ** (fit.intercept + fit.slope * np.log10(fit_x))
     ax_scale.plot(fit_x, fit_y, color="black", linewidth=1.35, alpha=0.82, zorder=1)
     label_layout = {
@@ -971,14 +980,31 @@ def render_overall_summary(
         )
     ax_scale.set_xscale("log")
     ax_scale.set_yscale("log")
-    ax_scale.set_xlim(0.01, 62)
-    ax_scale.set_ylim(0.008, 40)
+    ax_scale.set_xlim(scale_x_min, 62)
+    scale_y_max = 40 if included_new_model_keys is None else 1.0
+    ax_scale.set_ylim(0.008, scale_y_max)
     ax_scale.set_xlabel("Model parameter count (B; log scale)", fontsize=10.5)
     ax_scale.set_ylabel(r"Robustness $S_{\mathrm{rob}}$ (log scale)", fontsize=10.5)
-    ax_scale.set_xticks([0.01, 0.03, 0.1, 0.3, 1, 3, 8, 14, 32],
-                        ["0.01", "0.03", "0.1", "0.3", "1", "3", "8", "14", "32"])
-    ax_scale.set_yticks([0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30],
-                        ["0.01", "0.03", "0.1", "0.3", "1", "3", "10", "30"])
+    x_ticks = [0.01, 0.03, 0.1, 0.3, 1, 3, 8, 14, 32]
+    x_tick_labels = ["0.01", "0.03", "0.1", "0.3", "1", "3", "8", "14", "32"]
+    visible_ticks = [
+        (tick, label) for tick, label in zip(x_ticks, x_tick_labels)
+        if tick >= scale_x_min
+    ]
+    ax_scale.set_xticks(
+        [tick for tick, _ in visible_ticks],
+        [label for _, label in visible_ticks],
+    )
+    y_ticks = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
+    y_tick_labels = ["0.01", "0.03", "0.1", "0.3", "1", "3", "10", "30"]
+    visible_y_ticks = [
+        (tick, label) for tick, label in zip(y_ticks, y_tick_labels)
+        if tick <= scale_y_max
+    ]
+    ax_scale.set_yticks(
+        [tick for tick, _ in visible_y_ticks],
+        [label for _, label in visible_y_ticks],
+    )
     ax_scale.xaxis.set_minor_formatter(mpl.ticker.NullFormatter())
     ax_scale.yaxis.set_minor_formatter(mpl.ticker.NullFormatter())
     ax_scale.grid(True, which="major", color="#D9DDE1", linewidth=0.65, alpha=0.75)

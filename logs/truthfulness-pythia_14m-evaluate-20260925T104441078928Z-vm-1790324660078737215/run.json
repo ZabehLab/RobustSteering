@@ -1,0 +1,103 @@
+{
+  "schema_version": 2,
+  "run_id": "truthfulness-pythia_14m-evaluate-20260925T104441078928Z-vm-1790324660078737215",
+  "status": "complete",
+  "started_at_utc": "2026-09-25T10:44:41.079025+00:00",
+  "benchmark": "truthfulness",
+  "model": "pythia_14m",
+  "stage": "evaluate",
+  "methods": [
+    "original",
+    "h_infinity"
+  ],
+  "datasets": [
+    "id"
+  ],
+  "evaluated_model_kv_cache": false,
+  "devices": "cuda:1",
+  "calibration_id": "lambda_txi_n200_r1",
+  "parameters": {
+    "run_profile": "srob_small_models",
+    "generation_batch_size": 128,
+    "evaluation_samples": null,
+    "evaluation_repetitions": 1,
+    "scorers": [],
+    "api_concurrency": 500,
+    "api_batch_size": 20,
+    "selection_metric": "truthfulqa_txi_fluency_composite",
+    "h_infinity_fixed_parameters": null,
+    "h_infinity_lambda_sweep": false
+  },
+  "command": [
+    "/tmp/controller-run/robust_steerability/benchmarks/truthfulness.py",
+    "evaluate",
+    "--model",
+    "pythia_14m",
+    "--run-profile",
+    "srob_small_models",
+    "--methods",
+    "original,h_infinity",
+    "--datasets",
+    "id",
+    "--devices",
+    "cuda:1",
+    "--calibration-id",
+    "lambda_txi_n200_r1",
+    "--generation-batch-size",
+    "128",
+    "--evaluation-repetitions",
+    "1"
+  ],
+  "working_directory": "/tmp/controller-run",
+  "git": {
+    "commit": "246135eea9bd8768268881120674744fb5612bbd",
+    "dirty": false,
+    "branch": "main"
+  },
+  "machine": {
+    "hostname": "vm-1790324660078737215",
+    "lightning_cloudspace_id": "01m2ges9x7p9xpz3z1b9208rk6",
+    "lightning_cloudspace_host": "01m2ges9x7p9xpz3z1b9208rk6.cloudspaces.litng.ai",
+    "platform": "Linux-6.8.0-110-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "torch": "2.9.1+cu128",
+    "cuda_runtime": "12.8",
+    "cuda_visible_devices": null,
+    "cuda_devices": [
+      {
+        "index": 0,
+        "name": "NVIDIA H200",
+        "total_memory_bytes": 150109880320
+      },
+      {
+        "index": 1,
+        "name": "NVIDIA H200",
+        "total_memory_bytes": 150109880320
+      },
+      {
+        "index": 2,
+        "name": "NVIDIA H200",
+        "total_memory_bytes": 150109880320
+      },
+      {
+        "index": 3,
+        "name": "NVIDIA H200",
+        "total_memory_bytes": 150109880320
+      }
+    ],
+    "packages": {
+      "accelerate": "1.15.0",
+      "bitsandbytes": "0.50.2",
+      "datasets": "4.4.2",
+      "transformers": "4.57.1"
+    }
+  },
+  "storage": {
+    "backend": "lightning_teamspace_drive",
+    "benchmark_cache_root": "/tmp/truthfulness-srob-lambda/robust-steering-cache/truthfulness/pythia_14m",
+    "huggingface_model_cache": "/tmp/robust-steerability/huggingface",
+    "staged_model_snapshot": "/tmp/robust-steerability/huggingface/models--EleutherAI--pythia-14m/snapshots/cf967c0a9a04383db6f7b1108d86b2962634b4ac"
+  },
+  "finished_at_utc": "2026-09-25T10:45:07.008469+00:00",
+  "elapsed_seconds": 25.776984056999936
+}

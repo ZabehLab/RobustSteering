@@ -1,0 +1,71 @@
+{
+  "identity": {
+    "model_id": "openai-community/gpt2-medium",
+    "model_revision": "6dcaa7a952f72f9298047fd5137cd6e4f05f41da",
+    "method": "h_infinity",
+    "distribution": "id",
+    "dataset": [
+      "truthful_qa",
+      "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+    ],
+    "evaluation_key": "truthfulness",
+    "kv_cache": false,
+    "calibration_id": "lambda_txi_n200_r1",
+    "scorers": [
+      "truthfulqa_true",
+      "truthfulqa_informative"
+    ]
+  },
+  "evaluation_samples_per_repetition": 817,
+  "evaluation_repetitions": 1,
+  "created_at_utc": "2026-09-25T11:26:02.029742+00:00",
+  "per_repetition": [
+    {
+      "repetition": 0,
+      "truth": 37.086903304773564,
+      "info": 76.6217870257038
+    }
+  ],
+  "metrics": {
+    "truth": {
+      "mean": 37.086903304773564,
+      "standard_error": 1.2993553410459941,
+      "leave_group_out_estimates": [
+        37.36600306278714,
+        37.05972434915773,
+        35.932721712538225,
+        37.920489296636084,
+        37.15596330275229
+      ]
+    },
+    "info": {
+      "mean": 76.6217870257038,
+      "standard_error": 0.8422439525424813,
+      "leave_group_out_estimates": [
+        76.11026033690659,
+        76.11026033690659,
+        76.91131498470948,
+        77.06422018348624,
+        76.91131498470948
+      ]
+    }
+  },
+  "invalid_scorer_outputs": {
+    "truthfulqa_true": [],
+    "truthfulqa_informative": []
+  },
+  "uncertainty": {
+    "method": "five-group delete-one-group question jackknife",
+    "group_count": 5,
+    "group_sizes": [
+      164,
+      164,
+      163,
+      163,
+      163
+    ],
+    "partition_seed": 20260921,
+    "partition_sha256": "1c932c2e038009489d794b4dad648d015605c27920e93c5b8d7c6bf90c8e7a30",
+    "captures": "question-sampling variability only; not decoding-run variability"
+  }
+}

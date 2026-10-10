@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 from collections import defaultdict
 from pathlib import Path
@@ -13,7 +14,13 @@ mpl.use("Agg")
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.offsetbox import AnnotationBbox, OffsetImage
+from matplotlib.offsetbox import (
+    AnchoredOffsetbox,
+    AnnotationBbox,
+    HPacker,
+    OffsetImage,
+    TextArea,
+)
 from matplotlib.lines import Line2D
 from PIL import Image
 
@@ -216,6 +223,7 @@ def add_legends(
     dot_handles: bool = False,
     font_scale: float = 1.0,
     legend_y: float = 0.008,
+    grouped_model_header: bool = False,
 ) -> None:
     model_handles = []
     for model in MODELS:
@@ -226,15 +234,18 @@ def add_legends(
 
     # Matplotlib legends cannot natively use arbitrary logo images cleanly, so
     # position compact, untinted model logos and names directly above the panels.
-    legend_bounds = (
-        [0.25, 0.90, 0.54, 0.085]
-        if font_scale > 1.0
-        else [0.32, 0.91, 0.36, 0.06]
-    )
+    if grouped_model_header:
+        legend_bounds = [0.075, 0.90, 0.60, 0.085]
+    else:
+        legend_bounds = (
+            [0.25, 0.90, 0.54, 0.085]
+            if font_scale > 1.0
+            else [0.32, 0.91, 0.36, 0.06]
+        )
     legend_ax = fig.add_axes(legend_bounds)
     legend_ax.axis("off")
-    positions = [(0.02, "Qwen3-4B"), (0.38, "Phi-4-mini"), (0.72, "Granite-3.3-2B")]
-    for x, model in positions:
+    model_groups = []
+    for model in MODELS:
         # The legend shows the official company artwork in its native colors;
         # only the data marks are recolored to encode method identity.
         image = np.asarray(Image.open(MODEL_LOGOS[model]).convert("RGBA"))
@@ -247,22 +258,59 @@ def add_legends(
             "Phi-4-mini": 0.020,
             "Granite-3.3-2B": 0.026,
         }[model]
-        legend_ax.add_artist(
-            AnnotationBbox(
-                OffsetImage(image, zoom=zoom),
-                (x, 0.5),
-                xycoords="axes fraction",
-                frameon=False,
-                pad=0,
+        if grouped_model_header:
+            zoom *= 1.25
+        if grouped_model_header:
+            model_groups.append(
+                HPacker(
+                    children=[
+                        OffsetImage(image, zoom=zoom),
+                        TextArea(
+                            model,
+                            textprops={
+                                "fontsize": 14.0 * font_scale,
+                                "fontfamily": "Arial",
+                                "color": INK,
+                            },
+                        ),
+                    ],
+                    align="center",
+                    pad=0,
+                    sep=4,
+                )
             )
-        )
-        legend_ax.text(
-            x + 0.07,
-            0.5,
-            model,
-            va="center",
-            ha="left",
-            fontsize=10.4 * font_scale,
+        else:
+            x = {"Qwen3-4B": 0.02, "Phi-4-mini": 0.38, "Granite-3.3-2B": 0.72}[model]
+            legend_ax.add_artist(
+                AnnotationBbox(
+                    OffsetImage(image, zoom=zoom),
+                    (x, 0.5),
+                    xycoords="axes fraction",
+                    frameon=False,
+                    pad=0,
+                )
+            )
+            legend_ax.text(
+                x + 0.07,
+                0.5,
+                model,
+                va="center",
+                ha="left",
+                fontsize=10.4 * font_scale,
+            )
+
+    if grouped_model_header:
+        packed = HPacker(children=model_groups, align="center", pad=0, sep=24)
+        legend_ax.add_artist(
+            AnchoredOffsetbox(
+                loc="center left",
+                child=packed,
+                pad=0,
+                frameon=False,
+                bbox_to_anchor=(0.0, 0.5),
+                bbox_transform=legend_ax.transAxes,
+                borderpad=0,
+            )
         )
 
     if dot_handles:
@@ -291,17 +339,30 @@ def add_legends(
             )
             for method in methods
         ]
-    fig.legend(
-        handles=method_handles,
-        loc="lower center",
-        bbox_to_anchor=(0.5, legend_y),
-        ncol=len(methods),
-        frameon=False,
-        handlelength=1.7,
-        columnspacing=2.0,
-        handletextpad=0.55,
-        fontsize=11.2 * font_scale,
-    )
+    if grouped_model_header:
+        fig.legend(
+            handles=method_handles,
+            loc="center right",
+            bbox_to_anchor=(0.988, 0.9425),
+            ncol=len(methods),
+            frameon=False,
+            handlelength=0.7,
+            columnspacing=1.5,
+            handletextpad=0.25,
+            fontsize=14.0 * font_scale,
+        )
+    else:
+        fig.legend(
+            handles=method_handles,
+            loc="lower center",
+            bbox_to_anchor=(0.5, legend_y),
+            ncol=len(methods),
+            frameon=False,
+            handlelength=1.7,
+            columnspacing=2.0,
+            handletextpad=0.55,
+            fontsize=11.2 * font_scale,
+        )
 
 
 def accuracy_change(method_accuracy: float, original_accuracy: float) -> float:
@@ -313,6 +374,7 @@ def render_accuracy_change(
     rows: list[dict[str, object]],
     *,
     relative_right: bool = False,
+    expanded: bool = False,
 ) -> None:
     font_scale = 1.5
     configure_style(font_scale)
@@ -325,8 +387,11 @@ def render_accuracy_change(
     fig, axes = plt.subplots(
         1,
         2,
-        figsize=(12.0, 5.8),
-        gridspec_kw={"wspace": 0.24, "width_ratios": [0.72, 2.1]},
+        figsize=(12.0, 3.6) if expanded else (12.0, 5.8),
+        gridspec_kw={
+            "wspace": 0.32 if expanded else 0.24,
+            "width_ratios": [0.72, 2.1],
+        },
     )
     left, right = axes
 
@@ -363,6 +428,8 @@ def render_accuracy_change(
                 "Granite-3.3-2B": 0.023,
             }[model]
             zoom *= 1.10 if method == "H-infinity" else 0.94
+            if expanded:
+                zoom *= 1.8
             add_logo(
                 left,
                 method_points[method][0],
@@ -414,8 +481,8 @@ def render_accuracy_change(
             right.plot(
                 [pair[method][0] for method in COMPARISON_METHODS],
                 [pair[method][1] for method in COMPARISON_METHODS],
-                color="#858B8E",
-                linewidth=1.0,
+                color="#000000" if expanded else "#858B8E",
+                linewidth=1.5 if expanded else 1.0,
                 linestyle=(0, (3, 2)),
                 zorder=4,
             )
@@ -434,12 +501,18 @@ def render_accuracy_change(
             )
 
     left.set_xlabel(r"IR $\times$ fluency")
-    left.set_xlim(-0.12, 2.5)
+    left.set_xlim(-0.25 if expanded else -0.12, 2.5)
+    if expanded:
+        # Preserve the original nonnegative ticks while giving the enlarged
+        # Original marker enough breathing room at the left frame.
+        left.set_xticks([0, 1, 2])
     right.set_xticks(x, display_languages)
-    right.set_xlabel("Transfer language")
+    right.set_xlabel("Transfer language (OOD)" if expanded else "Transfer language")
     right.set_xlim(-0.5, len(display_languages) - 0.5)
 
-    left.set_ylabel(r"$\Delta$ Acc. from Original (%)")
+    left.set_ylabel(
+        "$\\Delta$ Acc. from\nOriginal (%)" if expanded else r"$\Delta$ Acc. from Original (%)"
+    )
     left.set_ylim(-3, 50.0 if relative_right else comparison_ymax)
     left.axhline(0.0, color=INK, linewidth=1.2, linestyle="-", zorder=2)
     left.text(
@@ -453,9 +526,13 @@ def render_accuracy_change(
         color=MUTED,
     )
     style_axis(left, font_scale)
+    if expanded:
+        left.tick_params(labelsize=14.0 * font_scale)
 
     if relative_right:
-        right.set_ylabel("% Match of Original Acc.")
+        right.set_ylabel(
+            "% Match of\nOriginal Acc." if expanded else "% Match of Original Acc."
+        )
         right.set_ylim(-13, right_ymax)
         right.set_yticks([0, 25, 50, 75, 100])
         right.axhline(100.0, color=INK, linewidth=1.2, linestyle="-", zorder=2)
@@ -474,6 +551,13 @@ def render_accuracy_change(
         right.set_ylim(-3, comparison_ymax)
         right.axhline(0.0, color=INK, linewidth=1.2, linestyle="-", zorder=2)
     style_axis(right, font_scale)
+    if expanded:
+        right.tick_params(labelsize=14.0 * font_scale)
+        right.xaxis.label.set_color("#8B1E1E")
+        right.xaxis.label.set_fontweight("bold")
+        for label in right.get_xticklabels():
+            label.set_color("#8B1E1E")
+            label.set_fontweight("bold")
 
     add_legends(
         fig,
@@ -481,14 +565,18 @@ def render_accuracy_change(
         dot_handles=True,
         font_scale=font_scale,
         legend_y=0.055 if relative_right else 0.008,
+        grouped_model_header=expanded,
     )
-    fig.subplots_adjust(left=0.075, right=0.988, bottom=0.30, top=0.86)
+    fig.subplots_adjust(
+        left=0.075,
+        right=0.988,
+        bottom=0.30,
+        top=0.86,
+    )
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    stem = (
-        "figure_language_relative"
-        if relative_right
-        else "figure_language_delta"
-    )
+    stem = "figure_language_relative" if relative_right else "figure_language_delta"
+    if expanded:
+        stem += "_expanded"
     fig.savefig(OUTPUT_DIR / f"{stem}.pdf", bbox_inches="tight", pad_inches=0.04)
     fig.savefig(
         OUTPUT_DIR / f"{stem}.png",
@@ -578,7 +666,14 @@ def render() -> None:
 
 
 if __name__ == "__main__":
-    render()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--relative-expanded-only", action="store_true")
+    args = parser.parse_args()
     rows = read_rows()
-    render_accuracy_change(rows)
-    render_accuracy_change(rows, relative_right=True)
+    if args.relative_expanded_only:
+        render_accuracy_change(rows, relative_right=True, expanded=True)
+    else:
+        render()
+        render_accuracy_change(rows)
+        render_accuracy_change(rows, relative_right=True)
+        render_accuracy_change(rows, relative_right=True, expanded=True)

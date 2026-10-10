@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import math
@@ -36,6 +37,8 @@ FALSE_REJECT_CACHE = UNIT / "cache/false_reject_full/parsed_judgments.jsonl"
 
 TEAL = "#398197"  # preserved only for the original figure variant
 PROJECT_TEAL = "#007C7C"
+TRUTHFUL_ALQR = "#687DA3"
+MGSM_LIGHT_GRAY = "#B8BEC2"
 INK = "#202124"
 MUTED = "#6E757B"
 GRID = "#E2E5E7"
@@ -190,13 +193,41 @@ def aggregates(rows: list[dict[str, str | float]]) -> dict[tuple[str, str], dict
 
 
 def style_main_axis(
-    ax: plt.Axes, *, grid_axis: str = "both", font_scale: float = 1.0
+    ax: plt.Axes,
+    *,
+    grid_axis: str = "both",
+    font_scale: float = 1.0,
+    despine: bool = True,
 ) -> None:
     ax.grid(True, axis=grid_axis, color=GRID, linewidth=0.75, zorder=0)
     ax.tick_params(labelsize=9.5 * font_scale, colors="black")
     ax.xaxis.label.set_color("black")
     ax.yaxis.label.set_color("black")
-    sns.despine(ax=ax, trim=True, offset=6)
+    if despine:
+        sns.despine(ax=ax, trim=True, offset=6)
+
+
+def apply_truthfulness_axis_style(ax: plt.Axes) -> None:
+    """Match the continuous box spines used in the TruthfulQA composite."""
+    for name, spine in ax.spines.items():
+        spine.set_visible(True)
+        spine.set_position(("outward", 0))
+        spine.set_bounds(None, None)
+        if name in ("left", "bottom"):
+            spine.set_color("#000000")
+            spine.set_linewidth(1.15)
+        else:
+            spine.set_color("#AEB4BC")
+            spine.set_linewidth(0.7)
+    ax.tick_params(
+        axis="both",
+        colors="black",
+        width=1.0,
+        length=5.5,
+        direction="out",
+        bottom=True,
+        left=True,
+    )
 
 
 def tinted_logo(color: str) -> np.ndarray:
@@ -244,8 +275,13 @@ def add_model_mark(
         zoom=logo_zoom(model, scale=1.10 if is_ours else 1.0),
         resample=True,
     )
+    exact_light_original = (
+        method == "Original" and colors["Original"] == MGSM_LIGHT_GRAY
+    )
     image.set_alpha(
-        1.0 if is_ours else (0.95 if method == "A-LQR" else 0.72)
+        1.0
+        if is_ours or exact_light_original
+        else (0.95 if method == "A-LQR" else 0.72)
     )
     ax.add_artist(
         AnnotationBbox(
@@ -314,11 +350,15 @@ def draw_profile_panel(
     font_scale: float = 1.0,
     bottom_spine_at_zero: bool = True,
     template_font_scale: float = 1.0,
+    expanded: bool = False,
 ) -> None:
     indexed = {(str(row["model"]), str(row["template"]), str(row["method"])): float(row["asr"]) for row in rows}
-    # Give the two longest adjacent labels (DNE nonresponse and APM
-    # programmer) a little extra room without widening the whole figure.
-    x = np.asarray([0.0, 0.90, 1.90, 3.25, 4.65, 5.65])
+    # The expanded paper variant uses strictly even categorical spacing.
+    x = (
+        np.arange(len(TEMPLATES), dtype=float)
+        if expanded
+        else np.asarray([0.0, 0.90, 1.90, 3.25, 4.65, 5.65])
+    )
     displayed_values: list[float] = []
     for model in MODEL_SIZES:
         for method in METHODS:
@@ -331,22 +371,56 @@ def draw_profile_panel(
                     colors=colors,
                 )
     ax.set_xticks(x)
-    ax.set_xticklabels(
-        [TEMPLATE_LABELS[t] for t in TEMPLATES],
-        fontsize=7.7 * font_scale * template_font_scale,
-    )
+    if expanded:
+        expanded_labels = (
+            "Direct attack",
+            "John persona",
+            "YOJA/Nona roleplay",
+            "DNE nonresponse",
+            "APM programmer",
+            "Jailbreak Bot",
+        )
+        ax.set_xticklabels(
+            expanded_labels,
+            fontsize=18.0,
+            rotation=45,
+            ha="right",
+            rotation_mode="anchor",
+        )
+    else:
+        ax.set_xticklabels(
+            [TEMPLATE_LABELS[t] for t in TEMPLATES],
+            fontsize=7.7 * font_scale * template_font_scale,
+        )
     ax.set_xlim(x[0] - 0.38, x[-1] + 0.38)
-    ax.set_ylabel("Attack success rate (%) ↓", fontsize=10.5 * font_scale)
-    ax.set_xlabel(
-        "Jailbreak template",
+    ax.set_ylabel(
+        "Attack success (%) ↓" if expanded else "Attack success rate (%) ↓",
         fontsize=10.5 * font_scale,
-        labelpad=14,
     )
+    if not expanded:
+        ax.set_xlabel(
+            "Jailbreak template",
+            fontsize=10.5 * font_scale,
+            labelpad=14,
+        )
     # Keep the visible baseline at zero while reserving enough internal room for
     # markers centered exactly on zero to render without clipping.
     ax.set_ylim(-2.0, 1.10 * max(displayed_values))
-    style_main_axis(ax, grid_axis="y", font_scale=font_scale)
-    ax.tick_params(axis="x", pad=8)
+    style_main_axis(
+        ax,
+        grid_axis="y",
+        font_scale=font_scale,
+        despine=not expanded,
+    )
+    if expanded:
+        apply_truthfulness_axis_style(ax)
+    ax.tick_params(axis="x", pad=3 if expanded else 8)
+    if expanded:
+        for index, label in enumerate(ax.get_xticklabels()):
+            label.set_color("#000000" if index == 0 else "#8B1E1E")
+            label.set_fontweight("normal" if index == 0 else "bold")
+            label.set(rotation=30, horizontalalignment="right")
+            label.set_rotation_mode("default")
     if bottom_spine_at_zero:
         ax.spines["bottom"].set_position(("data", 0))
 
@@ -359,6 +433,7 @@ def draw_frontier_panel(
     logo_images: dict[str, np.ndarray] | None = None,
     colors: dict[str, str] = METHOD_COLORS,
     font_scale: float = 1.0,
+    expanded: bool = False,
 ) -> None:
     nested = spec.subgridspec(2, 2, width_ratios=(1, 0.17), height_ratios=(0.18, 1), hspace=0.05, wspace=0.06)
     top = fig.add_subplot(nested[0, 0])
@@ -376,10 +451,10 @@ def draw_frontier_panel(
             ax.plot(
                 [source["mean_asr"], target["mean_asr"]],
                 [source["safe"], target["safe"]],
-                color="#B7BDC1",
-                lw=0.9,
-                ls=(0, (3, 2)),
-                alpha=0.55,
+                color="#000000" if expanded else "#B7BDC1",
+                lw=1.5 if expanded else 0.9,
+                ls=(0, (2, 2)) if expanded else (0, (3, 2)),
+                alpha=0.90 if expanded else 0.55,
             )
         for method in METHODS:
             point = summary[(model, method)]
@@ -403,9 +478,21 @@ def draw_frontier_panel(
 
     ax.set_xlim(*x_limits)
     ax.set_ylim(*y_limits)
-    ax.set_xlabel("Mean attack success rate (%) ↓", fontsize=10.5 * font_scale)
-    ax.set_ylabel("Safe-concept relevance (0–2) ↑", fontsize=10.5 * font_scale)
-    style_main_axis(ax, font_scale=font_scale)
+    ax.set_xlabel(
+        "Mean attack success (%) ↓"
+        if expanded
+        else "Mean attack success rate (%) ↓",
+        fontsize=10.5 * font_scale,
+    )
+    ax.set_ylabel(
+        "Safe-concept\nrelevance (0–2) ↑"
+        if expanded
+        else "Safe-concept relevance (0–2) ↑",
+        fontsize=10.5 * font_scale,
+    )
+    style_main_axis(ax, font_scale=font_scale, despine=not expanded)
+    if expanded:
+        apply_truthfulness_axis_style(ax)
     for marginal in (top, right):
         marginal.set_xticks([])
         marginal.set_yticks([])
@@ -414,6 +501,13 @@ def draw_frontier_panel(
             spine.set_visible(False)
     top.set_xlim(*x_limits)
     right.set_ylim(*y_limits)
+    if expanded:
+        top.spines["bottom"].set_visible(True)
+        top.spines["bottom"].set_color("#000000")
+        top.spines["bottom"].set_linewidth(1.15)
+        right.spines["left"].set_visible(True)
+        right.spines["left"].set_color("#000000")
+        right.spines["left"].set_linewidth(1.15)
 
 
 def create_figure(rows: list[dict[str, str | float]]) -> plt.Figure:
@@ -454,6 +548,7 @@ def draw_logo_size_legend(
     bounds: tuple[float, float, float, float] = (0.285, 0.885, 0.43, 0.09),
     fontsize: float = 14.0,
     separation: float = 24.0,
+    left_aligned: bool = False,
 ) -> None:
     ax = fig.add_axes(bounds)
     ax.set_axis_off()
@@ -474,11 +569,11 @@ def draw_logo_size_legend(
     packed = HPacker(children=groups, align="center", pad=0, sep=separation)
     ax.add_artist(
         AnchoredOffsetbox(
-            loc="center",
+            loc="center left" if left_aligned else "center",
             child=packed,
             pad=0,
             frameon=False,
-            bbox_to_anchor=(0.5, 0.5),
+            bbox_to_anchor=(0.0 if left_aligned else 0.5, 0.5),
             bbox_transform=ax.transAxes,
             borderpad=0,
         )
@@ -554,7 +649,9 @@ def create_logo_figure(rows: list[dict[str, str | float]]) -> plt.Figure:
     return fig
 
 
-def logo_method_handles() -> list[Line2D]:
+def logo_method_handles(
+    colors: dict[str, str] = LOGO_METHOD_COLORS,
+) -> list[Line2D]:
     return [
         Line2D(
             [],
@@ -562,9 +659,13 @@ def logo_method_handles() -> list[Line2D]:
             linestyle="none",
             marker="o",
             markersize=10.0 if method == "H-infinity" else 8.0,
-            markerfacecolor=LOGO_METHOD_COLORS[method],
+            markerfacecolor=colors[method],
             markeredgecolor="none",
-            alpha=1.0 if method != "Original" else 0.78,
+            alpha=(
+                1.0
+                if method != "Original" or colors["Original"] == MGSM_LIGHT_GRAY
+                else 0.78
+            ),
             label=METHOD_LABELS[method],
         )
         for method in METHODS
@@ -599,11 +700,13 @@ def draw_refusal_composition_panel(
     composition: dict[str, dict[str, tuple[float, ...]]],
     *,
     font_scale: float = 1.0,
+    expanded: bool = False,
+    colors: dict[str, str] = LOGO_METHOD_COLORS,
 ) -> None:
     categories = (
-        "Direct\nrefusal",
-        "Safe\npartial\ncompliance",
-        "Full\ncompliance",
+        ("Direct refusal", "Safe partial compliance", "Full compliance")
+        if expanded
+        else ("Direct\nrefusal", "Safe\npartial\ncompliance", "Full\ncompliance")
     )
     methods = ("A-LQR", "H-infinity")
     x = np.arange(len(categories), dtype=float)
@@ -631,13 +734,13 @@ def draw_refusal_composition_panel(
         for artist in box["boxes"]:
             artist.set(
                 facecolor="none",
-                edgecolor=LOGO_METHOD_COLORS[method],
+                edgecolor=colors[method],
                 linewidth=linewidth,
             )
         for key in ("whiskers", "caps", "medians"):
             for artist in box[key]:
                 artist.set(
-                    color=LOGO_METHOD_COLORS[method],
+                    color=colors[method],
                     linewidth=linewidth,
                 )
     for category_index, center in enumerate(x):
@@ -650,9 +753,10 @@ def draw_refusal_composition_panel(
             ax.plot(
                 pair_x,
                 pair_y,
-                color="#92999E",
-                linewidth=1.05,
-                alpha=0.72,
+                color="#000000" if expanded else "#92999E",
+                linewidth=1.5 if expanded else 1.05,
+                linestyle=(0, (2, 2)) if expanded else "-",
+                alpha=0.90 if expanded else 0.72,
                 zorder=3,
             )
             for method, point_x, point_y in zip(
@@ -663,7 +767,7 @@ def draw_refusal_composition_panel(
                     point_y,
                     marker="o",
                     markersize=4.8 if method == "H-infinity" else 4.2,
-                    markerfacecolor=LOGO_METHOD_COLORS[method],
+                    markerfacecolor=colors[method],
                     markeredgecolor="white",
                     markeredgewidth=0.55,
                     linestyle="none",
@@ -676,16 +780,29 @@ def draw_refusal_composition_panel(
         categories,
         fontsize=9.5 * font_scale,
     )
-    ax.set_ylabel("Response proportion (%)", fontsize=10.5 * font_scale)
+    ax.set_ylabel(
+        "Proportion (%)" if expanded else "Response proportion (%)",
+        fontsize=10.5 * font_scale,
+    )
     ax.set_ylim(0, 104)
     ax.set_yticks((0, 25, 50, 75, 100))
     ax.tick_params(axis="y", labelsize=9.5 * font_scale)
     ax.grid(axis="y", color=GRID, linewidth=0.8, alpha=0.75, zorder=0)
     ax.set_axisbelow(True)
-    sns.despine(ax=ax, trim=True, offset=5)
+    if not expanded:
+        sns.despine(ax=ax, trim=True, offset=5)
+    if expanded:
+        apply_truthfulness_axis_style(ax)
     # despine(trim=True) rebuilds these ticks; enforce the category size after
     # that operation so it is not reset to the global 16.5 pt default.
     ax.tick_params(axis="x", labelsize=9.5 * font_scale)
+    if expanded:
+        plt.setp(
+            ax.get_xticklabels(),
+            rotation=30,
+            ha="right",
+            rotation_mode="default",
+        )
 
 
 def create_logo_main_figure(rows: list[dict[str, str | float]]) -> plt.Figure:
@@ -743,6 +860,102 @@ def create_logo_main_figure(rows: list[dict[str, str | float]]) -> plt.Figure:
         separation=12.0,
     )
     add_logo_method_legend(fig, x=0.37, y=-0.01, fontsize=11.0)
+    fig.subplots_adjust(left=0.065, right=0.985, top=0.82, bottom=0.27)
+    return fig
+
+
+def create_logo_main_expanded_figure(
+    rows: list[dict[str, str | float]],
+) -> plt.Figure:
+    """Large-type HarmBench composite without modifying the canonical layout."""
+    summary = aggregates(rows)
+    expanded_colors = {
+        **LOGO_METHOD_COLORS,
+        "Original": MGSM_LIGHT_GRAY,
+        "A-LQR": TRUTHFUL_ALQR,
+    }
+    logo_images = {
+        method: tinted_logo(expanded_colors[method]) for method in METHODS
+    }
+    # Matches the TruthfulQA composite: 20 pt axis labels and 18 pt ticks.
+    font_scale = 1.90
+    fig = plt.figure(figsize=(12.7, 5.35))
+    outer = fig.add_gridspec(
+        1,
+        3,
+        width_ratios=(0.826, 1.0, 0.504),
+        wspace=0.40,
+    )
+
+    profile_grid = outer[0].subgridspec(
+        2,
+        1,
+        height_ratios=(0.18, 1.0),
+        hspace=0.05,
+    )
+    profile_spacer = fig.add_subplot(profile_grid[0])
+    profile_spacer.set_axis_off()
+    profile_ax = fig.add_subplot(profile_grid[1])
+    draw_profile_panel(
+        profile_ax,
+        rows,
+        logo_images=logo_images,
+        colors=expanded_colors,
+        font_scale=font_scale,
+        bottom_spine_at_zero=False,
+        expanded=True,
+    )
+
+    draw_frontier_panel(
+        fig,
+        outer[1],
+        summary,
+        logo_images=logo_images,
+        colors=expanded_colors,
+        font_scale=font_scale,
+        expanded=True,
+    )
+
+    # Mirror the marginal row used by the other two panels so all three main
+    # axes have precisely the same top and bottom coordinates.
+    refusal_grid = outer[2].subgridspec(
+        2,
+        1,
+        height_ratios=(0.18, 1.0),
+        hspace=0.05,
+    )
+    refusal_spacer = fig.add_subplot(refusal_grid[0])
+    refusal_spacer.set_axis_off()
+    refusal_ax = fig.add_subplot(refusal_grid[1])
+    draw_refusal_composition_panel(
+        refusal_ax,
+        read_false_reject_composition(),
+        font_scale=font_scale,
+        expanded=True,
+        colors=expanded_colors,
+    )
+
+    draw_logo_size_legend(
+        fig,
+        bounds=(0.065, 0.835, 0.59, 0.09),
+        fontsize=19.0,
+        separation=18.0,
+        left_aligned=True,
+    )
+    method_legend = fig.legend(
+        handles=logo_method_handles(expanded_colors),
+        loc="center right",
+        bbox_to_anchor=(0.985, 0.88),
+        ncol=len(METHODS),
+        fontsize=19.0,
+        handlelength=0.7,
+        handletextpad=0.25,
+        columnspacing=1.2,
+        labelcolor="black",
+    )
+    for text in method_legend.get_texts():
+        if "ours" in text.get_text():
+            text.set_fontweight("bold")
     fig.subplots_adjust(left=0.065, right=0.985, top=0.82, bottom=0.27)
     return fig
 
@@ -831,6 +1044,7 @@ def render_logo_variant() -> None:
     plt.close(figure)
     for stem, creator in [
         ("figure_harm_main", create_logo_main_figure),
+        ("figure_harm_main_expanded", create_logo_main_expanded_figure),
         ("figure_harm_rejection", create_logo_rejection_figure),
         ("figure_harm_refusal_composition", create_refusal_composition_figure),
     ]:
@@ -850,8 +1064,26 @@ def render_logo_variant() -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--main-expanded-only", action="store_true")
+    args = parser.parse_args()
     setup_style()
     PLOTS.mkdir(parents=True, exist_ok=True)
+    if args.main_expanded_only:
+        figure = create_logo_main_expanded_figure(read_rows())
+        figure.savefig(
+            PLOTS / "figure_harm_main_expanded.pdf",
+            bbox_inches="tight",
+            pad_inches=0.04,
+        )
+        figure.savefig(
+            PLOTS / "figure_harm_main_expanded.png",
+            dpi=300,
+            bbox_inches="tight",
+            pad_inches=0.04,
+        )
+        plt.close(figure)
+        return
     figure = create_figure(read_rows())
     figure.savefig(PLOTS / "figure_harm.pdf", bbox_inches="tight", pad_inches=0.04)
     figure.savefig(PLOTS / "figure_harm.png", dpi=300, bbox_inches="tight", pad_inches=0.04)

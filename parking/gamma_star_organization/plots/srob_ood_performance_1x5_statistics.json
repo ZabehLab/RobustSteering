@@ -1,0 +1,53 @@
+{
+  "harmful": {
+    "common_slope_raw_coordinates": 0.34669686616483725,
+    "condition_count": 5,
+    "condition_intercepts": {
+      "APM programmer": 97.18063102463307,
+      "DNE nonresponse": 96.6239643579664,
+      "Jailbreak Bot": 97.04063102463307,
+      "John persona": 96.06729769129973,
+      "YOJA/Nona roleplay": 96.7639643579664
+    },
+    "exact_model_block_permutation_count": 6,
+    "exact_two_sided_p_value": 0.6666666666666666,
+    "model_count": 3,
+    "observation_count": 15
+  },
+  "lciteeval": {
+    "n": 4,
+    "ols_intercept_raw_coordinates": 36.91715053720107,
+    "ols_slope_raw_coordinates": -0.9617089491001046
+  },
+  "mgsm": {
+    "common_slope_raw_coordinates": -15.713095305463934,
+    "condition_count": 5,
+    "condition_intercepts": {
+      "Chinese": 51.94964885950648,
+      "French": 47.94964885950648,
+      "Japanese": 42.61631552617315,
+      "Swahili": 19.949648859506482,
+      "Telugu": 16.61631552617315
+    },
+    "exact_model_block_permutation_count": 6,
+    "exact_two_sided_p_value": 0.3333333333333333,
+    "model_count": 3,
+    "observation_count": 15
+  },
+  "pooled": {
+    "n": 38,
+    "ols_intercept_raw_coordinates": 53.76370063147077,
+    "ols_slope_raw_coordinates": 3.4172242859103648
+  },
+  "truthfulness": {
+    "common_slope_raw_coordinates": 13.257899231971397,
+    "condition_count": 1,
+    "condition_intercepts": {
+      "Spanish": 82.14418949857759
+    },
+    "exact_model_block_permutation_count": 24,
+    "exact_two_sided_p_value": 0.875,
+    "model_count": 4,
+    "observation_count": 4
+  }
+}

@@ -2,73 +2,73 @@
   {
     "model_key": "pythia_14m",
     "model": "Pythia-14M",
-    "original_txi": 8.213468686375357,
-    "h_infinity_txi": 6.4720167673175135,
-    "h_infinity_minus_original_txi": -1.7414519190578437,
+    "original_txi": 8.411224754265612,
+    "h_infinity_txi": 8.343508282533493,
+    "h_infinity_minus_original_txi": -0.06771647173211903,
     "included": false
   },
   {
     "model_key": "pythia_31m",
     "model": "Pythia-31M",
-    "original_txi": 8.357291281204635,
-    "h_infinity_txi": 8.96089673387876,
-    "h_infinity_minus_original_txi": 0.6036054526741257,
-    "included": true
+    "original_txi": 9.123745859482328,
+    "h_infinity_txi": 7.9402057561997275,
+    "h_infinity_minus_original_txi": -1.183540103282601,
+    "included": false
   },
   {
     "model_key": "distilgpt2",
     "model": "DistilGPT-2",
-    "original_txi": 26.917297513517074,
-    "h_infinity_txi": 22.411755100084047,
-    "h_infinity_minus_original_txi": -4.505542413433027,
+    "original_txi": 27.726599239837665,
+    "h_infinity_txi": 27.49618345770492,
+    "h_infinity_minus_original_txi": -0.23041578213274505,
     "included": false
   },
   {
     "model_key": "gpt2_small",
     "model": "GPT-2 Small",
-    "original_txi": 27.506071261099432,
-    "h_infinity_txi": 27.425620497116807,
-    "h_infinity_minus_original_txi": -0.08045076398262552,
+    "original_txi": 28.295747195833936,
+    "h_infinity_txi": 27.531240215194558,
+    "h_infinity_minus_original_txi": -0.7645069806393785,
     "included": false
   },
   {
     "model_key": "smollm2_135m",
     "model": "SmolLM2-135M",
-    "original_txi": 36.4005998600726,
-    "h_infinity_txi": 48.95061941095659,
-    "h_infinity_minus_original_txi": 12.550019550883988,
+    "original_txi": 37.72766292777859,
+    "h_infinity_txi": 41.435289570315014,
+    "h_infinity_minus_original_txi": 3.7076266425364253,
     "included": true
   },
   {
     "model_key": "pythia_160m",
     "model": "Pythia-160M",
-    "original_txi": 26.175712258928606,
-    "h_infinity_txi": 21.156453514589753,
-    "h_infinity_minus_original_txi": -5.0192587443388526,
+    "original_txi": 25.799226653922382,
+    "h_infinity_txi": 25.042510063836257,
+    "h_infinity_minus_original_txi": -0.7567165900861248,
     "included": false
   },
   {
     "model_key": "gpt2_medium",
     "model": "GPT-2 Medium",
-    "original_txi": 28.080462749198865,
-    "h_infinity_txi": 27.181871161921766,
-    "h_infinity_minus_original_txi": -0.8985915872770995,
+    "original_txi": 30.455932607129107,
+    "h_infinity_txi": 28.416648064612303,
+    "h_infinity_minus_original_txi": -2.0392845425168034,
     "included": false
   },
   {
     "model_key": "qwen25_05b",
     "model": "Qwen-2.5-0.5B",
-    "original_txi": 46.866989568367416,
-    "h_infinity_txi": 57.3380235479536,
-    "h_infinity_minus_original_txi": 10.471033979586181,
+    "original_txi": 48.55810357923501,
+    "h_infinity_txi": 50.4051752163706,
+    "h_infinity_minus_original_txi": 1.847071637135592,
     "included": true
   },
   {
     "model_key": "gpt2_large",
     "model": "GPT-2 Large",
-    "original_txi": 26.356988654494682,
-    "h_infinity_txi": 37.810960180617215,
-    "h_infinity_minus_original_txi": 11.453971526122533,
+    "original_txi": 27.740681868914695,
+    "h_infinity_txi": 35.86036623824512,
+    "h_infinity_minus_original_txi": 8.119684369330425,
     "included": true
   }
 ]

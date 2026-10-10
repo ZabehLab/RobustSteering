@@ -1,0 +1,71 @@
+{
+  "identity": {
+    "model_id": "HuggingFaceTB/SmolLM2-135M",
+    "model_revision": "93efa2f097d58c2a74874c7e644dbc9b0cee75a2",
+    "method": "h_infinity",
+    "distribution": "id",
+    "dataset": [
+      "truthful_qa",
+      "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+    ],
+    "evaluation_key": "truthfulness",
+    "kv_cache": false,
+    "calibration_id": "lambda_txi_n200_r1",
+    "scorers": [
+      "truthfulqa_true",
+      "truthfulqa_informative"
+    ]
+  },
+  "evaluation_samples_per_repetition": 817,
+  "evaluation_repetitions": 1,
+  "created_at_utc": "2026-09-25T10:51:52.484141+00:00",
+  "per_repetition": [
+    {
+      "repetition": 0,
+      "truth": 63.1578947368421,
+      "info": 65.60587515299878
+    }
+  ],
+  "metrics": {
+    "truth": {
+      "mean": 63.1578947368421,
+      "standard_error": 2.2662477048536998,
+      "leave_group_out_estimates": [
+        63.70597243491577,
+        64.77794793261869,
+        61.31498470948012,
+        62.84403669724771,
+        63.149847094801224
+      ]
+    },
+    "info": {
+      "mean": 65.60587515299878,
+      "standard_error": 2.7870107884109396,
+      "leave_group_out_estimates": [
+        65.08422664624808,
+        63.85911179173048,
+        67.88990825688073,
+        64.83180428134557,
+        66.36085626911316
+      ]
+    }
+  },
+  "invalid_scorer_outputs": {
+    "truthfulqa_true": [],
+    "truthfulqa_informative": []
+  },
+  "uncertainty": {
+    "method": "five-group delete-one-group question jackknife",
+    "group_count": 5,
+    "group_sizes": [
+      164,
+      164,
+      163,
+      163,
+      163
+    ],
+    "partition_seed": 20260921,
+    "partition_sha256": "1c932c2e038009489d794b4dad648d015605c27920e93c5b8d7c6bf90c8e7a30",
+    "captures": "question-sampling variability only; not decoding-run variability"
+  }
+}

@@ -21,7 +21,7 @@ CACHE = HERE / "cache" / "stimulation_context"
 RESULTS = HERE / "results"
 PLOTS = HERE / "plots"
 HORIZONS_MS = (20, 40, 100, 200, 300, 400, 500, 700)
-ID_COLOR = "#8A8F94"
+ID_COLOR = "#c9c9c9"
 OOD_COLOR = "#8B1E1E"
 OPEN_COLOR = "#C47A5A"
 CLOSED_COLOR = "#007C7C"
@@ -232,7 +232,9 @@ def plot(context: pd.DataFrame, accuracy: pd.DataFrame, simplified: bool = False
     y = ordered["accuracy_pct"].to_numpy()
     errors = np.vstack([y - ordered["ci_low_pct"].to_numpy(),
                         ordered["ci_high_pct"].to_numpy() - y])
-    axes[3].bar(x, y, color=colors, width=0.68)
+    # Keep the established accuracy-panel layout, but make the two bars 70%
+    # of their previous width so they no longer dominate the compact axis.
+    axes[3].bar(x, y, color=colors, width=0.68 * 0.70)
     if simplified:
         axes[3].errorbar(x[0], y[0], yerr=errors[:, [0]], fmt="none",
                          ecolor="black", capsize=3, lw=1.2)

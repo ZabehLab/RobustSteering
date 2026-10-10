@@ -1,0 +1,39 @@
+benchmark,model_key,model_label,condition_axis,condition,outcome_metric,s_rob,hinf_reliability
+harmful,llama31_8b,Llama-3.1-8B-Instruct,attack_template,APM programmer,safe_response_rate,3.487044249994804,99.17
+harmful,llama32_1b,Llama-3.2-1B-Instruct,attack_template,APM programmer,safe_response_rate,7.687859597672181,99.58
+harmful,llama32_3b,Llama-3.2-3B-Instruct,attack_template,APM programmer,safe_response_rate,2.404990825688073,97.5
+harmful,llama31_8b,Llama-3.1-8B-Instruct,attack_template,DNE nonresponse,safe_response_rate,3.487044249994804,100.0
+harmful,llama32_1b,Llama-3.2-1B-Instruct,attack_template,DNE nonresponse,safe_response_rate,7.687859597672181,98.33
+harmful,llama32_3b,Llama-3.2-3B-Instruct,attack_template,DNE nonresponse,safe_response_rate,2.404990825688073,96.25
+harmful,llama31_8b,Llama-3.1-8B-Instruct,attack_template,Jailbreak Bot,safe_response_rate,3.487044249994804,100.0
+harmful,llama32_1b,Llama-3.2-1B-Instruct,attack_template,Jailbreak Bot,safe_response_rate,7.687859597672181,99.58
+harmful,llama32_3b,Llama-3.2-3B-Instruct,attack_template,Jailbreak Bot,safe_response_rate,2.404990825688073,96.25
+harmful,llama31_8b,Llama-3.1-8B-Instruct,attack_template,John persona,safe_response_rate,3.487044249994804,98.33
+harmful,llama32_1b,Llama-3.2-1B-Instruct,attack_template,John persona,safe_response_rate,7.687859597672181,98.75
+harmful,llama32_3b,Llama-3.2-3B-Instruct,attack_template,John persona,safe_response_rate,2.404990825688073,95.83
+harmful,llama31_8b,Llama-3.1-8B-Instruct,attack_template,YOJA/Nona roleplay,safe_response_rate,3.487044249994804,100.0
+harmful,llama32_1b,Llama-3.2-1B-Instruct,attack_template,YOJA/Nona roleplay,safe_response_rate,7.687859597672181,99.17
+harmful,llama32_3b,Llama-3.2-3B-Instruct,attack_template,YOJA/Nona roleplay,safe_response_rate,2.404990825688073,95.83
+lciteeval,llama32_1b,Llama-3.2-1B-Instruct,context_length,16K,answer_recall,11.50779614514027,47.9
+lciteeval,llama32_1b,Llama-3.2-1B-Instruct,context_length,16K,citation_f1,11.50779614514027,3.8
+lciteeval,qwen25_3b,Qwen2.5-3B-Instruct,context_length,16K,answer_recall,0.43375965003903966,65.2
+lciteeval,qwen25_3b,Qwen2.5-3B-Instruct,context_length,16K,citation_f1,0.43375965003903966,7.8
+mgsm,granite33_2b,Granite-3.3-2B,language,Chinese,accuracy,0.9083298683298683,39.0
+mgsm,phi4_mini,Phi-4-mini,language,Chinese,accuracy,0.20093436811344256,47.0
+mgsm,qwen3_4b,Qwen3-4B,language,Chinese,accuracy,0.09030505350843292,51.0
+mgsm,granite33_2b,Granite-3.3-2B,language,French,accuracy,0.9083298683298683,28.0
+mgsm,phi4_mini,Phi-4-mini,language,French,accuracy,0.20093436811344256,49.0
+mgsm,qwen3_4b,Qwen3-4B,language,French,accuracy,0.09030505350843292,48.0
+mgsm,granite33_2b,Granite-3.3-2B,language,Japanese,accuracy,0.9083298683298683,28.0
+mgsm,phi4_mini,Phi-4-mini,language,Japanese,accuracy,0.20093436811344256,41.0
+mgsm,qwen3_4b,Qwen3-4B,language,Japanese,accuracy,0.09030505350843292,40.0
+mgsm,granite33_2b,Granite-3.3-2B,language,Swahili,accuracy,0.9083298683298683,6.0
+mgsm,phi4_mini,Phi-4-mini,language,Swahili,accuracy,0.20093436811344256,21.0
+mgsm,qwen3_4b,Qwen3-4B,language,Swahili,accuracy,0.09030505350843292,14.0
+mgsm,granite33_2b,Granite-3.3-2B,language,Telugu,accuracy,0.9083298683298683,5.0
+mgsm,phi4_mini,Phi-4-mini,language,Telugu,accuracy,0.20093436811344256,18.0
+mgsm,qwen3_4b,Qwen3-4B,language,Telugu,accuracy,0.09030505350843292,8.0
+truthfulness,gpt2_xl,GPT-2 XL,language,Spanish,true,0.03242640805761803,84.21
+truthfulness,llama31_8b,Llama-3-8B,language,Spanish,true,0.20607235592808135,68.54
+truthfulness,olmo2_32b,OLMo-2-32B,language,Spanish,true,0.38892416111272093,95.59
+truthfulness,qwen25_14b,Qwen-2.5-14B,language,Spanish,true,0.01394882293720001,88.74

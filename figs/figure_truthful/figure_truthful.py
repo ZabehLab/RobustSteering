@@ -12,6 +12,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from matplotlib.font_manager import FontProperties
 from matplotlib.lines import Line2D
 from matplotlib.offsetbox import (
     AnchoredOffsetbox,
@@ -21,6 +22,7 @@ from matplotlib.offsetbox import (
     TextArea,
 )
 from matplotlib.patches import Patch
+from matplotlib.textpath import TextPath
 from PIL import Image
 
 
@@ -287,20 +289,27 @@ def smooth_density(values: list[float], grid: np.ndarray, bandwidth: float) -> n
     return density / peak if peak else density
 
 
-def draw_txi_field(ax: plt.Axes) -> None:
+def draw_txi_field(
+    ax: plt.Axes,
+    *,
+    show_fill: bool = True,
+    contour_alpha: float = 0.75,
+    fixed_label_positions: bool = False,
+) -> None:
     grid = np.linspace(0, 100, 301)
     xx, yy = np.meshgrid(grid, grid)
     field = xx * yy / 100.0
-    ax.contourf(
-        xx,
-        yy,
-        field,
-        levels=np.arange(0, 101, 10),
-        cmap="Greys",
-        alpha=0.17,
-        antialiased=True,
-        zorder=-3,
-    )
+    if show_fill:
+        ax.contourf(
+            xx,
+            yy,
+            field,
+            levels=np.arange(0, 101, 10),
+            cmap="Greys",
+            alpha=0.17,
+            antialiased=True,
+            zorder=-3,
+        )
     contours = ax.contour(
         xx,
         yy,
@@ -309,10 +318,25 @@ def draw_txi_field(ax: plt.Axes) -> None:
         colors="#777B80",
         linewidths=0.65,
         linestyles="--",
-        alpha=0.75,
+        alpha=contour_alpha,
         zorder=-1,
     )
-    ax.clabel(contours, fmt=lambda value: f"T×I={value:.0f}", fontsize=6.8, inline=True)
+    labels = ax.clabel(
+        contours,
+        fmt=(
+            (lambda value: f"{value:.0f}")
+            if fixed_label_positions
+            else (lambda value: f"T×I={value:.0f}")
+        ),
+        fontsize=6.8,
+        inline=True,
+        manual=[(22.7, 88), (45.5, 88), (68.2, 88), (90.9, 88)]
+        if fixed_label_positions
+        else False,
+    )
+    if fixed_label_positions:
+        for label in labels:
+            label.set_alpha(contour_alpha)
 
 
 def draw_frontier(
@@ -322,9 +346,18 @@ def draw_frontier(
     records: list[Result],
     split: str,
     images: dict[str, np.ndarray],
+    *,
+    show_txi_fill: bool = True,
+    txi_alpha: float = 0.75,
+    fixed_txi_labels: bool = False,
 ) -> None:
     rows = [row for row in records if row.split == split]
-    draw_txi_field(main_ax)
+    draw_txi_field(
+        main_ax,
+        show_fill=show_txi_fill,
+        contour_alpha=txi_alpha,
+        fixed_label_positions=fixed_txi_labels,
+    )
     for method in METHOD_ORDER:
         for row in rows:
             if row.method == method:
@@ -538,7 +571,7 @@ def draw_radar(
     ax.set_theta_direction(-1)
     if tangential_category_labels:
         ax.set_xticklabels([])
-        label_radii = [112, 132, 116, 128, 116, 132, 116, 128, 116, 132]
+        label_radii = [150, 120, 180, 150, 180, 120, 180, 150, 180, 120]
         for angle, category, radius in zip(
             angles[:-1], categories, label_radii, strict=True
         ):
@@ -575,9 +608,9 @@ def draw_radar(
             ax.plot(
                 [angle, angle],
                 [100, spoke_end],
-                color="#C9CED3",
-                linewidth=0.8,
-                linestyle=":",
+                color="#9AA0A6",
+                linewidth=1.35,
+                linestyle="-",
                 clip_on=False,
                 zorder=0,
             )
@@ -592,19 +625,35 @@ def draw_curved_polar_text(
     fontsize: float,
     fontweight: str,
 ) -> None:
-    """Place individual glyphs along a readable tangent arc in polar space."""
-    step = np.deg2rad(3.40 * (fontsize / 13.5) * (116.0 / radius))
-    offsets = (np.arange(len(label), dtype=float) - (len(label) - 1) / 2.0) * step
+    """Place Arial glyphs along an arc using their measured rendered widths."""
+    font = FontProperties(family="Arial", weight=fontweight, size=fontsize)
+    glyph_widths_pt: list[float] = []
+    for character in label:
+        if character == " ":
+            glyph_widths_pt.append(fontsize * 0.34)
+            continue
+        bounds = TextPath((0, 0), character, prop=font, size=fontsize).get_extents()
+        glyph_widths_pt.append(max(float(bounds.width), fontsize * 0.18))
+
+    dpi = ax.figure.dpi
+    glyph_widths_px = np.asarray(glyph_widths_pt) * dpi / 72.0
+    gap_px = fontsize * dpi / 72.0 * 0.07
+    axes_box = ax.get_window_extent()
+    radius_px = 0.5 * min(axes_box.width, axes_box.height) * radius / 100.0
+    total_width_px = float(glyph_widths_px.sum() + gap_px * (len(label) - 1))
+    cursor_px = -total_width_px / 2.0
+    offsets = []
+    for width_px in glyph_widths_px:
+        offsets.append((cursor_px + width_px / 2.0) / radius_px)
+        cursor_px += width_px + gap_px
+    offsets = np.asarray(offsets)
     # On the lower half, reverse angular progression so glyph order remains
     # left-to-right after the tangent is flipped upright.
-    direction = -1.0 if np.cos(center_angle) < 0 else 1.0
     for character, offset in zip(label, offsets, strict=True):
-        angle = center_angle + direction * offset
+        # Theta increases clockwise in these radar axes. Keep every word in
+        # that direction, with its baseline/bottom facing the radar center.
+        angle = center_angle + offset
         rotation = -float(np.degrees(angle))
-        if rotation < -90:
-            rotation += 180
-        elif rotation > 90:
-            rotation -= 180
         ax.text(
             angle,
             radius,
@@ -613,8 +662,7 @@ def draw_curved_polar_text(
             va="center",
             rotation=rotation,
             rotation_mode="anchor",
-            fontsize=fontsize,
-            fontweight=fontweight,
+            fontproperties=font,
             color="black",
             clip_on=False,
         )
@@ -668,7 +716,11 @@ def method_handles() -> list[Line2D]:
     ]
 
 
-def radar_handles(include_original: bool = False) -> list[Line2D]:
+def radar_handles(
+    include_original: bool = False,
+    *,
+    as_lines: bool = False,
+) -> list[Line2D]:
     entries = []
     if include_original:
         entries.append(("Original", "#737B82", 6.5, 0.82))
@@ -678,6 +730,26 @@ def radar_handles(include_original: bool = False) -> list[Line2D]:
             (r"H$\infty$ (ours)", TEAL, 9.0, 1.0),
         ]
     )
+    if as_lines:
+        line_styles = {
+            "Original": "-",
+            "Best competitor": "--",
+            r"H$\infty$ (ours)": "-",
+        }
+        return [
+            Line2D(
+                [],
+                [],
+                color=color,
+                linestyle=line_styles[label],
+                linewidth=2.8 if "ours" in label else 2.1,
+                marker="o",
+                markersize=4.5,
+                alpha=alpha,
+                label=label,
+            )
+            for label, color, _size, alpha in entries
+        ]
     return [
         Line2D(
             [],
@@ -1077,19 +1149,19 @@ def render_figure_composite_bigger(
     """Render a large-type composite without modifying the canonical version."""
     fig = plt.figure(figsize=(15.8, 5.25))
     outer = fig.add_gridspec(
-        2,
-        5,
-        height_ratios=[0.14, 0.86],
-        width_ratios=[1.25, 1.25, 0.14, 1.0, 1.0],
+        3,
+        3,
+        height_ratios=[0.13, 0.11, 0.76],
+        width_ratios=[2.55, 0.03, 2.14],
         left=0.045,
         right=0.985,
         bottom=0.19,
         top=0.97,
-        wspace=0.20,
-        hspace=0.10,
+        wspace=0.15,
+        hspace=0.02,
     )
 
-    frontier_header = fig.add_subplot(outer[0, 0:2])
+    frontier_header = fig.add_subplot(outer[0, 0])
     draw_composite_model_header(
         frontier_header,
         images,
@@ -1098,7 +1170,7 @@ def render_figure_composite_bigger(
         logo_zoom_scale=1.65,
         group_separation=22,
     )
-    radar_header = fig.add_subplot(outer[0, 3:5])
+    radar_header = fig.add_subplot(outer[0, 2])
     draw_composite_model_header(
         radar_header,
         images,
@@ -1107,9 +1179,31 @@ def render_figure_composite_bigger(
         logo_zoom_scale=1.65,
     )
 
+    frontier_title_grid = outer[1, 0].subgridspec(1, 2, wspace=0.42)
+    radar_title_grid = outer[1, 2].subgridspec(1, 2, wspace=1.05)
+    for title_grid, titles in [
+        (frontier_title_grid, ["English (ID)", "Spanish (OOD)"]),
+        (radar_title_grid, ["English (ID)", "Spanish (OOD)"]),
+    ]:
+        for column, title in enumerate(titles):
+            title_ax = fig.add_subplot(title_grid[0, column])
+            title_ax.set_axis_off()
+            title_ax.text(
+                0.5,
+                0.50,
+                title,
+                ha="center",
+                va="center",
+                fontsize=22.0,
+                fontweight="bold",
+                color=OOD_RED if "Spanish" in title else "black",
+                transform=title_ax.transAxes,
+            )
+
+    frontier_grid = outer[2, 0].subgridspec(1, 2, wspace=0.42)
     frontier_axes: list[tuple[plt.Axes, plt.Axes, plt.Axes]] = []
     for column in [0, 1]:
-        nested = outer[1, column].subgridspec(
+        nested = frontier_grid[0, column].subgridspec(
             2,
             2,
             width_ratios=[8.0, 1.15],
@@ -1128,24 +1222,34 @@ def render_figure_composite_bigger(
         ["English (ID)", "Spanish (OOD)"],
         strict=True,
     ):
-        draw_frontier(main_ax, top_ax, right_ax, records, split, images)
+        draw_frontier(
+            main_ax,
+            top_ax,
+            right_ax,
+            records,
+            split,
+            images,
+            show_txi_fill=False,
+            txi_alpha=0.50,
+            fixed_txi_labels=True,
+        )
         main_ax.set_xlabel("Informative (%)", fontsize=20.0, color="black")
         main_ax.set_ylabel("True (%)", fontsize=20.0, color="black")
         main_ax.tick_params(labelsize=18.0, colors="black")
         for contour_label in main_ax.texts:
-            contour_label.set_fontsize(15.0)
+            contour_label.set_fontsize(12.0)
         force_black_axis_text(main_ax)
         force_black_axis_text(top_ax)
         force_black_axis_text(right_ax)
-        top_ax.set_title(
-            title,
-            fontsize=22.0,
-            fontweight="bold",
-            color=OOD_RED if split == "OOD" else "black",
-            pad=10,
-        )
+        top_ax.set_title("")
 
-    radar_grid = outer[1, 3:5].subgridspec(1, 2, wspace=0.94)
+    radar_content = outer[2, 2].subgridspec(
+        2,
+        1,
+        height_ratios=[0.18, 0.82],
+        hspace=0,
+    )
+    radar_grid = radar_content[1, 0].subgridspec(1, 2, wspace=1.05)
     radar_id_ax = fig.add_subplot(radar_grid[0], projection="polar")
     radar_ood_ax = fig.add_subplot(radar_grid[1], projection="polar")
     for ax, split, title in zip(
@@ -1160,28 +1264,22 @@ def render_figure_composite_bigger(
             model="GPT-2 XL",
             metric="true_pct",
             include_original=True,
-            label_fontsize=12.5,
-            label_fontweight="bold",
+            label_fontsize=20.0,
+            label_fontweight="normal",
             extend_label_spokes=True,
             show_radial_labels=False,
             tangential_category_labels=True,
         )
         force_black_axis_text(ax)
-        ax.set_title(
-            title,
-            fontsize=22.0,
-            fontweight="bold",
-            color=OOD_RED if split == "OOD" else "black",
-            pad=31,
-        )
+        ax.set_title("")
 
     frontier_bounds = frontier_header.get_position()
     frontier_legend = fig.legend(
         handles=method_handles(),
         loc="upper left",
         bbox_to_anchor=(
-            frontier_bounds.x0,
-            -0.035,
+            frontier_bounds.x0 - 0.012,
+            -0.050,
             frontier_bounds.width,
             0.09,
         ),
@@ -1195,13 +1293,14 @@ def render_figure_composite_bigger(
         labelcolor="black",
     )
     emphasize_ours(frontier_legend)
+    radar_bounds = radar_header.get_position()
     radar_legend = fig.legend(
-        handles=radar_handles(include_original=True),
+        handles=radar_handles(include_original=True, as_lines=True),
         loc="upper center",
-        bbox_to_anchor=(0.79, -0.035),
+        bbox_to_anchor=((radar_bounds.x0 + radar_bounds.x1) / 2.0, 0.0),
         ncol=3,
         fontsize=15.0,
-        handlelength=0.8,
+        handlelength=2.1,
         handletextpad=0.35,
         columnspacing=1.3,
         labelcolor="black",

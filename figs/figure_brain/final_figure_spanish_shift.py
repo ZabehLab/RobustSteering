@@ -14,7 +14,7 @@ HERE = Path(__file__).resolve().parent
 SOURCE = (HERE / "ref" / "original_notebook_rerun" / "results" /
           "final_llmfit_panelD_error_shrinkage.csv")
 OUTPUT = HERE / "plots" / "Final Figures"
-ID_COLOR = "#8A8F94"
+ID_COLOR = "#c9c9c9"
 OOD_COLOR = "#8B1E1E"
 
 

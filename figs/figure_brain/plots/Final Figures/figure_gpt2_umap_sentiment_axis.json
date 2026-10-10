@@ -1,0 +1,34 @@
+{
+  "embedding": "UMAP",
+  "n_components": 3,
+  "n_neighbors": 6,
+  "min_dist": 0.12,
+  "metric": "cosine",
+  "random_state": 0,
+  "projection": "orthographic",
+  "box_aspect": [
+    1,
+    1,
+    1
+  ],
+  "camera_elevation_deg": 48,
+  "camera_azimuth_deg": -80,
+  "orientation": "UMAP coordinates rotated so axis 1 joins negative and positive endpoint centroids",
+  "preprocessing": "subtract across-prompt mean hidden state independently at each transformer depth",
+  "cache": "/home/dev/controller/code/figs/figure_brain/cache/gpt2_pca_layer_trajectories_base_prompts.pt",
+  "negative_endpoint_centroid": [
+    11.312734603881836,
+    10.184126853942871,
+    -1.8997876644134521
+  ],
+  "positive_endpoint_centroid": [
+    2.823955774307251,
+    2.135087490081787,
+    9.244187355041504
+  ],
+  "sentiment_axis_original_umap_coordinates": [
+    -0.5254074335098267,
+    -0.4981900453567505,
+    0.6897490620613098
+  ]
+}

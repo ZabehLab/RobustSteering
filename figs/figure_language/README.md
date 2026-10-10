@@ -50,3 +50,13 @@ omitted only from the relative bars because its 6% Original accuracy turns a
 modest absolute increase into a 316.7% ratio that dominates the relative scale.
 The relative panel labels only nonnegative ticks; its small negative margin
 exists solely to hold the model-logo row.
+
+`figure_language_relative_expanded` is a presentation-polish variant of the
+relative figure. It preserves the panel geometry, data, typography, axes, and
+method legend exactly, while grouping the model-logo header into compact
+logo–name pairs (matching the TruthfulQA composite), scaling only the model
+logos in the `IR × fluency` panel by 1.8×, and strengthening the paired
+transfer-language connectors. Its model and method legends share one top row,
+left- and right-aligned respectively, and their text and all tick labels match
+the axis-label size. Regenerate only this variant with
+`python figs/figure_language/figure_language.py --relative-expanded-only`.

@@ -71,6 +71,15 @@
   first two panels now occupy roughly 70% of a three-column canvas;
   the native-color Llama scale legend and method legend remain centered over
   those two panels, not over the reserved response-disposition slot.
+- `figure_harm_main_expanded` is the large-type paper-composition variant. It
+  preserves the canonical data and panel widths while matching the TruthfulQA
+  composite's 20 pt axis labels, 18 pt ticks, and 19 pt legends. The model and
+  method legends share the top row; the six fully written template labels are
+  angled, Direct attack remains black as ID, and the five adversarial/OOD
+  templates use the exact project dark red `#8B1E1E`. Blank marginal-height
+  rows align the first and third axes with the frontier panel's main axis.
+  Regenerate only this variant with
+  `python figs/figure_harm/figure_harm.py --main-expanded-only`.
 
 ## References
 

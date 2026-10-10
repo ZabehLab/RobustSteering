@@ -1,18 +1,18 @@
 benchmark,model_key,short_model,parameter_billions,gamma_star,s_rob_value,paper_status
 truthfulness,qwen25_14b,Qwen-2.5-14B,14.770033664,71.69063687324524,0.01394882293720001,final_reported
 truthfulness,gemma2_2b,Gemma-2-2B,2.614341888,39.205193519592285,0.02550682473994837,exploratory_exception
-truthfulness,gpt2_medium,GPT-2 Medium,0.354823168,34.003859758377075,0.029408426193548318,exploratory_exception
 truthfulness,gpt2_xl,GPT-2 XL,1.5576112,30.839061737060547,0.03242640805761803,final_reported
-truthfulness,smollm2_135m,SmolLM2-135M,0.134515008,24.052226543426514,0.041576192465778206,exploratory_exception
-truthfulness,gpt2_large,GPT-2 Large,0.77403008,10.133367776870728,0.09868387509653861,exploratory_exception
-truthfulness,gpt2_small,GPT-2 Small,0.124439808,8.935236930847168,0.11191645031232406,exploratory_exception
-truthfulness,distilgpt2,DistilGPT-2,0.081912576,6.254053115844727,0.15989630747882308,exploratory_exception
+truthfulness,gpt2_medium,GPT-2 Medium,0.354823168,21.133559942245483,0.04731810460390177,exploratory_exception
+truthfulness,gpt2_large,GPT-2 Large,0.77403008,15.876692533493042,0.06298541071387677,exploratory_exception
+truthfulness,gpt2_small,GPT-2 Small,0.124439808,15.591490268707275,0.06413755085407317,exploratory_exception
+truthfulness,smollm2_135m,SmolLM2-135M,0.134515008,11.381220817565918,0.0878640363832136,exploratory_exception
+truthfulness,distilgpt2,DistilGPT-2,0.081912576,6.227070093154907,0.16058916714286672,exploratory_exception
 truthfulness,llama31_8b,Llama-3.1-8B,8.030261248,4.852664470672607,0.20607235592808135,final_reported
+truthfulness,qwen25_05b,Qwen-2.5-0.5B,0.494032768,2.8317511081695557,0.35313838038767476,exploratory_exception
 truthfulness,olmo2_32b,OLMo-2-32B,32.234279936,2.571195363998413,0.38892416111272093,final_reported
-truthfulness,pythia_31m,Pythia-31M,0.03049472,1.8720448017120361,0.5341752500183076,exploratory_exception
-truthfulness,pythia_160m,Pythia-160M,0.162322944,1.542985439300537,0.6480942558040715,exploratory_exception
-truthfulness,qwen25_05b,Qwen-2.5-0.5B,0.494032768,1.3383746147155762,0.7471749605864382,exploratory_exception
-truthfulness,pythia_14m,Pythia-14M,0.014067712,0.044602155685424805,22.42044099959909,exploratory_exception
+truthfulness,pythia_31m,Pythia-31M,0.03049472,1.8719375133514404,0.5342058657768126,exploratory_exception
+truthfulness,pythia_160m,Pythia-160M,0.162322944,0.871121883392334,1.1479449880260006,exploratory_exception
+truthfulness,pythia_14m,Pythia-14M,0.014067712,0.1257002353668213,7.955434586751387,exploratory_exception
 harmful,llama32_3b,Llama-3.2-3B,3.212749824,0.415802001953125,2.404990825688073,final_reported
 harmful,llama31_8b,Llama-3.1-8B,8.030261248,0.2867758274078369,3.487044249994804,final_reported
 harmful,llama32_1b,Llama-3.2-1B,1.2358144,0.13007521629333496,7.687859597672181,final_reported

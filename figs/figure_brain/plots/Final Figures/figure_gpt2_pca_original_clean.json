@@ -1,0 +1,18 @@
+{
+  "embedding": "PCA",
+  "projection": "orthographic",
+  "box_aspect": [
+    1,
+    1,
+    1
+  ],
+  "camera_elevation_deg": 22.0,
+  "camera_azimuth_deg": -58.0,
+  "camera_separation_score": 0.0,
+  "projected_endpoint_class_separation": 0.0,
+  "sentiment_axis_horizontal_fraction": 0.0,
+  "camera_objective": "original conventional three-quarter PCA view",
+  "model": "gpt2",
+  "trajectory_axis": "transformer depth",
+  "cache": "/home/dev/controller/code/figs/figure_brain/cache/gpt2_pca_layer_trajectories_base_prompts.pt"
+}

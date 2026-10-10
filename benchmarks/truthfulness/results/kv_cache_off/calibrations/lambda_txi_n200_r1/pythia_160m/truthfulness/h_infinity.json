@@ -1,0 +1,71 @@
+{
+  "identity": {
+    "model_id": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "method": "h_infinity",
+    "distribution": "id",
+    "dataset": [
+      "truthful_qa",
+      "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+    ],
+    "evaluation_key": "truthfulness",
+    "kv_cache": false,
+    "calibration_id": "lambda_txi_n200_r1",
+    "scorers": [
+      "truthfulqa_true",
+      "truthfulqa_informative"
+    ]
+  },
+  "evaluation_samples_per_repetition": 817,
+  "evaluation_repetitions": 1,
+  "created_at_utc": "2026-09-25T11:05:48.285345+00:00",
+  "per_repetition": [
+    {
+      "repetition": 0,
+      "truth": 64.13708690330478,
+      "info": 39.0452876376989
+    }
+  ],
+  "metrics": {
+    "truth": {
+      "mean": 64.13708690330478,
+      "standard_error": 1.7789911722332468,
+      "leave_group_out_estimates": [
+        64.31852986217459,
+        65.23736600306279,
+        64.06727828746178,
+        62.53822629969419,
+        64.52599388379205
+      ]
+    },
+    "info": {
+      "mean": 39.0452876376989,
+      "standard_error": 3.230938729679967,
+      "leave_group_out_estimates": [
+        36.906584992343035,
+        37.36600306278714,
+        40.51987767584098,
+        39.60244648318043,
+        40.825688073394495
+      ]
+    }
+  },
+  "invalid_scorer_outputs": {
+    "truthfulqa_true": [],
+    "truthfulqa_informative": []
+  },
+  "uncertainty": {
+    "method": "five-group delete-one-group question jackknife",
+    "group_count": 5,
+    "group_sizes": [
+      164,
+      164,
+      163,
+      163,
+      163
+    ],
+    "partition_seed": 20260921,
+    "partition_sha256": "1c932c2e038009489d794b4dad648d015605c27920e93c5b8d7c6bf90c8e7a30",
+    "captures": "question-sampling variability only; not decoding-run variability"
+  }
+}

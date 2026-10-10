@@ -1,0 +1,71 @@
+{
+  "identity": {
+    "model_id": "Qwen/Qwen2.5-0.5B",
+    "model_revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "method": "original",
+    "distribution": "id",
+    "dataset": [
+      "truthful_qa",
+      "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+    ],
+    "evaluation_key": "truthfulness",
+    "kv_cache": false,
+    "calibration_id": "lambda_txi_n200_r1",
+    "scorers": [
+      "truthfulqa_true",
+      "truthfulqa_informative"
+    ]
+  },
+  "evaluation_samples_per_repetition": 817,
+  "evaluation_repetitions": 1,
+  "created_at_utc": "2026-09-25T11:21:56.059779+00:00",
+  "per_repetition": [
+    {
+      "repetition": 0,
+      "truth": 53.61077111383109,
+      "info": 90.57527539779682
+    }
+  ],
+  "metrics": {
+    "truth": {
+      "mean": 53.61077111383109,
+      "standard_error": 1.506771102980683,
+      "leave_group_out_estimates": [
+        53.905053598774884,
+        54.51761102603369,
+        52.293577981651374,
+        53.36391437308868,
+        53.97553516819572
+      ]
+    },
+    "info": {
+      "mean": 90.57527539779682,
+      "standard_error": 0.985607292226561,
+      "leave_group_out_estimates": [
+        90.96477794793262,
+        91.27105666156203,
+        89.90825688073394,
+        90.21406727828746,
+        90.51987767584097
+      ]
+    }
+  },
+  "invalid_scorer_outputs": {
+    "truthfulqa_true": [],
+    "truthfulqa_informative": []
+  },
+  "uncertainty": {
+    "method": "five-group delete-one-group question jackknife",
+    "group_count": 5,
+    "group_sizes": [
+      164,
+      164,
+      163,
+      163,
+      163
+    ],
+    "partition_seed": 20260921,
+    "partition_sha256": "1c932c2e038009489d794b4dad648d015605c27920e93c5b8d7c6bf90c8e7a30",
+    "captures": "question-sampling variability only; not decoding-run variability"
+  }
+}

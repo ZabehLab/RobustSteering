@@ -1,0 +1,144 @@
+{
+  "availability": {
+    "E1_within_model_sweep": {
+      "reason": "No frozen OOD evaluations exist for layer \u00d7 rho_rob \u00d7 calibration-seed configurations.",
+      "status": "unavailable"
+    },
+    "E2_across_models_within_task": {
+      "reason": "TruthfulQA, HarmBench, and L-CiteEval use matched ID/OOD results; MGSM lacks an ID H\u221e evaluation.",
+      "status": "completed_with_mgsm_proxy"
+    },
+    "E3_baseline_predictors": {
+      "available": [
+        "ID performance",
+        "1/max_norm_K"
+      ],
+      "status": "partial",
+      "unavailable": [
+        "residual norm",
+        "linear-probe accuracy"
+      ]
+    },
+    "E4_layer_selection": {
+      "status": "unavailable",
+      "substitute": "Top-1/top-2 model ranking across the four E2 tasks."
+    },
+    "E5_shared_cost_normalization": {
+      "reason": "Existing selected controllers use task-specific costs and no shared-cost recomputation is cached.",
+      "status": "unavailable"
+    },
+    "E6_calibration_size_sweep": {
+      "reason": "No matched OOD evaluations exist for the requested calibration-size sweep.",
+      "status": "unavailable"
+    },
+    "secondary_mixed_model": {
+      "reason": "Only 2\u20134 selected model-level observations exist per task; model random effects are not identifiable because nearly every model-task tuple has one retention value.",
+      "status": "not_fit"
+    }
+  },
+  "model_selection_analogue": {
+    "id_performance": {
+      "mean_retention_regret": 0.05805311457958523,
+      "median_retention_regret": 0.02635168404563515,
+      "task_count": 4,
+      "top1_hits": 1,
+      "top2_hits": 2
+    },
+    "inverse_gain_norm": {
+      "mean_retention_regret": 0.2006980407508995,
+      "median_retention_regret": 0.1179123804913631,
+      "task_count": 4,
+      "top1_hits": 1,
+      "top2_hits": 2
+    },
+    "s_rob": {
+      "mean_retention_regret": 0.06457349096542758,
+      "median_retention_regret": 0.02635168404563515,
+      "task_count": 4,
+      "top1_hits": 1,
+      "top2_hits": 2
+    }
+  },
+  "task_statistics": {
+    "harmful": {
+      "bootstrap_95_ci": [
+        -1.0,
+        -1.0
+      ],
+      "bootstrap_samples_requested": 2000,
+      "bootstrap_samples_valid": 1799,
+      "exact_permutation_count": 6,
+      "exact_two_sided_p_value": 0.3333333333333333,
+      "leave_one_out_minimum_rho": -0.9999999999999999,
+      "log10_srob_ols_intercept": 1.0664340996360102,
+      "log10_srob_ols_slope": -0.05446569910797109,
+      "n_models": 3,
+      "predictor_spearman_rho": {
+        "id_performance": -1.0,
+        "inverse_gain_norm": -1.0,
+        "s_rob": -1.0
+      },
+      "spearman_rho": -1.0
+    },
+    "lciteeval": {
+      "bootstrap_95_ci": [
+        -0.9999999999999999,
+        -0.9999999999999999
+      ],
+      "bootstrap_samples_requested": 2000,
+      "bootstrap_samples_valid": 964,
+      "exact_permutation_count": 2,
+      "exact_two_sided_p_value": 1.0,
+      "leave_one_out_minimum_rho": null,
+      "log10_srob_ols_intercept": 0.9295459517274185,
+      "log10_srob_ols_slope": -0.1444014785725258,
+      "n_models": 2,
+      "predictor_spearman_rho": {
+        "id_performance": 0.9999999999999999,
+        "inverse_gain_norm": -0.9999999999999999,
+        "s_rob": -0.9999999999999999
+      },
+      "spearman_rho": -0.9999999999999999
+    },
+    "mgsm": {
+      "bootstrap_95_ci": [
+        -1.0,
+        1.0
+      ],
+      "bootstrap_samples_requested": 2000,
+      "bootstrap_samples_valid": 1799,
+      "exact_permutation_count": 6,
+      "exact_two_sided_p_value": 1.0,
+      "leave_one_out_minimum_rho": -0.9999999999999999,
+      "log10_srob_ols_intercept": 0.9089445761915508,
+      "log10_srob_ols_slope": 0.07063111461546774,
+      "n_models": 3,
+      "predictor_spearman_rho": {
+        "id_performance": -1.0,
+        "inverse_gain_norm": 1.0,
+        "s_rob": 0.5
+      },
+      "spearman_rho": 0.5
+    },
+    "truthfulness": {
+      "bootstrap_95_ci": [
+        -1.0,
+        1.0
+      ],
+      "bootstrap_samples_requested": 2000,
+      "bootstrap_samples_valid": 1956,
+      "exact_permutation_count": 24,
+      "exact_two_sided_p_value": 0.9166666666666666,
+      "leave_one_out_minimum_rho": -0.5,
+      "log10_srob_ols_intercept": 0.9883595798147656,
+      "log10_srob_ols_slope": 0.08892236955382991,
+      "n_models": 4,
+      "predictor_spearman_rho": {
+        "id_performance": 0.7999999999999999,
+        "inverse_gain_norm": -0.39999999999999997,
+        "s_rob": -0.19999999999999998
+      },
+      "spearman_rho": -0.19999999999999998
+    }
+  }
+}

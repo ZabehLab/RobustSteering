@@ -1,0 +1,71 @@
+{
+  "identity": {
+    "model_id": "Qwen/Qwen2.5-0.5B",
+    "model_revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "method": "h_infinity",
+    "distribution": "id",
+    "dataset": [
+      "truthful_qa",
+      "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+    ],
+    "evaluation_key": "truthfulness",
+    "kv_cache": false,
+    "calibration_id": "lambda_txi_n200_r1",
+    "scorers": [
+      "truthfulqa_true",
+      "truthfulqa_informative"
+    ]
+  },
+  "evaluation_samples_per_repetition": 817,
+  "evaluation_repetitions": 1,
+  "created_at_utc": "2026-09-25T11:21:56.071208+00:00",
+  "per_repetition": [
+    {
+      "repetition": 0,
+      "truth": 62.30110159118727,
+      "info": 80.90575275397796
+    }
+  ],
+  "metrics": {
+    "truth": {
+      "mean": 62.30110159118727,
+      "standard_error": 1.2544960131848757,
+      "leave_group_out_estimates": [
+        63.093415007656965,
+        61.71516079632465,
+        62.38532110091743,
+        62.84403669724771,
+        61.46788990825688
+      ]
+    },
+    "info": {
+      "mean": 80.90575275397796,
+      "standard_error": 0.6727919435759884,
+      "leave_group_out_estimates": [
+        80.24502297090352,
+        81.01071975497703,
+        81.19266055045871,
+        81.03975535168196,
+        81.03975535168196
+      ]
+    }
+  },
+  "invalid_scorer_outputs": {
+    "truthfulqa_true": [],
+    "truthfulqa_informative": []
+  },
+  "uncertainty": {
+    "method": "five-group delete-one-group question jackknife",
+    "group_count": 5,
+    "group_sizes": [
+      164,
+      164,
+      163,
+      163,
+      163
+    ],
+    "partition_seed": 20260921,
+    "partition_sha256": "1c932c2e038009489d794b4dad648d015605c27920e93c5b8d7c6bf90c8e7a30",
+    "captures": "question-sampling variability only; not decoding-run variability"
+  }
+}

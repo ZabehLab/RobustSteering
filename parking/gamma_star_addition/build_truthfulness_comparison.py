@@ -16,15 +16,15 @@ OUTPUT = UNIT / "truthfulness_original_vs_hinf.md"
 MANIFEST = UNIT / "truthfulness_result_sources.json"
 
 MODELS = (
-    ("Pythia-14M", "pythia_14m/truthfulness"),
-    ("Pythia-31M", "pythia_31m/truthfulness"),
-    ("DistilGPT-2", "distilgpt2/truthfulness"),
-    ("GPT-2 Small", "gpt2_small/truthfulness"),
-    ("SmolLM2-135M", "smollm2_135m/truthfulness"),
-    ("Pythia-160M", "pythia_160m/truthfulness"),
-    ("GPT-2 Medium", "gpt2_medium/truthfulness"),
-    ("Qwen-2.5-0.5B", "qwen25_05b/truthfulness"),
-    ("GPT-2 Large", "gpt2_large/truthfulness"),
+    ("Pythia-14M", "calibrations/lambda_txi_n200_r1/pythia_14m/truthfulness"),
+    ("Pythia-31M", "calibrations/lambda_txi_n200_r1/pythia_31m/truthfulness"),
+    ("DistilGPT-2", "calibrations/lambda_txi_n200_r1/distilgpt2/truthfulness"),
+    ("GPT-2 Small", "calibrations/lambda_txi_n200_r1/gpt2_small/truthfulness"),
+    ("SmolLM2-135M", "calibrations/lambda_txi_n200_r1/smollm2_135m/truthfulness"),
+    ("Pythia-160M", "calibrations/lambda_txi_n200_r1/pythia_160m/truthfulness"),
+    ("GPT-2 Medium", "calibrations/lambda_txi_n200_r1/gpt2_medium/truthfulness"),
+    ("Qwen-2.5-0.5B", "calibrations/lambda_txi_n200_r1/qwen25_05b/truthfulness"),
+    ("GPT-2 Large", "calibrations/lambda_txi_n200_r1/gpt2_large/truthfulness"),
     (
         "GPT-2 XL",
         "calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness",

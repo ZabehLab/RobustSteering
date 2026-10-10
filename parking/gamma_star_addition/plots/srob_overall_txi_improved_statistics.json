@@ -1,24 +1,24 @@
 {
   "feature": "log10(s_rob)",
   "cluster_method": "global minimum-SSE one-dimensional k-means",
-  "n": 15,
+  "n": 14,
   "task_group_sizes": {
-    "truthfulness": 9,
+    "truthfulness": 8,
     "harmful": 3,
     "mgsm": 3
   },
   "silhouette_by_k": {
-    "2": 0.562052750457347,
-    "3": 0.5728151705548897,
-    "4": 0.600836510390618,
-    "5": 0.556553527130473,
-    "6": 0.5914052894509642
+    "2": 0.585106213400348,
+    "3": 0.574655995259353,
+    "4": 0.576103475879754,
+    "5": 0.5301769582796221,
+    "6": 0.5176865781300504
   },
-  "selected_k_by_maximum_silhouette": 4,
-  "observed_task_label_silhouette": 0.043895779365974844,
-  "permutation_null": "exact enumeration of all labeled 9/3/3 assignments",
-  "permutation_count": 100100,
-  "exact_upper_tail_p_value": 0.03822177822177822,
+  "selected_k_by_maximum_silhouette": 2,
+  "observed_task_label_silhouette": 0.09957930872863334,
+  "permutation_null": "exact enumeration of all labeled 8/3/3 assignments",
+  "permutation_count": 60060,
+  "exact_upper_tail_p_value": 0.020113220113220115,
   "new_truthfulness_model_filter": {
     "criterion": "evaluated H-infinity mean T\u00d7I > evaluated Original mean T\u00d7I",
     "applies_only_to": [
@@ -34,7 +34,6 @@
     ],
     "included": [
       "gpt2_large",
-      "pythia_31m",
       "qwen25_05b",
       "smollm2_135m"
     ]

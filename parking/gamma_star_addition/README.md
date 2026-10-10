@@ -17,7 +17,10 @@ published S-rob overall outputs are retained under `ref/` for direct comparison.
   logo.
 
 The nine additions are Pythia-14M, Pythia-31M, DistilGPT-2, GPT-2 Small,
-SmolLM2-135M, Pythia-160M, GPT-2 Medium, Qwen-2.5-0.5B, and GPT-2 Large.
+SmolLM2-135M, Pythia-160M, GPT-2 Medium, Qwen-2.5-0.5B, and GPT-2 Large. Their
+analysis-only points use the lambda-first rerun isolated under calibration ID
+`lambda_txi_n200_r1`; this unit does not register them as canonical benchmark
+models or modify any paper-facing benchmark table.
 
 ## Inputs and outputs
 

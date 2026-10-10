@@ -8,15 +8,15 @@
     "mgsm": 3
   },
   "silhouette_by_k": {
-    "2": 0.5654354233268857,
-    "3": 0.5380911193113881,
-    "4": 0.6255882411625322,
-    "5": 0.6259711832910605,
-    "6": 0.6161548587696267
+    "2": 0.5741363641205913,
+    "3": 0.5730732511865231,
+    "4": 0.49875936945462584,
+    "5": 0.5298487552938316,
+    "6": 0.5701024756808188
   },
-  "selected_k_by_maximum_silhouette": 5,
-  "observed_task_label_silhouette": -0.08581010368672681,
+  "selected_k_by_maximum_silhouette": 2,
+  "observed_task_label_silhouette": -0.07608989015694838,
   "permutation_null": "exact enumeration of all labeled 14/3/3 assignments",
   "permutation_count": 775200,
-  "exact_upper_tail_p_value": 0.18728070175438596
+  "exact_upper_tail_p_value": 0.16730392156862745
 }
