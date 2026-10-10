@@ -83,7 +83,9 @@ h2 { margin: 0 0 16px; font-size: var(--section-size); font-weight: 600; line-he
 .narrative-grid > p { margin: 0; font-size: 16px; line-height: 1.8; }
 .motivation-section h2 { max-width: 1000px; }
 .motivation-section h2 > span { color: var(--teal); }
-.motivation-layout { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 2fr); max-width: 1000px; gap: 32px; align-items: start; }
+.motivation-layout { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); max-width: 1000px; gap: 32px; align-items: start; }
+.motivation-layout > .motivation-points { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; align-self: stretch; }
+.motivation-layout > .motivation-points li { margin-bottom: 0; }
 .motivation-figure { min-width: 0; margin: 0; }
 .motivation-figure figcaption { font-size: var(--small-size); }
 .motivation-points { max-width: 1000px; margin: 0; padding: 0; list-style: none; counter-reset: argument; }
