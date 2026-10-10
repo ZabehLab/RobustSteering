@@ -1,6 +1,6 @@
 /* Isolated animation styles: no selectors outside this box. */
-.steering-demo { --demo-text-size: 20px; --demo-chat-text-size: 40px; position: relative; width: 100%; margin-inline: auto; background: #fff; color: #111; font-family: Arial, Helvetica, sans-serif; overflow: hidden; }
-.steering-demo-layout { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.6fr); gap: 48px; padding: 30px 24px 20px; align-items: center; }
+.steering-demo { --demo-text-size: 20px; --demo-chat-text-size: 40px; --demo-chat-scale: .5; position: relative; width: min(100%, 776px); margin-inline: auto; background: #fff; color: #111; font-family: Arial, Helvetica, sans-serif; overflow: hidden; }
+.steering-demo-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; padding: 30px 24px 20px; align-items: center; }
 .steering-demo-state { width: 100%; max-width: 340px; justify-self: center; opacity: 0; }
 .steering-demo-language { height: 30px; overflow: hidden; margin-bottom: 10px; text-align: center; font-size: var(--demo-text-size); line-height: 30px; font-weight: 400; }
 .steering-demo-language > div { transform: translateY(calc(var(--demo-swipe, 0) * -30px)); }
@@ -13,7 +13,8 @@
 .steering-demo-controller rect { fill: var(--demo-controller-fill, #fff); }
 .steering-demo-controller text { fill: var(--demo-controller-ink, #111); }
 .steering-demo-stored-bolt { fill: var(--demo-controller-bolt, #fff); stroke: var(--demo-controller-ink, #919191); }
-.steering-demo-scene { min-width: 0; opacity: 0; display: flex; flex-direction: column; gap: 24px; padding: 4px 0; }
+.steering-demo-scene-frame { position: relative; min-width: 0; }
+.steering-demo-scene { position: absolute; top: 0; left: 0; width: calc(100% / var(--demo-chat-scale)); transform: scale(var(--demo-chat-scale)); transform-origin: top left; min-width: 0; opacity: 0; display: flex; flex-direction: column; gap: 24px; padding: 4px 0; }
 .steering-demo .steering-demo-benchmark { font-family: Arial, Helvetica, sans-serif; font-size: 28px; line-height: 1.35; font-weight: 600; margin: 0; padding: 0 24px; text-align: center; }
 .steering-demo-question, .steering-demo-answer { display: flex; align-items: flex-start; gap: 18px; }
 .steering-demo-question { opacity: 0; }
@@ -26,14 +27,14 @@
 .steering-demo-copy { min-width: 0; flex: 1; }
 .steering-demo-label { display: block; margin-bottom: 6px; font-size: var(--demo-chat-text-size); color: var(--muted); }
 .steering-demo-copy p { margin: 0; min-height: 1.45em; font-size: var(--demo-chat-text-size); line-height: 1.45; font-weight: 400; overflow-wrap: anywhere; white-space: pre-wrap; }
-.steering-demo-copy .steering-demo-answer-text { min-height: var(--demo-response-height, 2.9em); }
+.steering-demo-copy .steering-demo-answer-text { height: var(--demo-response-height, 2.9em); }
 .steering-demo-char { visibility: hidden; }
 .steering-demo-char.is-visible { visibility: visible; }
 .steering-demo-char.is-glitch { color: var(--teal); display: inline-block; transform: translateY(-2px); text-shadow: 2px 0 rgba(0,124,124,.3); }
 .steering-demo-asker { width: 74px; height: 74px; flex: 0 0 74px; margin-top: 26px; }
 .steering-demo-model { position: relative; width: 58px; flex: 0 0 58px; margin-top: 69px; }
 .steering-demo-robot { display: block; width: 58px; height: 55px; }
-.steering-demo-stimulation { position: absolute; width: 90px; height: 60px; left: 0; top: 0; opacity: 0; pointer-events: none; }
+.steering-demo-stimulation { position: absolute; width: 90px; height: 60px; left: 0; top: 0; transform-origin: top left; opacity: 0; pointer-events: none; }
 .steering-demo-bolt { position: absolute; left: 23px; width: 44px; height: 56px; opacity: 1; transform-origin: 50% 65%; }
 .steering-demo-vibration { position: absolute; inset: 0; width: 90px; height: 60px; opacity: 0; }
 .steering-demo[data-phase="steering"] .steering-demo-bolt,
@@ -51,11 +52,8 @@
 .steering-demo-controls button { border: 0; padding: 4px 0; color: var(--muted); background: transparent; font: inherit; }
 .steering-demo-controls button:hover { color: var(--teal); }
 @keyframes steering-demo-shake { 0%,100% { transform: translateX(-2px) rotate(-9deg); } 50% { transform: translateX(2px) rotate(9deg); } }
-@media (max-width: 1050px) and (min-width: 781px) {
-  .steering-demo-layout { gap: 26px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); }
-}
 @media (max-width: 780px) {
-  .steering-demo { width: 100%; --demo-chat-text-size: 20px; }
+  .steering-demo { width: 100%; --demo-chat-text-size: 20px; --demo-chat-scale: 1; }
   .steering-demo-layout { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 26px; padding: 28px 24px; }
   .steering-demo .steering-demo-benchmark { padding-inline: 24px; }
   .steering-demo-state { max-width: 260px; }

@@ -19,6 +19,7 @@
   const description = find("description");
   const pauseButton = find("pause");
   const scene = find("scene");
+  const sceneFrame = find("scene-frame");
   const state = find("state");
   const direction = find("direction");
   const directionLine = find("direction-line");
@@ -45,6 +46,7 @@
   let paused = false;
   let started = false;
   let flightStart, flightEnd;
+  let sceneScale = 1;
   const clamp = (x) => Math.max(0, Math.min(1, x));
   const progress = (start, duration) => clamp((elapsed - start) / duration);
   const ease = (x) => x * x * (3 - 2 * x);
@@ -197,8 +199,9 @@
   function measureFlight() {
     const bounds = box.getBoundingClientRect();
     box.style.setProperty("--demo-svg-scale-inverse", 340 / find("state-map").clientWidth);
+    sceneScale = parseFloat(getComputedStyle(box).getPropertyValue("--demo-chat-scale"));
     const model = find("robot").getBoundingClientRect();
-    find("stimulation").style.transform = "translate(" + (model.x + model.width / 2 - bounds.x - 45) + "px," + (model.y - bounds.y - 72) + "px)";
+    find("stimulation").style.transform = "translate(" + (model.x + model.width / 2 - bounds.x - 45 * sceneScale) + "px," + (model.y - bounds.y - 72 * sceneScale) + "px) scale(" + sceneScale + ")";
     const from = find("stored-bolt").getBoundingClientRect();
     const to = find("bolt").getBoundingClientRect();
     flightStart = { x: from.x + from.width / 2 - bounds.x, y: from.y + from.height / 2 - bounds.y };
@@ -206,17 +209,40 @@
   }
 
   function reserveResponseHeight() {
-    // Measure both complete texts at the current width; keep the chat anchored.
-    response.style.removeProperty("--demo-response-height");
+    // Reserve every mixed/glitched response too, not only the two complete answers.
+    // Inline-block glitch glyphs can add a line; they must not resize the scene.
     const sample = response.cloneNode(false);
-    sample.style.cssText = "position:absolute;visibility:hidden;pointer-events:none;min-height:0;width:" + response.clientWidth + "px";
+    sample.style.cssText = "position:absolute;visibility:hidden;pointer-events:none;min-height:0;height:auto;width:" + response.clientWidth + "px";
     response.parentElement.append(sample);
-    const height = Math.max(...[example.baseline, example.steered].map((text) => {
+    let height = Math.max(...[example.baseline, example.steered].map((text) => {
       sample.textContent = text;
-      return sample.getBoundingClientRect().height;
+      return sample.offsetHeight;
     }));
+    const probe = document.createElement("span");
+    probe.style.display = "inline-block";
+    sample.replaceChildren(probe);
+    let widestGlyph = glyphs[0], widestWidth = 0;
+    glyphs.forEach((glyph) => {
+      probe.textContent = glyph;
+      if (probe.offsetWidth > widestWidth) {
+        widestWidth = probe.offsetWidth;
+        widestGlyph = glyph;
+      }
+    });
+    const mixed = characterNodes(sample, responseChars.length);
+    for (let front = 0; front <= mixed.length + 5; front++) {
+      mixed.forEach((span, i) => {
+        const changing = i <= front && i > front - 5;
+        span.classList.add("is-visible");
+        span.classList.toggle("is-glitch", changing);
+        span.textContent = changing ? widestGlyph : i <= front - 5 ? targetChars[i] || "" : baselineChars[i] || "";
+      });
+      height = Math.max(height, sample.offsetHeight);
+    }
     response.style.setProperty("--demo-response-height", height + "px");
     sample.remove();
+    const scale = parseFloat(getComputedStyle(box).getPropertyValue("--demo-chat-scale"));
+    sceneFrame.style.height = scene.offsetHeight * scale + "px";
     measureFlight();
   }
 
@@ -300,7 +326,7 @@
     if (flightStart && flightEnd && expand > 0 && expand < 1) {
       const x = flightStart.x + (flightEnd.x - flightStart.x) * expand;
       const y = flightStart.y + (flightEnd.y - flightStart.y) * expand - Math.sin(Math.PI * expand) * 70;
-      travelBolt.style.transform = "translate(" + (x - 22) + "px," + (y - 28) + "px) scale(" + (.65 + .35 * expand) + ")";
+      travelBolt.style.transform = "translate(" + (x - 22) + "px," + (y - 28) + "px) scale(" + (.65 + (sceneScale - .65) * expand) + ")";
       travelBolt.style.opacity = Math.min(1, expand * 8, (1 - expand) * 8);
     } else {
       travelBolt.style.opacity = 0;
@@ -395,7 +421,7 @@
     pauseButton.hidden = reducedMotion.matches;
     replay();
   });
-  new ResizeObserver(reserveResponseHeight).observe(response.parentElement);
+  new ResizeObserver(reserveResponseHeight).observe(sceneFrame);
   // Reuse the same timeline/layout for approved benchmark examples, without tabs.
   box.steeringDemo = {
     replay,
