@@ -84,32 +84,20 @@
         <div class="section-intro">
           <h2 id="motivation-title">A successful perturbation is not the same as <span>reliable control</span>.</h2>
         </div>
-        <ol class="motivation-points" role="list">
-          <li><p>First, the effect of stimulation depends on the state in which it is delivered: across invasive and non-invasive paradigms, state alters the magnitude, direction and behavioral consequence of otherwise identical stimulation.</p></li>
-          <li><p>At deployment, shifts in prompt, context, or activation trajectory alter the network’s local Jacobians and therefore how the same intervention propagates. Distribution shift thus changes not only the state being controlled but also the dynamics of control itself.</p></li>
-          <li><p>Language models and biological circuits are not equivalent systems, but both are high-dimensional, nonlinear and imperfectly modeled, and intervention in both inherits the same reliability problem.</p></li>
-        </ol>
-        <blockquote class="research-question">Can a language model’s internal dynamics tell us, before deployment, whether a representation will remain reliably steerable as those dynamics change?</blockquote>
-      </div>
-    </section>
-
-    <section class="section residual-section" id="linearization" aria-labelledby="linearization-title">
-      <div class="container">
-        <div class="section-intro">
-          <h2 id="linearization-title">Linearization residuals under distribution shift</h2>
-        </div>
-        <div class="residual-layout">
-          <div class="residual-copy">
-            <p>Human neural recordings and transformer hidden states share a modeling problem: local linear approximations are useful near the identification regime, but residual mismatch grows as the dynamics move away from it.</p>
-            <p>An intervention must therefore track the current state, and the model that shapes it cannot be trusted beyond its fitting regime. This motivates closed-loop control that explicitly accounts for model mismatch.</p>
-          </div>
-          <figure class="residual-figure">
-            <button class="figure-open" type="button" data-figure="assets/figure-3.png" data-caption="Figure 2. Linearization residuals under distribution shift in biological and artificial neural systems." aria-label="Expand Figure 2">
-              <img src="assets/figure-3.png" width="3197" height="5260" loading="lazy" alt="Human intracranial recordings and GPT-2 hidden-state dynamics, with linearization residuals under distribution shift and an illustrative open-loop versus closed-loop stimulation comparison.">
+        <div class="motivation-layout">
+          <ol class="motivation-points" role="list">
+            <li><p>First, the effect of stimulation depends on the state in which it is delivered: across invasive and non-invasive paradigms, state alters the magnitude, direction and behavioral consequence of otherwise identical stimulation.</p></li>
+            <li><p>At deployment, shifts in prompt, context, or activation trajectory alter the network’s local Jacobians and therefore how the same intervention propagates. Distribution shift thus changes not only the state being controlled but also the dynamics of control itself.</p></li>
+            <li><p>Language models and biological circuits are not equivalent systems, but both are high-dimensional, nonlinear and imperfectly modeled, and intervention in both inherits the same reliability problem.</p></li>
+          </ol>
+          <figure class="motivation-figure">
+            <button class="figure-open" type="button" data-figure="assets/figure-2.png" data-caption="Figure 2. Method schematic. Closed-loop stimulation enables controlled modulation of the system’s behavioral dynamics." aria-label="Expand Figure 2">
+              <img src="assets/figure-2.png" width="1064" height="1416" loading="lazy" alt="Method schematic comparing open-loop and state-dependent closed-loop neurostimulation, alongside closed-loop steering of a language model.">
             </button>
-            <figcaption><span class="figure-number">Figure 2.</span> Biological and artificial neural systems.</figcaption>
+            <figcaption><span class="figure-number">Figure 2.</span> Method schematic.</figcaption>
           </figure>
         </div>
+        <blockquote class="research-question">Can a language model’s internal dynamics tell us, before deployment, whether a representation will remain reliably steerable as those dynamics change?</blockquote>
       </div>
     </section>
 

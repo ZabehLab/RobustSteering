@@ -83,6 +83,9 @@ h2 { margin: 0 0 16px; font-size: var(--section-size); font-weight: 600; line-he
 .narrative-grid > p { margin: 0; font-size: 16px; line-height: 1.8; }
 .motivation-section h2 { max-width: 1000px; }
 .motivation-section h2 > span { color: var(--teal); }
+.motivation-layout { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); max-width: 1000px; gap: 32px; align-items: start; }
+.motivation-figure { min-width: 0; margin: 0; }
+.motivation-figure figcaption { font-size: var(--small-size); }
 .motivation-points { max-width: 1000px; margin: 0; padding: 0; list-style: none; counter-reset: argument; }
 .motivation-points li { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 16px; margin-bottom: 24px; counter-increment: argument; }
 .motivation-points li::before { content: counter(argument); color: var(--teal); font-size: 40px; font-weight: 400; line-height: 1.1; }
@@ -92,10 +95,6 @@ h2 { margin: 0 0 16px; font-size: var(--section-size); font-weight: 600; line-he
 .paper-copy { max-width: 1000px; }
 .paper-copy p { margin: 0 0 16px; font-size: var(--body-size); line-height: 1.65; }
 .paper-copy p:last-child { margin-bottom: 0; }
-.residual-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 48px; }
-.residual-figure { width: 100%; max-width: 380px; min-width: 0; margin: 0; justify-self: center; }
-.residual-copy { min-width: 0; }
-.residual-copy p { margin: 0 0 20px; font-size: var(--body-size); line-height: 1.75; }
 .method-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin-bottom: 24px; }
 .method-panel { min-width: 0; padding: 0 28px 0 0; }
 .method-panel + .method-panel { padding: 0 0 0 28px; border-left: 1px solid var(--line); }
@@ -175,7 +174,8 @@ mjx-container[display="true"] { margin: .5em 0 !important; }
   .narrative-grid { grid-template-columns: 1fr; row-gap: 10px; }
   .narrative-grid > p { padding-bottom: 16px; font-size: 15px; }
   .method-panels { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .residual-layout { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .motivation-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .motivation-figure { width: 100%; max-width: 260px; justify-self: center; }
   .method-panel { padding: 0; }
   .method-panel + .method-panel { padding: 24px 0 0; border-left: 0; border-top: 1px solid var(--line); }
   .demo-benchmarks { padding: 15px 20px; gap: 12px 24px; font-size: 12px; }
