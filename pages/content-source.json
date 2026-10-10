@@ -29,6 +29,7 @@
   },
   "figures": {
     "assets/figure-1.png": "paper/Final_Figures/abstract_box.png",
+    "assets/figure-2.png": "paper/Final_Figures/closedloopVertical2.png",
     "assets/figure-3.png": "paper/Final_Figures/BrainLLMVertical.png",
     "assets/figure-4.png": "paper/Final_Figures/ThruthfulQA.png",
     "assets/figure-5.png": "paper/Final_Figures/HarmBench.png",
@@ -38,9 +39,9 @@
   },
   "linearization_section": {
     "source": "paper/ICRL2027/arXiv_AppleStyle.tex",
-    "figure_label": "fig:human_linearization",
+    "displayed_figure": "Figure 2: Method Schematic (closedloopVertical2.png)",
     "framing_sources": ["Introduction: robustness and feedback motivation", "Figure 3 caption", "Problem formulation: empirical model-mismatch motivation"],
-    "scope": "Qualitative motivation for state-dependent feedback and robustness to local-model mismatch; the human stimulation comparison is presented as an illustration, not a brain–LLM equivalence or a population-level causal estimate."
+    "scope": "The text frames the shared local-model mismatch problem rather than reporting individual panels. At the user's request, Figure 2's conceptual method schematic is displayed instead of Figure 3's empirical composite; the schematic is not presented as residual data."
   },
   "asset_policy": "Final figures copied verbatim from Overleaf; no PDF extraction or replotting",
   "teal": {"hex": "#007C7C", "source": "StateTeal definition in arXiv_AppleStyle.tex"},

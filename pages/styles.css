@@ -92,7 +92,7 @@ h2 { margin: 0 0 16px; font-size: var(--section-size); font-weight: 600; line-he
 .paper-copy { max-width: 1000px; }
 .paper-copy p { margin: 0 0 16px; font-size: var(--body-size); line-height: 1.65; }
 .paper-copy p:last-child { margin-bottom: 0; }
-.residual-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: center; gap: 48px; }
+.residual-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); align-items: start; gap: 48px; }
 .residual-figure { min-width: 0; margin: 0; }
 .residual-copy { min-width: 0; }
 .residual-copy p { margin: 0 0 20px; font-size: var(--body-size); line-height: 1.75; }
