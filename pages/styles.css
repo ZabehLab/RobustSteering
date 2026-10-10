@@ -84,7 +84,9 @@ h2 { margin: 0 0 16px; font-size: var(--section-size); font-weight: 600; line-he
 .motivation-section h2 { max-width: 1000px; }
 .motivation-section h2 > span { color: var(--teal); }
 .motivation-layout { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); max-width: 1000px; gap: 32px; align-items: start; }
-.motivation-copy { min-width: 0; }
+.motivation-copy { min-width: 0; display: flex; flex-direction: column; align-self: stretch; }
+.motivation-copy > .motivation-points { display: flex; flex: 1; flex-direction: column; justify-content: space-between; }
+.motivation-copy > .research-question { margin-top: 44px; }
 .motivation-figure { min-width: 0; margin: 0; }
 .motivation-figure figcaption { font-size: var(--small-size); }
 .motivation-points { max-width: 1000px; margin: 0; padding: 0; list-style: none; counter-reset: argument; }
@@ -176,6 +178,8 @@ mjx-container[display="true"] { margin: .5em 0 !important; }
   .narrative-grid > p { padding-bottom: 16px; font-size: 15px; }
   .method-panels { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .motivation-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .motivation-copy, .motivation-copy > .motivation-points { display: block; }
+  .motivation-copy > .research-question { margin-top: 24px; }
   .motivation-figure { width: 100%; max-width: 260px; justify-self: center; }
   .method-panel { padding: 0; }
   .method-panel + .method-panel { padding: 24px 0 0; border-left: 0; border-top: 1px solid var(--line); }
