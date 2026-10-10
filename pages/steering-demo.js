@@ -6,7 +6,7 @@
   // Schematic example only: these are not recorded benchmark/model outputs.
   // Replace this data with approved question/response pairs in the next iteration.
   let example = {
-    benchmark: "MGSM",
+    benchmark: "Multilingual Grade-School Math Example",
     question: "阿米娜有3盒铅笔，每盒有12支。她一共有多少支铅笔？",
     baseline: "阿米娜一共有36支铅笔。",
     steered: "Amina tiene 36 lápices en total.",
@@ -21,6 +21,7 @@
   const scene = find("scene");
   const state = find("state");
   const direction = find("direction");
+  const directionLine = find("direction-line");
   const directionHead = find("direction-head");
   const directionLabels = find("direction-labels");
   const shiftMask = find("shift-mask");
@@ -32,7 +33,7 @@
   const glyphs = Array.from("▓▒░<>/\\#¿!?");
   // All times refer to this one pausable timeline (milliseconds).
   const intro = {
-    field: 400, direction: 1100, store: 2800, stored: 3900,
+    field: 400, endpoints: 1100, direction: 1550, store: 2800, stored: 3900,
     shift: 4500, shifted: 5600, dot: 5800, expand: 6500, chat: 7550,
   };
   let questionChars, baselineChars, targetChars, responseChars, timing;
@@ -61,22 +62,25 @@
       t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
       return ((t ^ t >>> 14) >>> 0) / 4294967296;
     };
-    const samples = Array.from({ length: 260 }, () => {
-      const c = components[random() < components[0].weight ? 0 : 1];
+    const totalWeight = components.reduce((sum, c) => sum + c.weight, 0);
+    const samples = Array.from({ length: 600 }, () => {
+      let draw = random() * totalWeight;
+      const c = components.find((component) => (draw -= component.weight) < 0) || components[components.length - 1];
       const radius = Math.sqrt(-2 * Math.log(Math.max(random(), 1e-10)));
       const theta = 2 * Math.PI * random();
       const a = radius * Math.cos(theta);
       const b = radius * Math.sin(theta);
       return [c.x + c.sx * a, c.y + c.sy * (c.rho * a + Math.sqrt(1 - c.rho * c.rho) * b)];
     });
-    const n = 96;
+    // Evaluate beyond the visible square, so contours can cross its edges cleanly.
+    const n = 128;
     const density = new Float64Array(n * n);
-    const bandwidth = .36;
+    const bandwidth = .45;
     let peak = 0;
     for (let y = 0; y < n; y++) {
       for (let x = 0; x < n; x++) {
-        const px = -3.5 + x * 7 / (n - 1);
-        const py = 3.5 - y * 7 / (n - 1);
+        const px = -6 + x * 12 / (n - 1);
+        const py = 6 - y * 12 / (n - 1);
         let value = 0;
         for (const [sx, sy] of samples) {
           const distance = ((px - sx) ** 2 + (py - sy) ** 2) / (2 * bandwidth * bandwidth);
@@ -88,7 +92,7 @@
     }
     const cases = [[], [[3, 0]], [[0, 1]], [[3, 1]], [[1, 2]], [[3, 0], [1, 2]], [[0, 2]], [[3, 2]], [[2, 3]], [[0, 2]], [[0, 1], [2, 3]], [[1, 2]], [[1, 3]], [[0, 1]], [[3, 0]], []];
     const paths = [];
-    for (const fraction of [.10, .20, .33, .47, .62, .77, .9]) {
+    for (const fraction of [.04, .08, .14, .23, .34, .47, .61, .76, .9]) {
       const threshold = peak * fraction;
       const vertices = new Map();
       const adjacency = new Map();
@@ -107,7 +111,7 @@
               const t = (threshold - values[edge]) / (values[next] - values[edge]);
               const [ax, ay] = corners[edge];
               const [bx, by] = corners[next];
-              vertices.set(key, [30 + (ax + (bx - ax) * t) * 280 / (n - 1), 18 + (ay + (by - ay) * t) * 280 / (n - 1)]);
+              vertices.set(key, [-70 + (ax + (bx - ax) * t) * 480 / (n - 1), -82 + (ay + (by - ay) * t) * 480 / (n - 1)]);
             }
             return key;
           };
@@ -157,13 +161,26 @@
   }
 
   // Compute once, then reuse exactly the same fields for every replay.
+  // The multi-modal landscapes are independent of the two language-direction points.
   makeStateContours(find("field-english"), 2027, [
-    { weight: .65, x: -.5, y: -.4, sx: .85, sy: .68, rho: .55 },
-    { x: .95, y: 1.05, sx: .55, sy: .52, rho: .2 },
+    { weight: .25, x: 0, y: 0, sx: 2.6, sy: 2.6, rho: -.1 },
+    { weight: .13, x: -2.4, y: 1.5, sx: .75, sy: .9, rho: -.3 },
+    { weight: .1, x: -.45, y: 2.2, sx: 1.0, sy: .55, rho: -.2 },
+    { weight: .13, x: 2.0, y: 1.5, sx: .8, sy: .8, rho: .2 },
+    { weight: .12, x: -1.75, y: -.7, sx: .9, sy: .65, rho: .1 },
+    { weight: .1, x: .7, y: .1, sx: .75, sy: .9, rho: -.4 },
+    { weight: .08, x: 2.5, y: -1.5, sx: .7, sy: .8, rho: -.2 },
+    { weight: .09, x: -.4, y: -2.4, sx: 1.15, sy: .55, rho: .1 },
   ], "#919191");
   makeStateContours(find("field-chinese"), 2028, [
-    { weight: .72, x: .55, y: .65, sx: .9, sy: .7, rho: -.55 },
-    { x: -1.3, y: -1.3, sx: .42, sy: .5, rho: .15 },
+    { weight: .25, x: 0, y: 0, sx: 2.6, sy: 2.6, rho: .05 },
+    { weight: .11, x: -2.2, y: 2.6, sx: .7, sy: .65, rho: .3 },
+    { weight: .14, x: .4, y: 1.8, sx: .9, sy: .7, rho: -.35 },
+    { weight: .1, x: 2.5, y: .8, sx: .7, sy: .9, rho: .2 },
+    { weight: .13, x: -2.2, y: -.4, sx: .8, sy: 1.0, rho: -.2 },
+    { weight: .1, x: -.3, y: -.8, sx: .65, sy: .65, rho: .1 },
+    { weight: .1, x: 1.5, y: -2.2, sx: .9, sy: .7, rho: -.3 },
+    { weight: .07, x: -1.3, y: -2.6, sx: .7, sy: .5, rho: .2 },
   ], "#8B1E1E");
 
   function characterNodes(node, count) {
@@ -238,7 +255,8 @@
 
   function stageAt(time) {
     if (time < intro.field) return "empty";
-    if (time < intro.direction) return "english";
+    if (time < intro.endpoints) return "english";
+    if (time < intro.direction) return "endpoints";
     if (time < intro.store) return "direction";
     if (time < intro.stored) return "store";
     if (time < intro.shift) return "stored";
@@ -251,11 +269,13 @@
   function renderState() {
     box.dataset.stage = stageAt(elapsed);
     state.style.opacity = progress(intro.field, 450);
+    const points = progress(intro.endpoints, 300);
     const drawn = progress(intro.direction, 850);
     const stored = ease(progress(intro.store, intro.stored - intro.store));
-    direction.style.opacity = drawn * (1 - stored);
+    direction.style.opacity = points * (1 - stored);
+    directionLine.style.opacity = drawn;
     directionHead.style.opacity = clamp(drawn * 4 - 3);
-    directionLabels.style.opacity = drawn * (1 - progress(intro.store, 300));
+    directionLabels.style.opacity = points * (1 - progress(intro.store, 300));
     box.style.setProperty("--demo-direction", drawn);
     const scale = 1 - stored * .94;
     // Collapse around the vector midpoint, then carry it down into the controller.
@@ -268,6 +288,7 @@
     box.style.setProperty("--demo-swipe", swipe);
     shiftMask.setAttribute("width", swipe * 280);
     const expand = ease(progress(intro.expand, intro.chat - intro.expand));
+    find("stimulation").style.opacity = elapsed >= intro.chat ? 1 : 0;
     const dotIn = progress(intro.dot, 250);
     dot.style.opacity = dotIn * (1 - expand);
     ripple.style.opacity = expand > 0 && expand < 1 ? 1 - expand : 0;

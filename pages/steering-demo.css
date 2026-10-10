@@ -33,7 +33,7 @@
 .steering-demo-asker { width: 44px; height: 44px; flex: 0 0 44px; margin-top: 16px; }
 .steering-demo-model { position: relative; width: 68px; flex: 0 0 68px; margin-top: 69px; }
 .steering-demo-robot { display: block; width: 68px; height: 64px; }
-.steering-demo-stimulation { position: absolute; width: 90px; height: 60px; left: 0; top: 0; pointer-events: none; }
+.steering-demo-stimulation { position: absolute; width: 90px; height: 60px; left: 0; top: 0; opacity: 0; pointer-events: none; }
 .steering-demo-bolt { position: absolute; left: 23px; width: 44px; height: 56px; opacity: 1; transform-origin: 50% 65%; }
 .steering-demo-vibration { position: absolute; inset: 0; width: 90px; height: 60px; opacity: 0; }
 .steering-demo[data-phase="steering"] .steering-demo-bolt,
