@@ -2,10 +2,6 @@
 
 ![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white) ![PyTorch 2.9.1](https://img.shields.io/badge/PyTorch-2.9.1-EE4C2C?logo=pytorch&logoColor=white) ![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-007C7C) ![arXiv: XXXX](https://img.shields.io/badge/arXiv-XXXX-B31B1B?logo=arxiv&logoColor=white)
 
-<p align="center">
-  <img src="assets/steering-demo.gif" alt="Illustration of closed-loop activation steering under a language distribution shift." width="776">
-</p>
-
 Robust Steering is a Python package for steering language-model representations with robust control. It models representation dynamics across transformer layers and uses finite-horizon H∞ control to steer toward semantic targets under distribution shift.
 
 The package brings together controller synthesis, activation interventions, and evaluation across truthfulness, safety, multilingual reasoning, and long-context tasks. It supports closed-loop steering without updating model weights, with LQR and activation-steering baselines for comparison.
