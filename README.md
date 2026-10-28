@@ -20,8 +20,8 @@ The package brings together controller synthesis, activation interventions, and 
 Requires Python 3.11 or newer.
 
 ```bash
-git clone https://github.com/rgs2151/controller.git
-cd controller
+git clone https://github.com/ZabehLab/RobustSteering.git
+cd RobustSteering
 python -m pip install -e .
 ```
 
