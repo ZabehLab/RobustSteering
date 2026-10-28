@@ -44,8 +44,8 @@
     "source": "User-supplied current PDF, not a new compilation of the bundle",
     "sha256": "6a9a474126314bf1764f6f7255a0b25b3a7f05a661e33f9eaabd571473b49959"
   },
-  "public_paper_link": {"provider": "arXiv", "url": "https://github.com/rgs2151/controller", "status": "User-requested local preview placeholder; replace with arXiv release URL before publication"},
-  "code_link": "https://github.com/rgs2151/controller",
+  "public_paper_link": {"provider": "arXiv", "url": "https://github.com/ZabehLab/RobustSteering", "status": "User-requested local preview placeholder; replace with arXiv release URL before publication"},
+  "code_link": "https://github.com/ZabehLab/RobustSteering",
   "math_renderer": {"name": "MathJax", "version": "3.2.2", "component": "Local TeX/SVG bundle"},
   "excluded_content_sources": ["alternate manuscript drafts", "rudra.tex", "old benchmark exports"],
   "arxiv_logo_source": "https://info.arxiv.org/assets/arxiv-logo-one-color-white.svg",
