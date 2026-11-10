@@ -37,7 +37,7 @@ Run from the repository root with the existing analysis environment.
   parameter counts, gamma-star values, evaluation sample and repetition counts,
   calibration IDs, and source paths.
 - `tables/truthfulqa_srob.md` contains the readable table. T×I and the derived
-  columns are displayed to six decimals. Srob retains the source CSV precision.
+  columns are displayed to six decimals. Srob and γ★ retain the source CSV precision.
 - `tables/source_manifest.json` records SHA-256 hashes for all 41 input files
   and the identities of the result and generation files.
 - `plots/srob_model_size.{png,pdf}` reproduces the five-model scaling comparison.

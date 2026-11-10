@@ -147,15 +147,15 @@ def save_tables(rows: list[dict], sources: dict) -> None:
         "# TruthfulQA Srob and T×I",
         "",
         "The five paper-figure models. T×I is True (%) × Informative (%) / 100.",
-        "Srob retains the source CSV precision. T×I, ratios, and differences are displayed to six decimals.",
+        "Srob and γ★ retain the source CSV precision. T×I, ratios, and differences are displayed to six decimals.",
         "The CSV and JSON retain the full saved floating-point precision.",
         "",
-        "| Model | Condition | Srob | Original T×I (%) | H∞ T×I (%) | H∞ / Original | H∞ − Original (pp) |",
-        "|---|---|---:|---:|---:|---:|---:|",
+        "| Model | Condition | Srob | γ★ | Original T×I (%) | H∞ T×I (%) | H∞ / Original | H∞ − Original (pp) |",
+        "|---|---|---:|---:|---:|---:|---:|---:|",
     ]
     for row in rows:
         lines.append(
-            f"| {row['model']} | {row['condition']} | {row['srob']!r} | "
+            f"| {row['model']} | {row['condition']} | {row['srob']!r} | {row['gamma_star']!r} | "
             f"{row['original_txi_pct']:.6f} | {row['hinf_txi_pct']:.6f} | "
             f"{row['hinf_over_original_txi']:.6f} | {row['hinf_minus_original_txi_pp']:+.6f} |"
         )
