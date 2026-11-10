@@ -227,3 +227,85 @@ readability. Full checkpoint names are retained in the tables.
 - [Paper HarmBench jackknife report](../../figs/bench_table/harmful/harmbench_jackknife.json)
 - [Original Srob figure points](../gamma_star_organization/plots/srob_overall_points.csv)
 - [HarmBench source manifest](tables/harmbench_source_manifest.json)
+
+# analyze_mgsm
+
+## Method
+
+Use Qwen3-4B, Phi-4-mini-instruct, and Granite-3.3-2B-Instruct from the paper.
+Compare H∞ with the saved A-LQR baseline on Chinese, French, Japanese, Swahili,
+and Telugu. These five languages are all OOD evaluation conditions.
+
+Verify selected-controller Srob and γ★ against the original figure points and
+controller diagnostics. Match model checkpoints, controller settings, evaluated
+question identities, and cache settings through the saved generation records.
+Compute exact-answer accuracy from all 100 cached judgments per language, counting
+unparseable answers as incorrect. Check the result means against the paper's
+language and overall jackknife reports.
+
+Average each method's accuracy equally over the five languages. Compute the
+ratio of those mean accuracies and their percentage-point difference, using
+A-LQR as the reference. The user selected the five-language average for this
+comparison. The figure therefore has two panels side by side.
+
+```bash
+/home/dev/miniconda3/envs/robust-steerability/bin/python \
+  parking/rebutall_rudra_srob_further/analyze_mgsm.py
+```
+
+## Variables
+
+- `alqr_accuracy_pct` and `hinf_accuracy_pct` are five-language mean accuracies.
+- `hinf_over_alqr_accuracy` is their ratio. A zero A-LQR denominator is saved as
+  JSON null and an empty CSV value, and is explicitly marked undefined in Markdown.
+- `hinf_minus_alqr_accuracy_pp` is H∞ minus A-LQR in percentage points.
+- `tables/mgsm_srob_accuracy_vs_alqr.{csv,json,md}` contain the three-model table,
+  Srob, γ★, accuracies, ratio, difference, checkpoint identities, and source paths.
+- `tables/mgsm_accuracy_by_language.{csv,json}` retain the 15 underlying language
+  comparisons and the verified question counts.
+- `tables/mgsm_source_manifest.json` records hashes and identities for all 99
+  input files, including result, generation, judgment, and controller artifacts.
+- `plots/srob_mgsm_accuracy_vs_alqr.{png,pdf}` contain the figure, with a 600-DPI PNG.
+
+## Statistics
+
+The difference panel fits ordinary least squares to Srob and the percentage-point
+accuracy improvement across three models. It displays Pearson's r and the
+two-sided p-value against a zero-slope null.
+
+Phi-4-mini has zero A-LQR accuracy in all five languages, so its accuracy ratio
+is undefined. The ratio panel displays two finite model ratios and identifies
+Phi's undefined value in text. Regression is performed only for panels with at
+least three finite model values. `tables/mgsm_regressions.json` records the counts,
+undefined models, and available fit results.
+
+## Legends
+
+- The left panel shows H∞ / A-LQR accuracy. The right panel shows H∞ − A-LQR
+  accuracy in percentage points.
+- Both x-axes show Srob. All points use the OOD dark red `#8B1E1E`, with model labels.
+- Gray reference lines show a ratio of one and a difference of zero. The fitted
+  line in the difference panel uses the same dark red.
+- Typography, marker sizes, fit styling, and output resolution use the shared
+  analysis plotting conventions.
+
+## Interpretation
+
+A ratio above one or a positive difference indicates greater mathematical
+accuracy under H∞ than under A-LQR. The average is computed over the same five
+languages separately for each method before taking the ratio or difference.
+
+## Notes
+
+The paper's deterministic evaluations use the same 100 MGSM question identities
+in each language and method. Qwen's legacy result JSON files declare 250 samples,
+while the saved generation and judgment records contain the paper's 100 evaluated
+questions. Verified counts come from those records. The language table also
+preserves the legacy declared counts for inspection.
+
+## References
+
+- [Paper MGSM summary](../../figs/bench_table/mgsm/mgsm_overall.md)
+- [Paper MGSM jackknife report](../../figs/bench_table/mgsm/mgsm_jackknife.json)
+- [MGSM comparison table](tables/mgsm_srob_accuracy_vs_alqr.md)
+- [MGSM source manifest](tables/mgsm_source_manifest.json)

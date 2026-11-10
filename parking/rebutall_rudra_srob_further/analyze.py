@@ -174,16 +174,20 @@ def save_figure(fig, stem: str) -> None:
     plt.close(fig)
 
 
+def configure_plot_style() -> None:
+    plt.rcParams.update({"font.family": "Arial", "font.size": 11,
+                         "axes.labelsize": 12, "axes.titlesize": 12,
+                         "pdf.fonttype": 42, "ps.fonttype": 42,
+                         "axes.spines.top": False, "axes.spines.right": False})
+
+
 def render_behavior_figure(
     rows: list[dict], outcomes: tuple, stem: str, label_offsets: dict | None = None,
     *, conditions: dict = CONDITIONS, x_limits: tuple = (-0.007, 0.46),
     x_ticks: tuple = (0, 0.1, 0.2, 0.3, 0.4), y_limits: tuple | None = None,
 ) -> dict:
     PLOTS.mkdir(exist_ok=True)
-    plt.rcParams.update({"font.family": "Arial", "font.size": 11,
-                         "axes.labelsize": 12, "axes.titlesize": 12,
-                         "pdf.fonttype": 42, "ps.fonttype": 42,
-                         "axes.spines.top": False, "axes.spines.right": False})
+    configure_plot_style()
     statistics = {}
     fig, axes = plt.subplots(2, 2, figsize=(10, 7), layout="constrained", sharex=True, sharey="row")
     offsets = {"gpt2_xl": (10, 5), "gemma2_2b": (10, -12), "llama31_8b": (9, -12),

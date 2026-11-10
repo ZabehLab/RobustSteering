@@ -1,0 +1,23 @@
+{
+  "hinf_over_alqr_accuracy": {
+    "n_models": 3,
+    "n_finite": 2,
+    "undefined_models": [
+      "Phi-4-mini"
+    ],
+    "fit": null
+  },
+  "hinf_minus_alqr_accuracy_pp": {
+    "n_models": 3,
+    "n_finite": 3,
+    "undefined_models": [],
+    "fit": {
+      "n": 3,
+      "slope": -22.377480598770298,
+      "intercept": 24.747779504258606,
+      "pearson_r": -0.577288920486136,
+      "p_two_sided": 0.6082212800866931,
+      "slope_standard_error": 31.65158105393947
+    }
+  }
+}
