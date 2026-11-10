@@ -15,7 +15,6 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.ticker import FixedLocator, NullFormatter, ScalarFormatter
 from scipy.stats import linregress
 
 
@@ -175,49 +174,19 @@ def save_figure(fig, stem: str) -> None:
     plt.close(fig)
 
 
-def render_figures(rows: list[dict]) -> None:
+def render_behavior_figure(
+    rows: list[dict], outcomes: tuple, stem: str, label_offsets: dict | None = None
+) -> dict:
     PLOTS.mkdir(exist_ok=True)
     plt.rcParams.update({"font.family": "Arial", "font.size": 11,
                          "axes.labelsize": 12, "axes.titlesize": 12,
                          "pdf.fonttype": 42, "ps.fonttype": 42,
                          "axes.spines.top": False, "axes.spines.right": False})
-    points = [row for row in rows if row["evaluation_key"] == "truthfulness"]
-    parameters = np.array([row["parameter_billions"] for row in points])
-    srob = np.array([row["srob"] for row in points])
-    size_fit = fit_record(np.log10(parameters), np.log10(srob))
-    statistics = {"model_size_log10_log10": size_fit}
-    fig, ax = plt.subplots(figsize=(4.8, 3.8), layout="constrained")
-    ax.set_xscale("log")
-    ax.set_yscale("log")
-    curve_x = np.geomspace(1.3, 40, 150)
-    ax.plot(curve_x, 10 ** size_fit["intercept"] * curve_x ** size_fit["slope"],
-            color="#777777", linewidth=1.2, linestyle="--", zorder=1)
-    ax.scatter(parameters, srob, s=52, color="#007C7C", zorder=3)
-    size_offsets = {"gpt2_xl": (7, 12), "gemma2_2b": (7, -15),
-                    "llama31_8b": (7, -15), "qwen25_14b": (-5, 12), "olmo2_32b": (-8, 9)}
-    for row in points:
-        offset = size_offsets[row["model_key"]]
-        alignment = "right" if offset[0] < 0 else "left"
-        ax.annotate(row["model"], (row["parameter_billions"], row["srob"]),
-                    xytext=offset, textcoords="offset points", ha=alignment, fontsize=10)
-    ax.set(xlim=(1.2, 58), ylim=(0.010, 0.65), xlabel="Model parameters (billions)", ylabel=r"$S_{\mathrm{rob}}$")
-    for axis, locations in ((ax.xaxis, [2, 4, 8, 16, 32]),
-                            (ax.yaxis, [0.01, 0.02, 0.05, 0.1, 0.2, 0.5])):
-        axis.set_major_locator(FixedLocator(locations))
-        axis.set_major_formatter(ScalarFormatter())
-        axis.set_minor_formatter(NullFormatter())
-    ax.text(0.03, 0.97, f"Log–log slope = {size_fit['slope']:.3f}\n"
-            f"r = {size_fit['pearson_r']:.3f}, p = {size_fit['p_two_sided']:.3f}",
-            transform=ax.transAxes, ha="left", va="top", fontsize=10)
-    save_figure(fig, "srob_model_size")
-
+    statistics = {}
     fig, axes = plt.subplots(2, 2, figsize=(10, 7), layout="constrained", sharex=True, sharey="row")
-    outcomes = (
-        ("hinf_over_original_txi", "H∞ T×I / Original T×I", 1.0),
-        ("hinf_minus_original_txi_pp", "H∞ T×I − Original T×I (pp)", 0.0),
-    )
     offsets = {"gpt2_xl": (10, 5), "gemma2_2b": (10, -12), "llama31_8b": (9, -12),
                "qwen25_14b": (9, 7), "olmo2_32b": (-9, 9)}
+    label_offsets = label_offsets or {}
     for column, (evaluation_key, (condition, _, color)) in enumerate(CONDITIONS.items()):
         selected = [row for row in rows if row["evaluation_key"] == evaluation_key]
         x = np.array([row["srob"] for row in selected])
@@ -233,7 +202,9 @@ def render_figures(rows: list[dict]) -> None:
                     color=color, linewidth=1.2, alpha=0.65, zorder=1)
             ax.scatter(x, y, s=52, color=color, zorder=3)
             for row in selected:
-                offset = offsets[row["model_key"]]
+                offset = label_offsets.get(
+                    (evaluation_key, outcome, row["model_key"]), offsets[row["model_key"]]
+                )
                 ax.annotate(row["model"], (row["srob"], row[outcome]), xytext=offset,
                             textcoords="offset points", ha="right" if offset[0] < 0 else "left",
                             fontsize=10, arrowprops={"arrowstyle": "-", "lw": 0.5, "color": "#999999"})
@@ -247,7 +218,16 @@ def render_figures(rows: list[dict]) -> None:
                 ax.set_xlabel(r"$S_{\mathrm{rob}}$")
     axes[0, 0].set_ylim(0.90, max(row[outcomes[0][0]] for row in rows) + 0.25)
     axes[1, 0].set_ylim(-2, max(row[outcomes[1][0]] for row in rows) + 6)
-    save_figure(fig, "srob_txi_changes")
+    save_figure(fig, stem)
+    return statistics
+
+
+def render_figures(rows: list[dict]) -> None:
+    outcomes = (
+        ("hinf_over_original_txi", "H∞ T×I / Original T×I", 1.0),
+        ("hinf_minus_original_txi_pp", "H∞ T×I − Original T×I (pp)", 0.0),
+    )
+    statistics = render_behavior_figure(rows, outcomes, "srob_txi_changes")
     (TABLES / "regressions.json").write_text(json.dumps(statistics, indent=2, allow_nan=False) + "\n")
 
 
