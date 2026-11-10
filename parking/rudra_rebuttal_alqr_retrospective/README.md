@@ -18,17 +18,25 @@ The top row shows the paper's H∞ reference grids. The bottom row shows A-LQR a
 
 ## Interpretation
 
-The existing caches cover 36 of 36 H∞ cells and 0 of 36 A-LQR cells. The available A-LQR responses were produced at the submitted cost on the direct test split. Their behavior IDs, prompt IDs, and prompt texts have zero overlap with the validation inputs for each model. The submitted A-LQR cost therefore has no measured validation score, rank, or gap in this audit. A complete behavioral sweep requires 600 A-LQR validation responses per model, or 1,800 in total, followed by AXBench scoring.
+The original caches cover all 36 H∞ cells. The original A-LQR responses were produced at the submitted cost on the direct test split. Their behavior IDs, prompt IDs, and prompt texts have zero overlap with the validation inputs for each model. The retrospective sweep produces 600 A-LQR validation responses per model, or 1,800 in total, and scores them with the paper's three AXBench rubrics.
 
 ## Notes
 
-Run from the repository root with the project environment active.
+Run from the repository root with the project environment active. The sweep uses the available GPUs for independent grid shards, starts AXBench scoring as cells finish, and resumes from saved gains, response batches, and judge batches.
+
+```bash
+python -m parking.rudra_rebuttal_alqr_retrospective.sweep run --devices auto
+```
+
+The sweep reuses the paper's pinned BF16 models, nominal dynamics, refusal direction, and formatted inputs. It uses greedy decoding with KV caching off and the paper's 512-token cap. Generation uses batches of 32 for 1B and 16 for 3B and 8B. The archived 8B calibration used batches of 32.
+
+The renderer can also run independently on the saved scores.
 
 ```bash
 python -m parking.rudra_rebuttal_alqr_retrospective.audit
 ```
 
-The script reads saved responses and scores. It writes the PNG and PDF comparison, `grid.csv`, and `prompt_split_audit.csv` to `cache/`. To load a scored A-LQR cell, place its response JSON in `cache/<model>/grid/generations/<grid_id>.json` and the three per-response rubric files in `cache/<model>/grid/scores/<rubric>/<grid_id>.json`. The generation identity must include `method`, `model`, `parameters`, and `evaluated_model_kv_cache`. The script checks these against the archived benchmark and matches the prompt IDs, behavior IDs, and input texts to the corresponding H∞ cell.
+Each model's `cache/<model>/grid/` holds its controller gains, responses, and rubric scores. `cache/logs/` holds the run plan and worker logs. The renderer writes the PNG and PDF comparison, `grid.csv`, and `prompt_split_audit.csv` to `cache/`. It verifies the response identities and matches the prompt IDs, behavior IDs, and input texts to the corresponding H∞ cell.
 
 ## References
 

@@ -98,7 +98,8 @@ def audit_model(model_key: str) -> dict:
 
         alqr_score = None
         path = alqr_grid / "generations" / filename
-        if path.is_file() and all((alqr_grid / "scores" / rubric / filename).is_file() for rubric in RUBRICS):
+        score_paths = [alqr_grid / "scores" / rubric / filename for rubric in RUBRICS]
+        if path.is_file() and all(p.is_file() and load_json(p)["status"] == "complete" for p in score_paths):
             identity, generations = read_generations(path)
             if (identity["method"] != "alqr" or identity["model"] != alqr["model"]
                 or identity["parameters"] != params
