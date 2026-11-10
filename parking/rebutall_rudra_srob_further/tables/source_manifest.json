@@ -1,0 +1,961 @@
+{
+  "parking/gamma_star_organization/plots/srob_parameter_size_truthfulness_main.csv": {
+    "sha256": "4c8865a5f6803b9687d4acc007164a36fd6a07740890cabfc0c2fd9176158198"
+  },
+  "benchmarks/truthfulness/cache/gpt2_xl/calibrations/h_infinity/txi95_fluency05_n200_r1/selection.json": {
+    "sha256": "5ea8317607b10195563368292fa182de96eccf02bb2c358da996fe66bc9b28b2",
+    "identity": null
+  },
+  "benchmarks/truthfulness/cache/gpt2_xl/calibrations/h_infinity/txi95_fluency05_n200_r1/controller_diagnostics/runs/calibration-9a8d5980c958e9962406/score.json": {
+    "sha256": "f7a746b47a3d63dc8e8cf1ec04ceef3b3d2487d318c91fcd4049c5bb30b01133",
+    "identity": null
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/original.json": {
+    "sha256": "c96d9f9995613a58130c42bdee5488d492c5a3bae4b42c791d7200dbf242459f",
+    "identity": {
+      "model_id": "openai-community/gpt2-xl",
+      "model_revision": "15ea56dee5df4983c59b2538573817e1667135e2",
+      "method": "original",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/h_infinity.json": {
+    "sha256": "8cbce791eb11a22b8ba086735884be4e8aec0e11276026149754de8c51055ee0",
+    "identity": {
+      "model_id": "openai-community/gpt2-xl",
+      "model_revision": "15ea56dee5df4983c59b2538573817e1667135e2",
+      "method": "h_infinity",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "calibration_id": "txi95_fluency05_n200_r1_hinf_seed000",
+      "scorers": [
+        "axbench_concept_relevance",
+        "axbench_fluency",
+        "axbench_instruction_relevance",
+        "axbench_overall",
+        "truthfulqa_informative",
+        "truthfulqa_true"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/gpt2_xl/evaluations/kv_cache_off/calibrations/txi95_fluency05_n200_r1_hinf_seed000/generations/truthfulness/h_infinity/final.json": {
+    "sha256": "3b79216d37ec25406d85070f61ab746213d228169fb43ea8c4244a368816260a",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "openai-community/gpt2-xl",
+      "checkpoint_revision": "15ea56dee5df4983c59b2538573817e1667135e2",
+      "behavior": "truthfulness",
+      "distribution": "id",
+      "evaluation_key": "truthfulness",
+      "cache_namespace": "truthfulness",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 3.0,
+        "q": 0.03162277660168379,
+        "r": 1.0,
+        "q_final": 0.1
+      },
+      "calibration_id": "txi95_fluency05_n200_r1_hinf_seed000",
+      "model_loading": {
+        "model_id": "openai-community/gpt2-xl",
+        "revision": "15ea56dee5df4983c59b2538573817e1667135e2",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32",
+        "rope_scaling": null
+      },
+      "protocol": {
+        "evaluation_repetitions": 1,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 96,
+        "use_cache": false,
+        "seed": 0,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/original.json": {
+    "sha256": "9ae1916aadd42718cee2a05b8650540082c684ccacb7d0999bd8909c785f3f4d",
+    "identity": {
+      "model_id": "openai-community/gpt2-xl",
+      "model_revision": "15ea56dee5df4983c59b2538573817e1667135e2",
+      "method": "original",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/h_infinity.json": {
+    "sha256": "8f9b8d856dbd8b23890eafccdf9eda1ed9e9b4ade032e903417a7c66dbaac51a",
+    "identity": {
+      "model_id": "openai-community/gpt2-xl",
+      "model_revision": "15ea56dee5df4983c59b2538573817e1667135e2",
+      "method": "h_infinity",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/gpt2_xl/evaluations/kv_cache_off/calibrations/txi95_fluency05_n200_r1/generations/truthfulness_spanish/h_infinity/final.json": {
+    "sha256": "d471841f6c4a1d142555803d1213825ac6efdf70becf3d54b8a3b752ecd118a1",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "openai-community/gpt2-xl",
+      "checkpoint_revision": "15ea56dee5df4983c59b2538573817e1667135e2",
+      "behavior": "truthfulness",
+      "distribution": "spanish",
+      "evaluation_key": "truthfulness_spanish",
+      "cache_namespace": "truthfulness_spanish",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 3.0,
+        "q": 0.03162277660168379,
+        "r": 1.0,
+        "q_final": 0.1
+      },
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "model_loading": {
+        "model_id": "openai-community/gpt2-xl",
+        "revision": "15ea56dee5df4983c59b2538573817e1667135e2",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32",
+        "rope_scaling": null
+      },
+      "protocol": {
+        "evaluation_repetitions": 1,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 256,
+        "use_cache": false,
+        "seed": 42,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  },
+  "benchmarks/truthfulness/cache/gemma2b/calibrations/h_infinity/fixed_q0p1_qf0p31622777_r1/selection.json": {
+    "sha256": "988c07b7b801d49abe9a4f66fa70055fbc2357ad72a0fb2d50473f0ccab1be4a",
+    "identity": null
+  },
+  "benchmarks/truthfulness/cache/gemma2b/calibrations/h_infinity/fixed_q0p1_qf0p31622777_r1/base/controller_diagnostics/runs/calibration-3a591a0623c6ce074079/score.json": {
+    "sha256": "1ef1c4e458a2efca333e8b60acaa5b08aed5c43ed5c8a91d9f752862d298cd15",
+    "identity": null
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/original.json": {
+    "sha256": "8d1f6923721957cf3ab241eee15da0368b63cdc7d14f0e5a311ed5861aaa28cf",
+    "identity": {
+      "model_id": "google/gemma-2-2b",
+      "model_revision": "c5ebcd40d208330abc697524c919956e692655cf",
+      "method": "original",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_instruction_relevance",
+        "axbench_fluency"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/h_infinity.json": {
+    "sha256": "2d907c2421cd6150127ffbcf6b5acfa82ef1a2ca47cbeddc3c31e4a7d98f3765",
+    "identity": {
+      "model_id": "google/gemma-2-2b",
+      "model_revision": "c5ebcd40d208330abc697524c919956e692655cf",
+      "method": "h_infinity",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_instruction_relevance",
+        "axbench_fluency"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/gemma2b/evaluations/kv_cache_off/generations/truthfulness/h_infinity/final.json": {
+    "sha256": "9a95564ef88ae876e28c7c9a9d682e972de3c5030414b0e4e4ee7da091afff2d",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "google/gemma-2-2b",
+      "checkpoint_revision": "c5ebcd40d208330abc697524c919956e692655cf",
+      "behavior": "truthfulness",
+      "distribution": "id",
+      "evaluation_key": "truthfulness",
+      "cache_namespace": "truthfulness",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 3.0,
+        "q": 0.1,
+        "r": 1.0,
+        "q_final": 0.31622776601683794
+      },
+      "calibration_id": "fixed_q0p1_qf0p31622777_r1",
+      "model_loading": {
+        "model_id": "google/gemma-2-2b",
+        "revision": "c5ebcd40d208330abc697524c919956e692655cf",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32"
+      },
+      "protocol": {
+        "evaluation_repetitions": 5,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 64,
+        "use_cache": false,
+        "seed": 42,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/original.json": {
+    "sha256": "4257556318a08811b1690066895bf49e1c9d0234a001a16ea6c42f7235245ba9",
+    "identity": {
+      "model_id": "google/gemma-2-2b",
+      "model_revision": "c5ebcd40d208330abc697524c919956e692655cf",
+      "method": "original",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_instruction_relevance",
+        "axbench_fluency"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/h_infinity.json": {
+    "sha256": "3404932f1efeeb37cbf2184c4757b644739404f3f16c0fbee9467bfd69e1c6c5",
+    "identity": {
+      "model_id": "google/gemma-2-2b",
+      "model_revision": "c5ebcd40d208330abc697524c919956e692655cf",
+      "method": "h_infinity",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_instruction_relevance",
+        "axbench_fluency"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/gemma2b/evaluations/kv_cache_off/generations/truthfulness_spanish/h_infinity/final.json": {
+    "sha256": "9ad3f30482f713c629a89b964a8664267ef18a83f8d6178b7300b6e5f72ea075",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "google/gemma-2-2b",
+      "checkpoint_revision": "c5ebcd40d208330abc697524c919956e692655cf",
+      "behavior": "truthfulness",
+      "distribution": "spanish",
+      "evaluation_key": "truthfulness_spanish",
+      "cache_namespace": "truthfulness_spanish",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 3.0,
+        "q": 0.1,
+        "r": 1.0,
+        "q_final": 0.31622776601683794
+      },
+      "calibration_id": "fixed_q0p1_qf0p31622777_r1",
+      "model_loading": {
+        "model_id": "google/gemma-2-2b",
+        "revision": "c5ebcd40d208330abc697524c919956e692655cf",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32"
+      },
+      "protocol": {
+        "evaluation_repetitions": 5,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 64,
+        "use_cache": false,
+        "seed": 42,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  },
+  "benchmarks/truthfulness/cache/llama8b/calibrations/h_infinity/txi_fluency_95_05/selection.json": {
+    "sha256": "7c64c7517b09634f29ca57e0e4aeb3e638f00fd30427dbf1cb7ba3c0a5168aad",
+    "identity": null
+  },
+  "benchmarks/truthfulness/cache/llama8b/calibrations/h_infinity/txi_fluency_95_05/controller_diagnostics/runs/calibration-611998f4b5388509098f/score.json": {
+    "sha256": "d8cc1f5d58d5e997767cbda71b149ccb990f8821ea7198d3bc08cd8ea609e4a8",
+    "identity": null
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness/original.json": {
+    "sha256": "ad6534242d3e7cf927df6a1c0d97d0c86fc428ee03df7dd51c351009d07ab283",
+    "identity": {
+      "model_id": "meta-llama/Meta-Llama-3-8B",
+      "model_revision": "8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920",
+      "method": "original",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_instruction_relevance",
+        "axbench_fluency"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi_fluency_95_05/llama8b/truthfulness/h_infinity.json": {
+    "sha256": "c37c7979fe9216ce549fcd3309892530317dcec8fed1588ee7122972ecd0706b",
+    "identity": {
+      "model_id": "meta-llama/Meta-Llama-3-8B",
+      "model_revision": "8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920",
+      "method": "h_infinity",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "calibration_id": "txi_fluency_95_05",
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/llama8b/evaluations/kv_cache_off/calibrations/txi_fluency_95_05/generations/truthfulness/h_infinity/final.json": {
+    "sha256": "355f35d57dd5b94201ad29eb60c23bbd9e5f4326a1ba699f20ed425d2d96804f",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "meta-llama/Meta-Llama-3-8B",
+      "checkpoint_revision": "8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920",
+      "behavior": "truthfulness",
+      "distribution": "id",
+      "evaluation_key": "truthfulness",
+      "cache_namespace": "truthfulness",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 2.0,
+        "q": 0.1,
+        "r": 1.0,
+        "q_final": 0.31622776601683794
+      },
+      "calibration_id": "txi_fluency_95_05",
+      "model_loading": {
+        "model_id": "meta-llama/Meta-Llama-3-8B",
+        "revision": "8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32",
+        "rope_scaling": null
+      },
+      "protocol": {
+        "evaluation_repetitions": 1,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 104,
+        "use_cache": false,
+        "seed": 42,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness_spanish/original.json": {
+    "sha256": "89f229f0b1d93cef5eb14f93078920870313630772579e376bd73f433ad9e6d6",
+    "identity": {
+      "model_id": "meta-llama/Meta-Llama-3-8B",
+      "model_revision": "8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920",
+      "method": "original",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_instruction_relevance",
+        "axbench_fluency"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi_fluency_95_05/llama8b/truthfulness_spanish/h_infinity.json": {
+    "sha256": "e12ac8d76c1563786e9dff37ba81e181ee4aab59188252d6111fd7197eb5caae",
+    "identity": {
+      "model_id": "meta-llama/Meta-Llama-3-8B",
+      "model_revision": "8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920",
+      "method": "h_infinity",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "calibration_id": "txi_fluency_95_05",
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/llama8b/evaluations/kv_cache_off/calibrations/txi_fluency_95_05/generations/truthfulness_spanish/h_infinity/final.json": {
+    "sha256": "ae0e4db859ffa831ec803808f2177d3ac01db0b62a03ea16d01f639875843490",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "meta-llama/Meta-Llama-3-8B",
+      "checkpoint_revision": "8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920",
+      "behavior": "truthfulness",
+      "distribution": "spanish",
+      "evaluation_key": "truthfulness_spanish",
+      "cache_namespace": "truthfulness_spanish",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 2.0,
+        "q": 0.1,
+        "r": 1.0,
+        "q_final": 0.31622776601683794
+      },
+      "calibration_id": "txi_fluency_95_05",
+      "model_loading": {
+        "model_id": "meta-llama/Meta-Llama-3-8B",
+        "revision": "8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32",
+        "rope_scaling": null
+      },
+      "protocol": {
+        "evaluation_repetitions": 1,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 104,
+        "use_cache": false,
+        "seed": 42,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  },
+  "benchmarks/truthfulness/cache/qwen14b/calibrations/h_infinity/selected/selection.json": {
+    "sha256": "baa8ce836355c33202afdfec8e0fd66fe41dd6c538dbf40f9649ad6b2ebdda8a",
+    "identity": null
+  },
+  "benchmarks/truthfulness/cache/qwen14b/calibrations/h_infinity/selected/controller_diagnostics/runs/calibration-4856ec2d04927cc00d55/score.json": {
+    "sha256": "e1bd86b332aefd5d71600f47d4624b1725776f1051da25d141f0a194a731e1e8",
+    "identity": null
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/original.json": {
+    "sha256": "8a310939979e1277f8c492573ffc50e7a59e3000db2b25d28914b7334709ff31",
+    "identity": {
+      "model_id": "Qwen/Qwen2.5-14B",
+      "model_revision": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "method": "original",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/h_infinity.json": {
+    "sha256": "1847c3c89a46e718069229d67fbdb888e36f376744713178b7372b867c05d9be",
+    "identity": {
+      "model_id": "Qwen/Qwen2.5-14B",
+      "model_revision": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "method": "h_infinity",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "scorers": [
+        "axbench_concept_relevance",
+        "axbench_fluency",
+        "axbench_instruction_relevance",
+        "axbench_overall",
+        "truthfulqa_informative",
+        "truthfulqa_true"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/qwen14b/evaluations/kv_cache_off/generations/truthfulness/h_infinity/final.json": {
+    "sha256": "a40c6ca7fcc5888ad17db7341fd9a93a0fabc1fc97da6306f7572195ed929f58",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "Qwen/Qwen2.5-14B",
+      "checkpoint_revision": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "behavior": "truthfulness",
+      "distribution": "id",
+      "evaluation_key": "truthfulness",
+      "cache_namespace": "truthfulness",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 3.0,
+        "q": 0.31622776601683794,
+        "r": 1.0,
+        "q_final": 0.1
+      },
+      "calibration_id": "selected",
+      "model_loading": {
+        "model_id": "Qwen/Qwen2.5-14B",
+        "revision": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32",
+        "rope_scaling": null
+      },
+      "protocol": {
+        "evaluation_repetitions": 5,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 128,
+        "use_cache": false,
+        "seed": 42,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/original.json": {
+    "sha256": "8152e6efe2ed0adfa8b4f15ec54817c74ada922cc5c182e9ae4e8ecb8ce54fbe",
+    "identity": {
+      "model_id": "Qwen/Qwen2.5-14B",
+      "model_revision": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "method": "original",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/h_infinity.json": {
+    "sha256": "f0253596a4690068ca6e341a7bcc35351901d1e419f3fa6396f6bcd3ea5397dd",
+    "identity": {
+      "model_id": "Qwen/Qwen2.5-14B",
+      "model_revision": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "method": "h_infinity",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "scorers": [
+        "axbench_concept_relevance",
+        "axbench_fluency",
+        "axbench_instruction_relevance",
+        "axbench_overall",
+        "truthfulqa_informative",
+        "truthfulqa_true"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/qwen14b/evaluations/kv_cache_off/generations/truthfulness_spanish/h_infinity/final.json": {
+    "sha256": "522e97f57742348b3048383500a2d2f9b1b66a9a52464d704bc882ff38d80530",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "Qwen/Qwen2.5-14B",
+      "checkpoint_revision": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "behavior": "truthfulness",
+      "distribution": "spanish",
+      "evaluation_key": "truthfulness_spanish",
+      "cache_namespace": "truthfulness_spanish",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 3.0,
+        "q": 0.31622776601683794,
+        "r": 1.0,
+        "q_final": 0.1
+      },
+      "calibration_id": "selected",
+      "model_loading": {
+        "model_id": "Qwen/Qwen2.5-14B",
+        "revision": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32",
+        "rope_scaling": null
+      },
+      "protocol": {
+        "evaluation_repetitions": 5,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 128,
+        "use_cache": false,
+        "seed": 42,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  },
+  "benchmarks/truthfulness/cache/olmo2_32b_instruct/calibrations/h_infinity/txi95_fluency05_n200_r1/selection.json": {
+    "sha256": "145a1c50d6436dc4dc77cecbbf1acfce2b0687a3941b481367b86050ddf48e1b",
+    "identity": null
+  },
+  "benchmarks/truthfulness/cache/olmo2_32b_instruct/calibrations/h_infinity/txi95_fluency05_n200_r1/controller_diagnostics/runs/calibration-781d3955821342dd9718/score.json": {
+    "sha256": "406b95dab9ad9f82c950043e26ef62d8bb48890c9a226deb0bbe927f06fb7690",
+    "identity": null
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/original.json": {
+    "sha256": "83dca8a1c59df70c68ff3e43411ae5c503eff70b97180f699b9f10a0b2e1e48e",
+    "identity": {
+      "model_id": "allenai/OLMo-2-0325-32B-Instruct",
+      "model_revision": "b96024342a77a69aa0dda815c3454a671f477463",
+      "method": "original",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/h_infinity.json": {
+    "sha256": "5069e0ec6a474977370fcb647c03e6f01a59a23c42ea176c9006dd9faad8cc6d",
+    "identity": {
+      "model_id": "allenai/OLMo-2-0325-32B-Instruct",
+      "model_revision": "b96024342a77a69aa0dda815c3454a671f477463",
+      "method": "h_infinity",
+      "distribution": "id",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness",
+      "kv_cache": false,
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/olmo2_32b_instruct/evaluations/kv_cache_off/calibrations/txi95_fluency05_n200_r1/generations/truthfulness/h_infinity/final.json": {
+    "sha256": "26860dea3caad3f789fd6b70cd29af33f50f2f8fc8f93c05e44afcb1e94bf8cb",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "allenai/OLMo-2-0325-32B-Instruct",
+      "checkpoint_revision": "b96024342a77a69aa0dda815c3454a671f477463",
+      "behavior": "truthfulness",
+      "distribution": "id",
+      "evaluation_key": "truthfulness",
+      "cache_namespace": "truthfulness",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 3.0,
+        "q": 0.1,
+        "r": 1.0,
+        "q_final": 0.01
+      },
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "model_loading": {
+        "model_id": "allenai/OLMo-2-0325-32B-Instruct",
+        "revision": "b96024342a77a69aa0dda815c3454a671f477463",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32",
+        "rope_scaling": null
+      },
+      "protocol": {
+        "evaluation_repetitions": 1,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 64,
+        "use_cache": false,
+        "seed": 42,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/original.json": {
+    "sha256": "3f292eab059b07c2199d478d3f7128bd269a30d68afb34fe1c8c73f895e680f1",
+    "identity": {
+      "model_id": "allenai/OLMo-2-0325-32B-Instruct",
+      "model_revision": "b96024342a77a69aa0dda815c3454a671f477463",
+      "method": "original",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/h_infinity.json": {
+    "sha256": "c67e7c88d0a252c42632aa920b0f95cb2a2cf41d22a9c0f7b6e2230f3226ae95",
+    "identity": {
+      "model_id": "allenai/OLMo-2-0325-32B-Instruct",
+      "model_revision": "b96024342a77a69aa0dda815c3454a671f477463",
+      "method": "h_infinity",
+      "distribution": "spanish",
+      "dataset": [
+        "truthful_qa",
+        "741b8276f2d1982aa3d5b832d3ee81ed3b896490"
+      ],
+      "evaluation_key": "truthfulness_spanish",
+      "kv_cache": false,
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "scorers": [
+        "truthfulqa_true",
+        "truthfulqa_informative",
+        "axbench_concept_relevance",
+        "axbench_instruction_relevance",
+        "axbench_fluency",
+        "axbench_overall"
+      ]
+    }
+  },
+  "benchmarks/truthfulness/cache/olmo2_32b_instruct/evaluations/kv_cache_off/calibrations/txi95_fluency05_n200_r1/generations/truthfulness_spanish/h_infinity/final.json": {
+    "sha256": "7d5a6804ac581120fd6d145534619f5620f892c9d3c4b12e70f1383d43578816",
+    "identity": {
+      "schema_version": 1,
+      "model_id": "allenai/OLMo-2-0325-32B-Instruct",
+      "checkpoint_revision": "b96024342a77a69aa0dda815c3454a671f477463",
+      "behavior": "truthfulness",
+      "distribution": "spanish",
+      "evaluation_key": "truthfulness_spanish",
+      "cache_namespace": "truthfulness_spanish",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 3.0,
+        "q": 0.1,
+        "r": 1.0,
+        "q_final": 0.01
+      },
+      "calibration_id": "txi95_fluency05_n200_r1",
+      "model_loading": {
+        "model_id": "allenai/OLMo-2-0325-32B-Instruct",
+        "revision": "b96024342a77a69aa0dda815c3454a671f477463",
+        "quantized": true,
+        "dtype": "float32",
+        "attention_implementation": null,
+        "quantization_compute_dtype": "float32",
+        "rope_scaling": null
+      },
+      "protocol": {
+        "evaluation_repetitions": 1,
+        "evaluation_samples_per_repetition": 817,
+        "generation": {
+          "max_new_tokens": 50,
+          "temperature": 1.0,
+          "top_p": 0.3,
+          "repetition_penalty": 1.2,
+          "do_sample": true
+        },
+        "batch_size": 64,
+        "use_cache": false,
+        "seed": 42,
+        "repetition_seed_stride": 100000,
+        "batch_seed_rule": "repetition_seed_plus_batch_start",
+        "feedback": "full rank-8 reduced-state deviation"
+      }
+    }
+  }
+}

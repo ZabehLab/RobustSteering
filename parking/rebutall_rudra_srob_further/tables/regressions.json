@@ -1,0 +1,42 @@
+{
+  "model_size_log10_log10": {
+    "n": 5,
+    "slope": 0.603715251550477,
+    "intercept": -1.7129896295364897,
+    "pearson_r": 0.5206775649104646,
+    "p_two_sided": 0.36836201131058194,
+    "slope_standard_error": 0.5715248296645087
+  },
+  "truthfulness_hinf_over_original_txi": {
+    "n": 5,
+    "slope": 0.5620444592204649,
+    "intercept": 1.2648093469984183,
+    "pearson_r": 0.6603935076208197,
+    "p_two_sided": 0.22507765218677542,
+    "slope_standard_error": 0.36897823898325405
+  },
+  "truthfulness_hinf_minus_original_txi_pp": {
+    "n": 5,
+    "slope": 40.56614278459623,
+    "intercept": 11.024495105677676,
+    "pearson_r": 0.6890464626648237,
+    "p_two_sided": 0.19815429276453256,
+    "slope_standard_error": 24.633330235637924
+  },
+  "truthfulness_spanish_hinf_over_original_txi": {
+    "n": 5,
+    "slope": -0.2603354672057333,
+    "intercept": 1.5574598583388002,
+    "pearson_r": -0.08459839665580404,
+    "p_two_sided": 0.8924145971216294,
+    "slope_standard_error": 1.7703164007101562
+  },
+  "truthfulness_spanish_hinf_minus_original_txi_pp": {
+    "n": 5,
+    "slope": 49.57993867678344,
+    "intercept": 8.853452278849417,
+    "pearson_r": 0.8593113023801378,
+    "p_two_sided": 0.061992417139562175,
+    "slope_standard_error": 17.03728911256231
+  }
+}
