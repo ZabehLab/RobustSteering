@@ -65,11 +65,11 @@ def main() -> None:
     )
     label_offsets = {
         ("truthfulness", "hinf_minus_original_truthful_pp", "gpt2_xl"): (10, -12),
-        ("truthfulness", "hinf_minus_original_truthful_pp", "gemma2_2b"): (10, 15),
+        ("truthfulness", "hinf_minus_original_truthful_pp", "gemma2_2b"): (10, 0),
         ("truthfulness_spanish", "hinf_over_original_truthful", "gpt2_xl"): (10, -12),
         ("truthfulness_spanish", "hinf_over_original_truthful", "olmo2_32b"): (-9, 20),
         ("truthfulness_spanish", "hinf_minus_original_truthful_pp", "gpt2_xl"): (10, -15),
-        ("truthfulness_spanish", "hinf_minus_original_truthful_pp", "qwen25_14b"): (12, 24),
+        ("truthfulness_spanish", "hinf_minus_original_truthful_pp", "qwen25_14b"): (40, -12),
         ("truthfulness_spanish", "hinf_minus_original_truthful_pp", "gemma2_2b"): (10, 7),
     }
     statistics = render_behavior_figure(rows, outcomes, "srob_truthful_changes", label_offsets)
