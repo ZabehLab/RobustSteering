@@ -152,3 +152,78 @@ existing saved evaluations.
 - [Shared source checks and plotting implementation](analyze.py)
 - [Truthful percentage table](tables/truthfulqa_srob_truthful.md)
 - [Truthful source manifest](tables/truthful_source_manifest.json)
+
+# analyze_harmbench
+
+## Method
+
+Use the three HarmBench models reported in the paper, Llama-3.2-1B-Instruct,
+Llama-3.2-3B-Instruct, and Llama-3.1-8B-Instruct. Join each original Srob point
+to its selected H∞ controller and paired Original/H∞ results. Verify checkpoint,
+controller costs, evaluation identities, sample counts, and matched behavior IDs.
+Check the Srob value against its controller diagnostic and reciprocal γ★.
+Reconstruct the evaluated behavior subset from the paper's saved jackknife groups
+and verify the scored prompt identities and means against the cached judgments.
+
+Convert the saved `harmbench_test_success.score` to ASR (%) by multiplying by 100.
+The two conditions are direct requests (ID) and the aggregate of the five frozen
+human jailbreak templates (OOD). Each template has the same number of behaviors,
+so the saved aggregate is their equal-weight mean. Cross-check every ASR against
+the full-sample means in the paper's HarmBench jackknife report.
+
+Calculate H∞ ASR / Original ASR and H∞ ASR − Original ASR in percentage points.
+Use the shared plotting implementation for the 2×2 comparison.
+
+```bash
+/home/dev/miniconda3/envs/robust-steerability/bin/python \
+  parking/rebutall_rudra_srob_further/analyze_harmbench.py
+```
+
+## Variables
+
+- `original_asr_pct` and `hinf_asr_pct` are the saved ASR percentages.
+- `hinf_over_original_asr` is their dimensionless ratio.
+- `hinf_minus_original_asr_pp` is their percentage-point difference.
+- `tables/harmbench_srob_asr.{csv,json,md}` contain six rows with Srob, γ★,
+  both ASRs, ratio, difference, counts, checkpoint identity, and source paths.
+  CSV and JSON retain full precision. Markdown shows behavioral quantities to
+  six decimals.
+- `tables/harmbench_source_manifest.json` records input hashes and result identities.
+- `plots/srob_harmbench_asr_changes.{png,pdf}` contain the figure, with a 600-DPI PNG.
+
+## Statistics
+
+Each panel fits ordinary least squares between linear Srob and the displayed
+ASR ratio or difference using three models. Pearson's r and the two-sided p-value
+against a zero-slope null are displayed. Full-precision fit results are saved in
+`tables/harmbench_regressions.json`.
+
+## Legends
+
+- Direct (ID) is the left column, in teal `#007C7C`. Jailbreak (OOD) is the right
+  column, in dark red `#8B1E1E`.
+- The top row shows H∞ / Original ASR with a reference at one.
+- The bottom row shows H∞ − Original ASR in percentage points with a reference at zero.
+- The x-axis shows Srob on a linear scale. Both columns share y-axis ranges
+  within each row. Model labels identify the points, and straight lines show fits.
+
+## Interpretation
+
+ASR is lower-is-better. A ratio below one or a negative difference indicates
+reduced attack success under H∞. The plots compare the size of that ASR change
+with each selected controller's Srob value.
+
+## Notes
+
+The 1B and 3B results use 240 direct requests and 1,200 jailbreak prompts each.
+The 8B results use the paper's frozen subset of 120 direct requests and 600
+jailbreak prompts. Original and H∞ use matching behavior identities within
+each model. Plotted model labels omit the checkpoint's `-Instruct` suffix for
+readability. Full checkpoint names are retained in the tables.
+
+## References
+
+- [Paper HarmBench ASR summary](../../figs/bench_table/harmful/harmbench_summary.md)
+- [Paper HarmBench jackknife report](../../figs/bench_table/harmful/harmbench_jackknife.json)
+- [Original Srob figure points](../gamma_star_organization/plots/srob_overall_points.csv)
+- [HarmBench source manifest](tables/harmbench_source_manifest.json)

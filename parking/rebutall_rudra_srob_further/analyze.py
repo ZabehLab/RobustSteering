@@ -175,7 +175,9 @@ def save_figure(fig, stem: str) -> None:
 
 
 def render_behavior_figure(
-    rows: list[dict], outcomes: tuple, stem: str, label_offsets: dict | None = None
+    rows: list[dict], outcomes: tuple, stem: str, label_offsets: dict | None = None,
+    *, conditions: dict = CONDITIONS, x_limits: tuple = (-0.007, 0.46),
+    x_ticks: tuple = (0, 0.1, 0.2, 0.3, 0.4), y_limits: tuple | None = None,
 ) -> dict:
     PLOTS.mkdir(exist_ok=True)
     plt.rcParams.update({"font.family": "Arial", "font.size": 11,
@@ -187,7 +189,7 @@ def render_behavior_figure(
     offsets = {"gpt2_xl": (10, 5), "gemma2_2b": (10, -12), "llama31_8b": (9, -12),
                "qwen25_14b": (9, 7), "olmo2_32b": (-9, 9)}
     label_offsets = label_offsets or {}
-    for column, (evaluation_key, (condition, _, color)) in enumerate(CONDITIONS.items()):
+    for column, (evaluation_key, (condition, _, color)) in enumerate(conditions.items()):
         selected = [row for row in rows if row["evaluation_key"] == evaluation_key]
         x = np.array([row["srob"] for row in selected])
         axes[0, column].set_title(condition, color=color, pad=12)
@@ -203,21 +205,24 @@ def render_behavior_figure(
             ax.scatter(x, y, s=52, color=color, zorder=3)
             for row in selected:
                 offset = label_offsets.get(
-                    (evaluation_key, outcome, row["model_key"]), offsets[row["model_key"]]
+                    (evaluation_key, outcome, row["model_key"]), offsets.get(row["model_key"], (10, 5))
                 )
                 ax.annotate(row["model"], (row["srob"], row[outcome]), xytext=offset,
                             textcoords="offset points", ha="right" if offset[0] < 0 else "left",
                             fontsize=10, arrowprops={"arrowstyle": "-", "lw": 0.5, "color": "#999999"})
-            ax.set_xlim(-0.007, 0.46)
-            ax.set_xticks([0, 0.1, 0.2, 0.3, 0.4])
+            ax.set_xlim(x_limits)
+            ax.set_xticks(x_ticks)
             ax.text(0.97, 0.04, f"r = {fit['pearson_r']:.3f}, p = {fit['p_two_sided']:.3f}",
                     transform=ax.transAxes, ha="right", va="bottom", fontsize=10)
             if column == 0:
                 ax.set_ylabel(ylabel)
             if panel_row == 1:
                 ax.set_xlabel(r"$S_{\mathrm{rob}}$")
-    axes[0, 0].set_ylim(0.90, max(row[outcomes[0][0]] for row in rows) + 0.25)
-    axes[1, 0].set_ylim(-2, max(row[outcomes[1][0]] for row in rows) + 6)
+    if y_limits is None:
+        y_limits = ((0.90, max(row[outcomes[0][0]] for row in rows) + 0.25),
+                    (-2, max(row[outcomes[1][0]] for row in rows) + 6))
+    axes[0, 0].set_ylim(y_limits[0])
+    axes[1, 0].set_ylim(y_limits[1])
     save_figure(fig, stem)
     return statistics
 

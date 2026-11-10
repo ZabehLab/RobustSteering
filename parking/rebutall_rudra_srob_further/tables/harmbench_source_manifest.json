@@ -1,0 +1,442 @@
+{
+  "parking/gamma_star_organization/plots/srob_overall_points.csv": {
+    "sha256": "eb50f1b594cd409db1674d7adc081fe350261be995aa1098ad99a1abb5217221"
+  },
+  "parking/gamma_star_organization/exports/gamma_star_collaborator_bundle/final_selected_calibrations.csv": {
+    "sha256": "dee126c416412672faab74e56b3719e504759e0e20577e931e8391ae43401adf"
+  },
+  "figs/bench_table/harmful/harmbench_jackknife.json": {
+    "sha256": "ba41ec1579e240695c49b8d23cfb63cdef64267e74df88c614ad6b3db7fed9bf",
+    "identity": null
+  },
+  "benchmarks/harmful/cache/llama32_1b_instruct/calibrations/h_infinity/selected/selection.json": {
+    "sha256": "2a79bafefb7e8982bf05e85967751ee1d1b9be761b3361ac89505fe046990226",
+    "identity": null
+  },
+  "benchmarks/harmful/cache/llama32_1b_instruct/calibrations/h_infinity/selected/controller_diagnostics/runs/calibration-55c0c4409cb146fe4e55/score.json": {
+    "sha256": "206aa22cb46deeecc4513dbda7c1f2d7b5a80d03e4656dc6ca90753d4eb85c56",
+    "identity": null
+  },
+  "benchmarks/harmful/cache/llama32_1b_instruct/datasets/harmbench.json": {
+    "sha256": "c642587de314656d0e292511a652b1561084310de20e7af5e36f5d6c3d1633ca",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/original.json": {
+    "sha256": "efa0d7df197a5350967745a654b2c37af9d415b5f7b5c2caa2bfe75ea2a46a8a",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.2-1B-Instruct",
+        "9213176726f574b556790deb65791e0c5aa438b6"
+      ],
+      "condition": "direct",
+      "method": "original",
+      "parameters": {},
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 16,
+      "max_new_tokens": 512,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+        "revision": "9213176726f574b556790deb65791e0c5aa438b6",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama32_1b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_direct/original/final.json": {
+    "sha256": "7509123df12ecb253128e1037d230c97eee2ed104b46b76dcb44d1e59783746a",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/h_infinity.json": {
+    "sha256": "003014fdbce4e411bcb4f06d3d4e80177291e1be361389a20910ac06883d02c6",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.2-1B-Instruct",
+        "9213176726f574b556790deb65791e0c5aa438b6"
+      ],
+      "condition": "direct",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 1.5,
+        "q": 0.01,
+        "r": 1.0,
+        "q_final": 0.01
+      },
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 16,
+      "max_new_tokens": 512,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+        "revision": "9213176726f574b556790deb65791e0c5aa438b6",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama32_1b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_direct/h_infinity/final.json": {
+    "sha256": "637e80e9570e132c9e6677c63e8b09d9f982e5e991d2bae3b458d2a93156d303",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/original.json": {
+    "sha256": "1d2710790421e526501032f7f09238713c063ab768b73e129d8f26f851bed111",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.2-1B-Instruct",
+        "9213176726f574b556790deb65791e0c5aa438b6"
+      ],
+      "condition": "human_jailbreak",
+      "method": "original",
+      "parameters": {},
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 8,
+      "max_new_tokens": 512,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+        "revision": "9213176726f574b556790deb65791e0c5aa438b6",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama32_1b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_human_jailbreak/original/final.json": {
+    "sha256": "565d34024d49c38b8e586c02d13322ad5c18b5eeda9d4f2d8e7b9e8759b3dbe9",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/h_infinity.json": {
+    "sha256": "d5ce2b6ff83ee5f26cdadede567b52ccc1c4a2e24a192294a2ef9f6765338e6d",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.2-1B-Instruct",
+        "9213176726f574b556790deb65791e0c5aa438b6"
+      ],
+      "condition": "human_jailbreak",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 1.5,
+        "q": 0.01,
+        "r": 1.0,
+        "q_final": 0.01
+      },
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 8,
+      "max_new_tokens": 512,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+        "revision": "9213176726f574b556790deb65791e0c5aa438b6",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama32_1b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_human_jailbreak/h_infinity/final.json": {
+    "sha256": "a3522f5fa8e563404cd0ced69f751048261e1c9eb1e1562f631a5fb62f937672",
+    "identity": null
+  },
+  "benchmarks/harmful/cache/llama32_3b_instruct/calibrations/h_infinity/selected/selection.json": {
+    "sha256": "e57b719e43b6cd9ff36c4c249bcf5eeb99dfd200da5e9dae93eb987442c1cc88",
+    "identity": null
+  },
+  "benchmarks/harmful/cache/llama32_3b_instruct/calibrations/h_infinity/selected/controller_diagnostics/runs/calibration-54eb6c36d2fcc340e8b6/score.json": {
+    "sha256": "3d088fe991c58617be9109f714caa1c4fa50978b672f714bcc07b7b1e53ddee5",
+    "identity": null
+  },
+  "benchmarks/harmful/cache/llama32_3b_instruct/datasets/harmbench.json": {
+    "sha256": "4843d7d28bb5cc5f62f10ad0824ce8be9fed03dae36197b61e94fd5a3bb16037",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/original.json": {
+    "sha256": "566fac611d17ee281f8f675e964f068ff3a1be70d0da401684291253adc5e308",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.2-3B-Instruct",
+        "0cb88a4f764b7a12671c53f0838cd831a0843b95"
+      ],
+      "condition": "direct",
+      "method": "original",
+      "parameters": {},
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 16,
+      "max_new_tokens": 512,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama32_3b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_direct/original/final.json": {
+    "sha256": "94c67fad5ddeae15baa6293a2f86ed8293f30914c2a8733d15d725c6304adc5e",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/h_infinity.json": {
+    "sha256": "000bdea34f4791fe5e9723bdb20324590e95db5645e2598882ecba9fc0baa000",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.2-3B-Instruct",
+        "0cb88a4f764b7a12671c53f0838cd831a0843b95"
+      ],
+      "condition": "direct",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 1.5,
+        "q": 0.1,
+        "r": 1.0,
+        "q_final": 0.01
+      },
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 16,
+      "max_new_tokens": 512,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama32_3b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_direct/h_infinity/final.json": {
+    "sha256": "012b5dfa28745ed735bcb22892db6f382d3405ccfe77f4618f035cb41083b0ef",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/original.json": {
+    "sha256": "88c1ccdcc74d6e612f54f0da0dad8a97bd2856448169eacfe69db2fcc183392c",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.2-3B-Instruct",
+        "0cb88a4f764b7a12671c53f0838cd831a0843b95"
+      ],
+      "condition": "human_jailbreak",
+      "method": "original",
+      "parameters": {},
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 8,
+      "max_new_tokens": 512,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama32_3b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_human_jailbreak/original/final.json": {
+    "sha256": "ea8f9a654bb4819fb11de4fce6db9b4b0f5d74833a1eef620f10ae785a73941c",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/h_infinity.json": {
+    "sha256": "06e23aa0d7bea486db8c40e8de88147f80ba19f26a1e3c17cbb4dbb1227be06f",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.2-3B-Instruct",
+        "0cb88a4f764b7a12671c53f0838cd831a0843b95"
+      ],
+      "condition": "human_jailbreak",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 1.5,
+        "q": 0.1,
+        "r": 1.0,
+        "q_final": 0.01
+      },
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 8,
+      "max_new_tokens": 512,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama32_3b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_human_jailbreak/h_infinity/final.json": {
+    "sha256": "8bdf02fb82cab6cba2dd165109be1303c4fd3f7bd27178e870e83225050d35a9",
+    "identity": null
+  },
+  "benchmarks/harmful/cache/llama31_8b_instruct/calibrations/h_infinity/selected/selection.json": {
+    "sha256": "148ae12a7fcca96baec25f4fe7abddc54b18f1ff2ff67177f109945be3a6f933",
+    "identity": null
+  },
+  "benchmarks/harmful/cache/llama31_8b_instruct/calibrations/h_infinity/selected/controller_diagnostics/runs/calibration-ae06c2cd7708e2ba2d9b/score.json": {
+    "sha256": "678f801793f8ff2693d9478143141e9ffa425ee67e347800c3031e94e4536776",
+    "identity": null
+  },
+  "benchmarks/harmful/cache/llama31_8b_instruct/datasets/harmbench.json": {
+    "sha256": "cb2aa69b212b49a4114ec22b0fd994003cd6681c377b3c0914566761382b383b",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/original.json": {
+    "sha256": "0022ea2db7dbf3243840c056f07c254538c143de4454f10065a1d648f582e6b8",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.1-8B-Instruct",
+        "0e9e39f249a16976918f6564b8830bc894c89659"
+      ],
+      "condition": "direct",
+      "method": "original",
+      "parameters": {},
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 32,
+      "evaluation_behavior_count": 120,
+      "max_new_tokens": 100,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama31_8b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_direct/original/final.json": {
+    "sha256": "5437aaabdd4ad7ef7dd3ceda4ee8252ecfbdf4fe21a0daa1a03fe3a3817e33fd",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/h_infinity.json": {
+    "sha256": "6ca699353412e9872fde23bd6572e5c289c655f8cdd04517cf9a28148d7aa909",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.1-8B-Instruct",
+        "0e9e39f249a16976918f6564b8830bc894c89659"
+      ],
+      "condition": "direct",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 1.5,
+        "q": 0.01,
+        "r": 1.0,
+        "q_final": 0.01
+      },
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 32,
+      "evaluation_behavior_count": 120,
+      "max_new_tokens": 100,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama31_8b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_direct/h_infinity/final.json": {
+    "sha256": "799766a91dc581605dddcfc897ff399bebd241f3d201dfa833d203fcc8d73a34",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/original.json": {
+    "sha256": "d4950738b3b9c70ada322df7f835744bd37e99031d4c56775bb96b0d021a3fe7",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.1-8B-Instruct",
+        "0e9e39f249a16976918f6564b8830bc894c89659"
+      ],
+      "condition": "human_jailbreak",
+      "method": "original",
+      "parameters": {},
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 32,
+      "evaluation_behavior_count": 120,
+      "max_new_tokens": 100,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama31_8b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_human_jailbreak/original/final.json": {
+    "sha256": "12c530e60a194273b9fdb373e5cf4d8b2e13cb7ba183b1b6e80dd5139192e25e",
+    "identity": null
+  },
+  "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/h_infinity.json": {
+    "sha256": "c60a4dbffb6a9d4397e4696e5330dbcf22dca31a7ccbd19a061c6e563f957435",
+    "identity": {
+      "schema_version": 1,
+      "model": [
+        "meta-llama/Llama-3.1-8B-Instruct",
+        "0e9e39f249a16976918f6564b8830bc894c89659"
+      ],
+      "condition": "human_jailbreak",
+      "method": "h_infinity",
+      "parameters": {
+        "lambda": 1.5,
+        "q": 0.01,
+        "r": 1.0,
+        "q_final": 0.01
+      },
+      "calibration_id": "selected",
+      "evaluated_model_kv_cache": false,
+      "generation_batch_size": 32,
+      "evaluation_behavior_count": 120,
+      "max_new_tokens": 100,
+      "model_loading": {
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "quantized": false,
+        "dtype": "bfloat16",
+        "attention_implementation": "sdpa",
+        "quantization_compute_dtype": "float16",
+        "rope_scaling": null
+      }
+    }
+  },
+  "benchmarks/harmful/cache/llama31_8b_instruct/evaluations/kv_cache_off/scores/harmbench_test_success/harmbench_human_jailbreak/h_infinity/final.json": {
+    "sha256": "f50f7d56e35d4e3a113c71bb1716fa4fe055dd2770d78d1ff9cbf96b143b4e3a",
+    "identity": null
+  }
+}
