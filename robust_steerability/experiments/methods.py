@@ -44,9 +44,26 @@ class ControllerArtifact:
     spid_setpoints: torch.Tensor
 
 
+@dataclass(frozen=True)
+class ReducedLQRArtifact:
+    """Nominal gains and the fitted eight-dimensional tracking coordinates."""
+
+    gains: torch.Tensor
+    control_channels: torch.Tensor
+    means: torch.Tensor
+    encoders: torch.Tensor
+    decoders: torch.Tensor
+    feature_unit: torch.Tensor
+    setpoints: torch.Tensor
+
+    def __post_init__(self) -> None:
+        if self.gains.ndim != 3 or self.gains.shape[-1] != 8:
+            raise ValueError("A-LQR (8D) requires gains on an eight-dimensional state")
+
+
 def build_policy(
     method: str,
-    artifact: ControllerArtifact,
+    artifact: ControllerArtifact | ReducedLQRArtifact,
     *,
     kp: float,
     ki: float,
@@ -62,6 +79,10 @@ def build_policy(
         return BaselinePolicy(method, artifact.baselines, strength=artifact.baselines["strengths"][method], record=record)
     if method == "alqr":
         controller = LQRController(artifact.lqr_gains)
+    elif method == "alqr_8d":
+        if not isinstance(artifact, ReducedLQRArtifact):
+            raise TypeError("A-LQR (8D) requires a ReducedLQRArtifact")
+        controller = LQRController(artifact.gains, artifact.control_channels)
     elif method == "spid":
         controller = PIDController(
             PIDGains(proportional=kp, integral=ki, derivative=kd),

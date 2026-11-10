@@ -42,6 +42,7 @@ METHODS = {
     ),
     "spid": MethodSpec("spid", "S-PID", "source", "source_fit", "alqr"),
     "alqr": MethodSpec("alqr", "A-LQR", "source", "fixed", "alqr"),
+    "alqr_8d": MethodSpec("alqr_8d", "A-LQR (8D)", "alqr_8d", "alqr_8d", "alqr"),
     "h_infinity": MethodSpec(
         "h_infinity", "H-infinity", "h_infinity", "h_infinity", "alqr", "hinf"
     ),
