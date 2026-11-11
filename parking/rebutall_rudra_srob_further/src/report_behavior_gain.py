@@ -208,9 +208,9 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             curve_x = np.linspace(float(x.min()), float(x.max()), 100)
             ax.plot(curve_x, fit["intercept"] + fit["slope"] * curve_x,
                     color="#c9c9c9" if multiple else color, linewidth=1 if multiple else 1.8, zorder=1)
-            ax.scatter(x, y, s=29 if multiple else 36, color="black", marker=marker, zorder=3)
+            ax.scatter(x, y, s=7.25 if multiple else 9, color="black", marker=marker, zorder=3)
             fits.append(fit)
-            handles.append(Line2D([0], [0], color="black", marker=marker, linestyle="none", markersize=3, label=name))
+            handles.append(Line2D([0], [0], color="black", marker=marker, linestyle="none", markersize=1.5, label=name))
         if multiple:
             mean_fit = {key: float(np.mean([fit[key] for fit in fits])) for key in ("slope", "intercept")}
             ax.plot(curve_x, mean_fit["intercept"] + mean_fit["slope"] * curve_x,
