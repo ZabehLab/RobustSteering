@@ -352,3 +352,51 @@ remain available on the Sources sheet.
 
 - [TruthfulQA input](tables/truthfulqa_srob_truthful.csv)
 - [HarmBench input](tables/harmbench_srob_asr.csv)
+
+# plot_truthful_harm_ratios
+
+## Method
+
+Plot the saved H∞ / Original ratios against Srob in two panels, TruthfulQA on the
+left and HarmBench on the right. Overlay ID and OOD points within each benchmark.
+Use the full-precision saved values and fit a separate ordinary least-squares
+line for each benchmark and evaluation split.
+
+```bash
+/home/dev/miniconda3/envs/robust-steerability/bin/python \
+  parking/rebutall_rudra_srob_further/plot_truthful_harm_ratios.py
+```
+
+## Variables
+
+TruthfulQA uses True percentages for five paper models. HarmBench uses ASR for
+three paper models. Each point is one model under ID or OOD evaluation.
+Outputs are `plots/srob_truthful_harm_ratios.{png,pdf}` and
+`tables/truthful_harm_ratio_slopes.json`.
+
+## Statistics
+
+Each fitted line estimates the linear relationship between Srob and H∞ / Original.
+Only slopes are annotated in the figure. Full-precision slopes, intercepts,
+model counts, and input hashes are retained in the JSON output.
+
+## Legends
+
+ID points and lines use blue `#2463EB`. OOD points and lines use dark red
+`#8B1E1E`. The common legend is centered below the panels. Each benchmark has
+its own linear x-axis and y-axis ranges. PNG exports use 600 DPI.
+
+## Interpretation
+
+For TruthfulQA, higher H∞ / Original means a greater relative True percentage.
+For HarmBench, lower H∞ / Original means a lower relative attack success rate.
+
+## Notes
+
+The figure contains four independent fits, each using the paper-reported model
+set for its benchmark and split.
+
+## References
+
+- [TruthfulQA values](tables/truthfulqa_srob_truthful.json)
+- [HarmBench values](tables/harmbench_srob_asr.json)
