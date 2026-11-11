@@ -16,7 +16,7 @@ from scipy.interpolate import PchipInterpolator
 
 UNIT = Path(__file__).resolve().parent
 REPO = UNIT.parents[1]
-BEHAVIOR = REPO / 'parking/rebutall_rudra_srob_further'
+BEHAVIOR = REPO / 'parking/rudra_rebuttal_srob_further'
 TREND = REPO / 'parking/rudra_rebuttal_trend_of_srob'
 PLOTS = UNIT / 'plots'
 FONT = 11

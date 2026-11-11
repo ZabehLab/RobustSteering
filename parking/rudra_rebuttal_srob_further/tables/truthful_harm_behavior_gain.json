@@ -1,7 +1,7 @@
 {
-  "definition": "(H\u221e - A-LQR) / A-LQR",
+  "definition": "(method - Original) / Original",
   "sources_sha256": {
-    "parking/rebutall_rudra_srob_further/tables/truthfulqa_srob_truthful.json": "5bd6bea9979b813c1caa17fb257c14c0ed79773df674426f9ba54b8337c38aaf",
+    "parking/rudra_rebuttal_srob_further/tables/truthfulqa_srob_truthful.json": "5bd6bea9979b813c1caa17fb257c14c0ed79773df674426f9ba54b8337c38aaf",
     "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/original.json": "c96d9f9995613a58130c42bdee5488d492c5a3bae4b42c791d7200dbf242459f",
     "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/h_infinity.json": "8cbce791eb11a22b8ba086735884be4e8aec0e11276026149754de8c51055ee0",
     "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/alqr.json": "528291ae2943a3af96b4abf0dc052c3d61a6579d810af035c8d39a523af64f33",
@@ -32,7 +32,7 @@
     "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/original.json": "3f292eab059b07c2199d478d3f7128bd269a30d68afb34fe1c8c73f895e680f1",
     "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/h_infinity.json": "c67e7c88d0a252c42632aa920b0f95cb2a2cf41d22a9c0f7b6e2230f3226ae95",
     "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/alqr.json": "6ccb060d0e3a131949ae9077a5537e52441faf7f42cade9365f4b47c4d63e596",
-    "parking/rebutall_rudra_srob_further/tables/harmbench_srob_asr.json": "14cc2d11252a07c14b553cbeee5ec9c8af55e8ee549bf9d6c9147f5669f1eb69",
+    "parking/rudra_rebuttal_srob_further/tables/harmbench_srob_asr.json": "14cc2d11252a07c14b553cbeee5ec9c8af55e8ee549bf9d6c9147f5669f1eb69",
     "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/original.json": "efa0d7df197a5350967745a654b2c37af9d415b5f7b5c2caa2bfe75ea2a46a8a",
     "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/h_infinity.json": "003014fdbce4e411bcb4f06d3d4e80177291e1be361389a20910ac06883d02c6",
     "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/alqr.json": "410d988d92623ebc41310f3d7cc525fe187b455a7fcbcf3908606aa3a345ed1d",
@@ -69,8 +69,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/alqr.json"
-      },
-      "behavior_advantage": 0.49019607843137253
+      }
     },
     {
       "benchmark": "TruthfulQA",
@@ -88,8 +87,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/alqr.json"
-      },
-      "behavior_advantage": 0.13344316309719936
+      }
     },
     {
       "benchmark": "TruthfulQA",
@@ -107,8 +105,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/alqr.json"
-      },
-      "behavior_advantage": 0.12490180675569533
+      }
     },
     {
       "benchmark": "TruthfulQA",
@@ -126,8 +123,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/alqr.json"
-      },
-      "behavior_advantage": 0.04941956882255415
+      }
     },
     {
       "benchmark": "TruthfulQA",
@@ -145,8 +141,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi_fluency_95_05/llama8b/truthfulness/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness/alqr.json"
-      },
-      "behavior_advantage": 0.2977574750830564
+      }
     },
     {
       "benchmark": "TruthfulQA",
@@ -164,8 +159,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness_spanish/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi_fluency_95_05/llama8b/truthfulness_spanish/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness_spanish/alqr.json"
-      },
-      "behavior_advantage": 0.2334801762114537
+      }
     },
     {
       "benchmark": "TruthfulQA",
@@ -183,8 +177,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/alqr.json"
-      },
-      "behavior_advantage": 0.18779822767552812
+      }
     },
     {
       "benchmark": "TruthfulQA",
@@ -202,8 +195,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/alqr.json"
-      },
-      "behavior_advantage": 0.04106835152211354
+      }
     },
     {
       "benchmark": "TruthfulQA",
@@ -221,8 +213,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/alqr.json"
-      },
-      "behavior_advantage": 0.05578800557880049
+      }
     },
     {
       "benchmark": "TruthfulQA",
@@ -240,8 +231,7 @@
         "original": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/original.json",
         "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/h_infinity.json",
         "alqr": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/alqr.json"
-      },
-      "behavior_advantage": 0.05683355886332891
+      }
     },
     {
       "benchmark": "HarmBench",
@@ -259,8 +249,7 @@
         "original": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/original.json",
         "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/h_infinity.json",
         "alqr": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/alqr.json"
-      },
-      "behavior_advantage": -0.6956521739130436
+      }
     },
     {
       "benchmark": "HarmBench",
@@ -278,8 +267,7 @@
         "original": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/original.json",
         "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/h_infinity.json",
         "alqr": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/alqr.json"
-      },
-      "behavior_advantage": -0.8333333333333333
+      }
     },
     {
       "benchmark": "HarmBench",
@@ -297,8 +285,7 @@
         "original": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/original.json",
         "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/h_infinity.json",
         "alqr": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/alqr.json"
-      },
-      "behavior_advantage": -0.5833333333333334
+      }
     },
     {
       "benchmark": "HarmBench",
@@ -316,8 +303,7 @@
         "original": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/original.json",
         "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/h_infinity.json",
         "alqr": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/alqr.json"
-      },
-      "behavior_advantage": -0.6834532374100719
+      }
     },
     {
       "benchmark": "HarmBench",
@@ -335,8 +321,7 @@
         "original": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/original.json",
         "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/h_infinity.json",
         "alqr": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/alqr.json"
-      },
-      "behavior_advantage": -0.7894736842105262
+      }
     },
     {
       "benchmark": "HarmBench",
@@ -354,33 +339,60 @@
         "original": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/original.json",
         "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/h_infinity.json",
         "alqr": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/alqr.json"
-      },
-      "behavior_advantage": -0.9538461538461539
+      }
     }
   ],
   "fits": {
-    "TruthfulQA": {
-      "ID": {
-        "n_models": 5,
-        "slope": -0.46385512681228663,
-        "intercept": 0.2931553276935322
+    "H\u221e": {
+      "TruthfulQA": {
+        "ID": {
+          "n_models": 5,
+          "slope": 0.3012772340601694,
+          "intercept": 0.5048367274808805
+        },
+        "OOD": {
+          "n_models": 5,
+          "slope": 0.5635899971327875,
+          "intercept": 0.36698156437014456
+        }
       },
-      "OOD": {
-        "n_models": 5,
-        "slope": 0.07302706362669736,
-        "intercept": 0.0931089269102574
+      "HarmBench": {
+        "ID": {
+          "n_models": 3,
+          "slope": -0.022962783614780144,
+          "intercept": -0.5619916115493673
+        },
+        "OOD": {
+          "n_models": 3,
+          "slope": -0.011460664944215828,
+          "intercept": -0.778012875337921
+        }
       }
     },
-    "HarmBench": {
-      "ID": {
-        "n_models": 3,
-        "slope": -0.009037584811346753,
-        "intercept": -0.6485765805391002
+    "A-LQR": {
+      "TruthfulQA": {
+        "ID": {
+          "n_models": 5,
+          "slope": 0.7819793140982219,
+          "intercept": 0.1668110228511165
+        },
+        "OOD": {
+          "n_models": 5,
+          "slope": 0.4316466145544845,
+          "intercept": 0.25313725901192674
+        }
       },
-      "OOD": {
-        "n_models": 3,
-        "slope": -0.01237254435637212,
-        "intercept": -0.7675382917962041
+      "HarmBench": {
+        "ID": {
+          "n_models": 3,
+          "slope": -0.0357001233129651,
+          "intercept": 0.21437908258306235
+        },
+        "OOD": {
+          "n_models": 3,
+          "slope": 0.016347635464080527,
+          "intercept": -0.17082419147390088
+        }
       }
     }
   }

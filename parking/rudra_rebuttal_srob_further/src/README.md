@@ -22,7 +22,7 @@ Run from the repository root with the existing analysis environment.
 
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
-  parking/rebutall_rudra_srob_further/src/analyze.py
+  parking/rudra_rebuttal_srob_further/src/analyze.py
 ```
 
 ## Variables
@@ -104,7 +104,7 @@ typography, colors, reference lines, fits, and model labels.
 
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
-  parking/rebutall_rudra_srob_further/src/analyze_truthful.py
+  parking/rudra_rebuttal_srob_further/src/analyze_truthful.py
 ```
 
 ## Variables
@@ -176,7 +176,7 @@ Use the shared plotting implementation for the 2×2 comparison.
 
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
-  parking/rebutall_rudra_srob_further/src/analyze_harmbench.py
+  parking/rudra_rebuttal_srob_further/src/analyze_harmbench.py
 ```
 
 ## Variables
@@ -250,7 +250,7 @@ comparison. The figure therefore has two panels side by side.
 
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
-  parking/rebutall_rudra_srob_further/src/analyze_mgsm.py
+  parking/rudra_rebuttal_srob_further/src/analyze_mgsm.py
 ```
 
 ## Variables
@@ -364,7 +364,7 @@ line for each benchmark and evaluation split.
 
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
-  parking/rebutall_rudra_srob_further/src/plot_truthful_harm_ratios.py
+  parking/rudra_rebuttal_srob_further/src/plot_truthful_harm_ratios.py
 ```
 
 ## Variables
@@ -417,7 +417,7 @@ as the Original baseline for each model and condition.
 
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
-  parking/rebutall_rudra_srob_further/src/plot_behavior_gain_variants.py
+  parking/rudra_rebuttal_srob_further/src/plot_behavior_gain_variants.py
 ```
 
 ## Variables
@@ -468,7 +468,7 @@ against competitor. Reuse the matched result checks from
 
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
-  parking/rebutall_rudra_srob_further/src/plot_behavior_advantage.py
+  parking/rudra_rebuttal_srob_further/src/plot_behavior_advantage.py
 ```
 
 ## Variables
@@ -538,7 +538,7 @@ component slopes is undefined.
 
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
-  parking/rebutall_rudra_srob_further/src/report_behavior_gain.py
+  parking/rudra_rebuttal_srob_further/src/report_behavior_gain.py
 ```
 
 Add `--tables-only` to update the report and data without rewriting the figure.
