@@ -1,4 +1,5 @@
 {
+  "figs/bench_table/harmful/harmbench_jackknife.json": "ba41ec1579e240695c49b8d23cfb63cdef64267e74df88c614ad6b3db7fed9bf",
   "parking/rebutall_rudra_srob_further/tables/truthfulqa_srob_truthful.json": "5bd6bea9979b813c1caa17fb257c14c0ed79773df674426f9ba54b8337c38aaf",
   "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/original.json": "c96d9f9995613a58130c42bdee5488d492c5a3bae4b42c791d7200dbf242459f",
   "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/h_infinity.json": "8cbce791eb11a22b8ba086735884be4e8aec0e11276026149754de8c51055ee0",

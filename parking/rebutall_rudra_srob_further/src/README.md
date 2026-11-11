@@ -525,21 +525,37 @@ separately for Chinese, French, Japanese, Swahili, and Telugu. Fit a separate sl
 for each language. All five languages are OOD, and the MGSM table uses language
 columns in place of ID/OOD columns.
 
+For HarmBench, keep the ID slope and expand OOD into the five frozen jailbreak
+templates: John, DNE, Jailbreak Bot, YOJA/Nona, and APM. Read their metric means
+from the existing paper-table summary and verify that averaging the five
+templates reproduces the pooled cached result for every measure and method.
+
+The last column of the MGSM and HarmBench tables is the arithmetic mean of the
+five separately fitted OOD slopes. This differs from fitting a slope after
+pooling the behavioral values across conditions. The figure continues to use
+the pooled HarmBench OOD values. A mean slope is undefined if any of its five
+component slopes is undefined.
+
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
   parking/rebutall_rudra_srob_further/src/report_behavior_gain.py
 ```
 
+Add `--tables-only` to update the report and data without rewriting the figure.
+
 ## Variables
 
 - The active figure files are `../hinf_behavior_gain.png` and `.pdf`.
 - The unit's root `../README.md` is the slope report with three benchmark tables.
-- `../tables/behavior_signal_points.{csv,json}` contain 190 model/split/measure
+- `../tables/behavior_signal_points.{csv,json}` contain 265 model/split/measure
   records with Original values, H∞ values, relative gains, and availability status.
-  MGSM records include a language code; other benchmarks use a null language.
-- `../tables/behavior_signal_slopes.{csv,json}` contain 54 benchmark/measure/condition
-  summaries, with language codes, model counts, slopes, and intercepts.
-- `../tables/behavior_signal_sources.json` records hashes for the 65 input files.
+  MGSM records include a language code, and HarmBench template records include a
+  zero-based template index. Pooled and other records use null condition fields.
+- `../tables/behavior_signal_slopes.{csv,json}` contain 79 benchmark/measure/condition
+  summaries, with language/template codes, model counts, slopes, and intercepts.
+- `../tables/behavior_signal_mean_ood_slopes.{csv,json}` contain the 11 final-column
+  averages, including counts of defined condition slopes.
+- `../tables/behavior_signal_sources.json` records hashes for the 66 input files.
 
 ## Statistics
 
@@ -548,7 +564,7 @@ Only slopes are displayed. A descriptive slope requires at least two finite
 model pairs with a positive Original denominator. The report shows the model
 count whenever it is smaller than the benchmark's full reported model set.
 Rows are ordered by the largest absolute available slope within each benchmark,
-across ID/OOD conditions or MGSM languages. The ranking retains the native sign
+across the table's displayed ID/OOD conditions, jailbreak templates, or MGSM languages. The ranking retains the native sign
 and definition of every measure.
 
 ## Legends

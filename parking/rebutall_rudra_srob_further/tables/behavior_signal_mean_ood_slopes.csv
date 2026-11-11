@@ -1,0 +1,12 @@
+benchmark,measure,condition_count,defined_condition_count,mean_ood_slope
+HarmBench,ASR,5,5,-0.011584337103235826
+HarmBench,Safe-concept relevance,5,5,-0.007562859407885281
+HarmBench,Instruction relevance,5,5,-0.06388235150701896
+HarmBench,Fluency,5,5,-0.0402758106702912
+HarmBench,AXBench overall,5,5,-0.10203567062512671
+MGSM,Accuracy,5,5,0.12241053039152701
+MGSM,Spanish relevance,5,0,
+MGSM,Instruction relevance,5,5,0.05221521993508882
+MGSM,Fluency,5,5,0.2514222636315431
+MGSM,AXBench overall,5,0,
+MGSM,Answer parse rate,5,5,0.009186823207278297

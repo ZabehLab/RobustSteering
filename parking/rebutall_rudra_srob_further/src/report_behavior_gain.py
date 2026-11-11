@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 import hashlib
 import json
@@ -29,6 +30,7 @@ MEASURES = {
 }
 MODEL_COUNTS = {"TruthfulQA": 5, "HarmBench": 3, "MGSM": 3}
 LANGUAGES = {"zh": "Chinese", "fr": "French", "ja": "Japanese", "sw": "Swahili", "te": "Telugu"}
+JAILBREAKS = {0: "John", 1: "DNE", 2: "Jailbreak Bot", 3: "YOJA/Nona", 4: "APM"}
 PANELS = (("TruthfulQA", "T", (0.1, 0.85)),
           ("HarmBench", "ASR", (-1.02, -0.38)))
 
@@ -56,7 +58,7 @@ def load_signals() -> tuple[list[dict], dict]:
 
     points = []
 
-    def append_gains(benchmark, model, srob, split, original_values, hinf_values, language=None):
+    def append_gains(benchmark, model, srob, split, original_values, hinf_values, language=None, template=None):
         for measure in MEASURES[benchmark]:
             original = original_values[measure]
             hinf = hinf_values[measure]
@@ -69,10 +71,11 @@ def load_signals() -> tuple[list[dict], dict]:
             else:
                 gain = (hinf - original) / original
             points.append({"benchmark": benchmark, "model": model, "split": split, "srob": srob,
-                           "language": language,
+                           "language": language, "template": template,
                            "measure": measure, "original": original, "hinf": hinf,
                            "behavior_gain": gain, "status": status})
 
+    harmbench_summary = read_json(REPO / "figs/bench_table/harmful/harmbench_jackknife.json")["models"]
     for benchmark, filename in (("TruthfulQA", "truthfulqa_srob_truthful.json"),
                                 ("HarmBench", "harmbench_srob_asr.json")):
         for row in read_json(TABLES / filename):
@@ -89,6 +92,29 @@ def load_signals() -> tuple[list[dict], dict]:
             append_gains(benchmark, row["model"], row["srob"], split,
                          {name: metric_value(original, key) for name, key in MEASURES[benchmark].items()},
                          {name: metric_value(hinf, key) for name, key in MEASURES[benchmark].items()})
+            if benchmark == "HarmBench" and split == "OOD":
+                cache_key = (REPO / row["selection_path"]).parents[3].name
+                summary = harmbench_summary[cache_key]
+                if summary["behavior_count"] != row["behavior_count"]:
+                    raise ValueError(f"HarmBench behavior subset mismatch for {row['model']}")
+                template_values = {"original": [], "h_infinity": []}
+                for template in JAILBREAKS:
+                    condition = summary["conditions"][str(template)]
+                    values = {}
+                    for method in template_values:
+                        values[method] = {
+                            measure: condition[method][key.removesuffix(".score")]["full_sample_mean"]
+                            / (100 if measure == "ASR" else 1)
+                            for measure, key in MEASURES["HarmBench"].items()
+                        }
+                        template_values[method].append(values[method])
+                    append_gains("HarmBench", row["model"], row["srob"], "OOD",
+                                 values["original"], values["h_infinity"], template=template)
+                for method, result in (("original", original), ("h_infinity", hinf)):
+                    for measure, key in MEASURES["HarmBench"].items():
+                        pooled = sum(values[measure] for values in template_values[method]) / len(JAILBREAKS)
+                        if not math.isclose(pooled, metric_value(result, key), rel_tol=1e-12, abs_tol=1e-12):
+                            raise ValueError(f"HarmBench template means disagree with pooled {measure} for {row['model']}")
 
     for row in read_json(TABLES / "mgsm_srob_accuracy_vs_alqr.json"):
         cache_key = (REPO / row["selection_path"]).parents[3].name
@@ -108,22 +134,41 @@ def load_signals() -> tuple[list[dict], dict]:
 def fit_signals(points: list[dict]) -> list[dict]:
     slopes = []
     for benchmark, measures in MEASURES.items():
-        conditions = [("OOD", language) for language in LANGUAGES] if benchmark == "MGSM" else [(split, None) for split in COLORS]
+        conditions = [("OOD", language, None) for language in LANGUAGES] if benchmark == "MGSM" else [
+            (split, None, None) for split in COLORS]
+        if benchmark == "HarmBench":
+            conditions.extend(("OOD", None, template) for template in JAILBREAKS)
         for measure in measures:
-            for split, language in conditions:
+            for split, language, template in conditions:
                 selected = [point for point in points if point["benchmark"] == benchmark
                             and point["measure"] == measure and point["split"] == split
                             and point["language"] == language
+                            and point["template"] == template
                             and point["behavior_gain"] is not None]
                 slope = intercept = None
                 if len(selected) >= 2:
                     fit = linregress([point["srob"] for point in selected], [point["behavior_gain"] for point in selected])
                     slope, intercept = float(fit.slope), float(fit.intercept)
                 slopes.append({"benchmark": benchmark, "measure": measure, "split": split,
-                               "language": language,
+                               "language": language, "template": template,
                                "n_models": len(selected), "expected_models": MODEL_COUNTS[benchmark],
                                "slope": slope, "intercept": intercept})
     return slopes
+
+
+def mean_ood_slopes(slopes: list[dict]) -> list[dict]:
+    means = []
+    for benchmark in ("HarmBench", "MGSM"):
+        for measure in MEASURES[benchmark]:
+            conditions = [row for row in slopes if row["benchmark"] == benchmark and row["measure"] == measure
+                          and row["split"] == "OOD" and (row["language"] is not None or row["template"] is not None)]
+            if len(conditions) != 5:
+                raise ValueError(f"Expected five OOD condition slopes for {benchmark}, {measure}")
+            values = [row["slope"] for row in conditions if row["slope"] is not None]
+            means.append({"benchmark": benchmark, "measure": measure, "condition_count": len(conditions),
+                          "defined_condition_count": len(values),
+                          "mean_ood_slope": sum(values) / 5 if len(values) == 5 else None})
+    return means
 
 
 def render(points: list[dict], slopes: list[dict]) -> None:
@@ -133,10 +178,12 @@ def render(points: list[dict], slopes: list[dict]) -> None:
     for ax, (benchmark, measure, y_limits) in zip(axes, PANELS, strict=True):
         for split, color in COLORS.items():
             selected = [point for point in points if point["benchmark"] == benchmark
-                        and point["measure"] == measure and point["split"] == split]
+                        and point["measure"] == measure and point["split"] == split
+                        and point["language"] is None and point["template"] is None]
             if len(selected) != MODEL_COUNTS[benchmark] or any(point["behavior_gain"] is None for point in selected):
                 raise ValueError(f"Incomplete main figure values for {benchmark}, {measure}, {split}")
-            fit = next(row for row in slopes if (row["benchmark"], row["measure"], row["split"]) == (benchmark, measure, split))
+            fit = next(row for row in slopes if (row["benchmark"], row["measure"], row["split"]) == (benchmark, measure, split)
+                       and row["language"] is None and row["template"] is None)
             x = np.array([point["srob"] for point in selected])
             y = np.array([point["behavior_gain"] for point in selected])
             curve_x = np.linspace(float(x.min()), float(x.max()), 100)
@@ -169,7 +216,7 @@ def render(points: list[dict], slopes: list[dict]) -> None:
     plt.close(fig)
 
 
-def write_report(slopes: list[dict]) -> None:
+def write_report(slopes: list[dict], ood_means: list[dict]) -> None:
     lines = ["# H∞ behavior gain", "", "Behavior gain = (H∞ − Original) / Original.", "",
              "![TruthfulQA T and HarmBench ASR behavior gain](hinf_behavior_gain.png)", "",
              "[PDF](hinf_behavior_gain.pdf) · [Signal values](tables/behavior_signal_points.csv) · "
@@ -177,19 +224,29 @@ def write_report(slopes: list[dict]) -> None:
              "Rows are ordered by the largest absolute available slope within each benchmark. "
              "Model counts are shown when a slope uses fewer than the full reported model set.", ""]
     for benchmark, measures in MEASURES.items():
-        columns = [("OOD", language, name) for language, name in LANGUAGES.items()] if benchmark == "MGSM" else [
-            (split, None, f"{split} slope") for split in COLORS]
+        if benchmark == "MGSM":
+            columns = [("OOD", language, None, name) for language, name in LANGUAGES.items()]
+        elif benchmark == "HarmBench":
+            columns = [("ID", None, None, "ID slope")] + [
+                ("OOD", None, template, name) for template, name in JAILBREAKS.items()]
+        else:
+            columns = [(split, None, None, f"{split} slope") for split in COLORS]
+        means = {row["measure"]: row["mean_ood_slope"] for row in ood_means if row["benchmark"] == benchmark}
+        headers = [label for _, _, _, label in columns] + (["Mean OOD slope"] if means else [])
         heading = "MGSM (OOD)" if benchmark == "MGSM" else benchmark
-        lines.extend([f"## {heading}", "", "| Measure | " + " | ".join(label for _, _, label in columns) + " |",
-                      "|---|" + "---:|" * len(columns)])
-        grouped = {measure: {(row["split"], row["language"]): row for row in slopes if row["benchmark"] == benchmark and row["measure"] == measure}
+        lines.extend([f"## {heading}", "", "| Measure | " + " | ".join(headers) + " |",
+                      "|---|" + "---:|" * len(headers)])
+        grouped = {measure: {(row["split"], row["language"], row["template"]): row for row in slopes
+                             if row["benchmark"] == benchmark and row["measure"] == measure}
                    for measure in measures}
         def magnitude(measure):
-            return max((abs(row["slope"]) for row in grouped[measure].values() if row["slope"] is not None), default=-1)
+            return max((abs(grouped[measure][split, language, template]["slope"])
+                        for split, language, template, _ in columns
+                        if grouped[measure][split, language, template]["slope"] is not None), default=-1)
         for measure in sorted(measures, key=magnitude, reverse=True):
             values = []
-            for split, language, _ in columns:
-                row = grouped[measure][split, language]
+            for split, language, template, _ in columns:
+                row = grouped[measure][split, language, template]
                 if row["slope"] is None:
                     value = "Undefined"
                 else:
@@ -197,9 +254,15 @@ def write_report(slopes: list[dict]) -> None:
                     if row["n_models"] < row["expected_models"]:
                         value += f" (n={row['n_models']})"
                 values.append(value)
+            if means:
+                values.append("Undefined" if means[measure] is None else f"{means[measure]:+.6f}")
             lines.append(f"| {measure} | {' | '.join(values)} |")
         lines.append("")
-    lines.extend(["MGSM columns show slopes fitted separately for each OOD language. "
+    lines.extend(["HarmBench's five named jailbreak columns are OOD. Mean OOD slope is the arithmetic mean of "
+                  "the five condition-specific slopes, for both HarmBench and MGSM. "
+                  "It is undefined if any condition's slope is undefined. "
+                  "The plotted HarmBench OOD fit still uses the pooled jailbreak results.", "",
+                  "MGSM columns show slopes fitted separately for each OOD language. "
                   "Its Spanish relevance and AXBench overall gains are undefined because Original is zero.", "",
                   "TruthfulQA concept relevance has paired values for three models. AXBench overall has "
                   "two finite model pairs. Missing or non-finite values are excluded, with counts shown above.", "",
@@ -209,18 +272,24 @@ def write_report(slopes: list[dict]) -> None:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--tables-only", action="store_true", help="Update data and slope tables without rewriting the figure")
+    args = parser.parse_args()
     points, sources = load_signals()
     slopes = fit_signals(points)
+    ood_means = mean_ood_slopes(slopes)
     TABLES.mkdir(exist_ok=True)
-    for stem, records in (("behavior_signal_points", points), ("behavior_signal_slopes", slopes)):
+    for stem, records in (("behavior_signal_points", points), ("behavior_signal_slopes", slopes),
+                          ("behavior_signal_mean_ood_slopes", ood_means)):
         with (TABLES / f"{stem}.csv").open("w", newline="") as handle:
             writer = csv.DictWriter(handle, fieldnames=list(records[0]), lineterminator="\n")
             writer.writeheader()
             writer.writerows(records)
         (TABLES / f"{stem}.json").write_text(json.dumps(records, indent=2, allow_nan=False) + "\n")
     (TABLES / "behavior_signal_sources.json").write_text(json.dumps(sources, indent=2) + "\n")
-    render(points, slopes)
-    write_report(slopes)
+    if not args.tables_only:
+        render(points, slopes)
+    write_report(slopes, ood_means)
     print((UNIT / "README.md").read_text())
 
 

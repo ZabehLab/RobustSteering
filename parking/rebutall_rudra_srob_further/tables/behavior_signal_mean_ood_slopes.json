@@ -1,0 +1,79 @@
+[
+  {
+    "benchmark": "HarmBench",
+    "measure": "ASR",
+    "condition_count": 5,
+    "defined_condition_count": 5,
+    "mean_ood_slope": -0.011584337103235826
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "Safe-concept relevance",
+    "condition_count": 5,
+    "defined_condition_count": 5,
+    "mean_ood_slope": -0.007562859407885281
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "Instruction relevance",
+    "condition_count": 5,
+    "defined_condition_count": 5,
+    "mean_ood_slope": -0.06388235150701896
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "Fluency",
+    "condition_count": 5,
+    "defined_condition_count": 5,
+    "mean_ood_slope": -0.0402758106702912
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "AXBench overall",
+    "condition_count": 5,
+    "defined_condition_count": 5,
+    "mean_ood_slope": -0.10203567062512671
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Accuracy",
+    "condition_count": 5,
+    "defined_condition_count": 5,
+    "mean_ood_slope": 0.12241053039152701
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Spanish relevance",
+    "condition_count": 5,
+    "defined_condition_count": 0,
+    "mean_ood_slope": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Instruction relevance",
+    "condition_count": 5,
+    "defined_condition_count": 5,
+    "mean_ood_slope": 0.05221521993508882
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Fluency",
+    "condition_count": 5,
+    "defined_condition_count": 5,
+    "mean_ood_slope": 0.2514222636315431
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "AXBench overall",
+    "condition_count": 5,
+    "defined_condition_count": 0,
+    "mean_ood_slope": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Answer parse rate",
+    "condition_count": 5,
+    "defined_condition_count": 5,
+    "mean_ood_slope": 0.009186823207278297
+  }
+]
