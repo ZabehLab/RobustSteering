@@ -31,11 +31,9 @@ MEASURES = {
 MODEL_COUNTS = {"TruthfulQA": 5, "HarmBench": 3, "MGSM": 3}
 LANGUAGES = {"zh": "Chinese", "fr": "French", "ja": "Japanese", "sw": "Swahili", "te": "Telugu"}
 JAILBREAKS = {0: "John", 1: "DNE", 2: "Jailbreak Bot", 3: "YOJA/Nona", 4: "APM"}
-PANELS = (("TruthfulQA", "T", "ID", (0.1, 0.85)),
-          ("TruthfulQA", "T", "OOD", (0.1, 0.85)),
-          ("HarmBench", "ASR", "ID", (-1.02, -0.38)),
-          ("HarmBench", "ASR", "OOD", (-1.02, -0.38)),
-          ("MGSM", "Accuracy", "OOD", None))
+PANELS = (("TruthfulQA", "T", "ID"), ("TruthfulQA", "T", "OOD"),
+          ("HarmBench", "ASR", "ID"), ("HarmBench", "ASR", "OOD"),
+          ("MGSM", "Accuracy", "OOD"))
 
 
 def metric_value(result: dict, key: str) -> float | None:
@@ -176,17 +174,26 @@ def mean_ood_slopes(slopes: list[dict]) -> list[dict]:
 
 def render(points: list[dict], slopes: list[dict]) -> None:
     configure_plot_style()
-    fig, axes = plt.subplots(1, 5, figsize=(25, 4))
-    palette = ("#2463EB", "#D97706", "#008B8B", "#8B1E1E", "#7C3AED")
-    labels = []
-    for ax, (benchmark, measure, split, y_limits) in zip(axes, PANELS, strict=True):
+    red = "#8B1E1E"
+    markers = ("o", "s", "^", "D", "v")
+    panel_width = (25 * (0.995 - 0.028) / (5 + 4 * 0.40)) / 3
+    panel_height = 4 * (0.87 - 0.30)
+    positions = [0.65]
+    for gap in (0.60, 0.95, 0.60, 0.95):
+        positions.append(positions[-1] + panel_width + gap)
+    figure_width = positions[-1] + panel_width + 0.15
+    fig = plt.figure(figsize=(figure_width, 4))
+    axes = [fig.add_axes([left / figure_width, 0.30, panel_width / figure_width, panel_height / 4])
+            for left in positions]
+    for ax, (benchmark, measure, split) in zip(axes, PANELS, strict=True):
         multiple = split == "OOD" and benchmark in ("HarmBench", "MGSM")
         conditions = JAILBREAKS if benchmark == "HarmBench" else LANGUAGES
-        series = [(key, name, palette[i]) for i, (key, name) in enumerate(conditions.items())] if multiple else [
-            (None, split, COLORS[split])]
+        series = [(key, name, markers[i]) for i, (key, name) in enumerate(conditions.items())] if multiple else [
+            (None, split, "o")]
+        color = "black" if split == "ID" else red
         fits = []
         handles = []
-        for condition, name, color in series:
+        for condition, name, marker in series:
             language = condition if multiple and benchmark == "MGSM" else None
             template = condition if multiple and benchmark == "HarmBench" else None
             selected = [point for point in points if point["benchmark"] == benchmark
@@ -199,44 +206,36 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             x = np.array([point["srob"] for point in selected])
             y = np.array([point["behavior_gain"] for point in selected])
             curve_x = np.linspace(float(x.min()), float(x.max()), 100)
-            ax.plot(curve_x, fit["intercept"] + fit["slope"] * curve_x, color=color,
-                    linewidth=1.3 if multiple else 1.5, alpha=0.7 if multiple else 0.8, zorder=1)
-            ax.scatter(x, y, s=40 if multiple else 48, color=color, zorder=3)
+            ax.plot(curve_x, fit["intercept"] + fit["slope"] * curve_x,
+                    color="#c9c9c9" if multiple else color, linewidth=1 if multiple else 1.8, zorder=1)
+            ax.scatter(x, y, s=29 if multiple else 36, color=color, marker=marker, zorder=3)
             fits.append(fit)
-            handles.append(Line2D([0], [0], color=color, marker="o", linewidth=1.3, markersize=4, label=name))
-            if not multiple:
-                fraction = 0.70 if split == "ID" else 0.35
-                label_x = float(x.min() + fraction * (x.max() - x.min()))
-                labels.append((ax, label_x, fit, color, float(x.min()), float(x.max()), "slope"))
+            handles.append(Line2D([0], [0], color=color, marker=marker, linestyle="none", markersize=4, label=name))
         if multiple:
             mean_fit = {key: float(np.mean([fit[key] for fit in fits])) for key in ("slope", "intercept")}
-            ax.plot(curve_x, mean_fit["intercept"] + mean_fit["slope"] * curve_x, color="black", linewidth=2.1, zorder=4)
-            label_x = float(x.min() + 0.60 * (x.max() - x.min()))
-            labels.append((ax, label_x, mean_fit, "black", float(x.min()), float(x.max()), "mean slope"))
-            handles.append(Line2D([0], [0], color="black", linewidth=2.1, label="Mean"))
-            ax.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, -0.29),
-                      ncol=3, frameon=False, fontsize=9, columnspacing=0.9, handletextpad=0.4)
-        ax.set(title=f"{benchmark} · {split}", xlabel=r"$S_{\mathrm{rob}}$", ylabel=f"{measure} behavior gain")
-        if y_limits is not None:
-            ax.set_ylim(y_limits)
+            ax.plot(curve_x, mean_fit["intercept"] + mean_fit["slope"] * curve_x,
+                    color=red, linewidth=3.2, zorder=4)
+            handles.append(Line2D([0], [0], color=red, linewidth=3.2, label="Mean"))
+            lower, upper = ax.dataLim.ymin, ax.dataLim.ymax
+            span = upper - lower
+            ax.set_ylim(lower - 0.12 * span, upper + 0.80 * span)
+            ax.legend(handles=handles, loc="upper right", frameon=True, facecolor="white", edgecolor="none",
+                      framealpha=0.95, fontsize=7.5, borderpad=0.35, labelspacing=0.35,
+                      handlelength=1.1, handletextpad=0.45)
         else:
-            ax.margins(y=0.16)
+            ax.margins(y=0.20)
+        ax.set(title=split, xlabel=r"$S_{\mathrm{rob}}$", ylabel=f"{measure} behavior gain")
+        ax.title.set_color(color)
+        ax.yaxis.set_major_locator(plt.MaxNLocator(4))
         if benchmark == "TruthfulQA":
-            ax.set(xlim=(-0.007, 0.46), xticks=[0, 0.1, 0.2, 0.3, 0.4])
+            ax.set(xlim=(-0.007, 0.46), xticks=[0, 0.2, 0.4])
         elif benchmark == "HarmBench":
-            ax.set(xlim=(1.9, 8.5), xticks=[2, 3, 4, 5, 6, 7, 8])
+            ax.set(xlim=(1.9, 8.5), xticks=[2, 5, 8])
         else:
-            ax.set(xlim=(0, 1), xticks=[0, 0.2, 0.4, 0.6, 0.8, 1])
-    fig.subplots_adjust(left=0.028, right=0.995, bottom=0.30, top=0.87, wspace=0.40)
-    fig.canvas.draw()
-    for ax, label_x, fit, color, x_min, x_max, prefix in labels:
-        endpoints = ax.transData.transform([[x_min, fit["intercept"] + fit["slope"] * x_min],
-                                          [x_max, fit["intercept"] + fit["slope"] * x_max]])
-        dx, dy = endpoints[1] - endpoints[0]
-        angle = np.degrees(np.arctan2(dy, dx))
-        ax.text(label_x, fit["intercept"] + fit["slope"] * label_x, f"{prefix} = {fit['slope']:.3f}",
-                ha="center", va="center", color=color, rotation=angle, rotation_mode="anchor", fontsize=11,
-                bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.88, "pad": 1.3}, zorder=5)
+            ax.set(xlim=(0, 1), xticks=[0, 0.5, 1])
+    for first, last, name in ((0, 1, "TruthfulQA"), (2, 3, "HarmBench"), (4, 4, "MGSM")):
+        center = (positions[first] + positions[last] + panel_width) / (2 * figure_width)
+        fig.text(center, 0.98, name, ha="center", va="center", fontsize=12)
     for suffix in ("png", "pdf"):
         fig.savefig(UNIT / f"hinf_behavior_gain.{suffix}", dpi=600, bbox_inches="tight", facecolor="white")
     plt.close(fig)
