@@ -1,0 +1,326 @@
+[
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "T",
+    "split": "ID",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": 0.3012772340601694,
+    "intercept": 0.5048367274808805
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "T",
+    "split": "OOD",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": 0.5635899971327875,
+    "intercept": 0.36698156437014456
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "I",
+    "split": "ID",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": 0.18482722928310888,
+    "intercept": -0.15820713123434482
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "I",
+    "split": "OOD",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": -0.6608720450441756,
+    "intercept": 0.1692312325065948
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "T\u00d7I",
+    "split": "ID",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": 0.5620444592204645,
+    "intercept": 0.26480934699841824
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "T\u00d7I",
+    "split": "OOD",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": -0.260335467205733,
+    "intercept": 0.5574598583388002
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "Concept relevance",
+    "split": "ID",
+    "n_models": 3,
+    "expected_models": 5,
+    "slope": 0.2057408892158875,
+    "intercept": -0.10545634526526904
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "Concept relevance",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 5,
+    "slope": 0.24212260273984818,
+    "intercept": -0.24481750988230136
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "Instruction relevance",
+    "split": "ID",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": -0.18675994697157672,
+    "intercept": -0.11108066124370852
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "Instruction relevance",
+    "split": "OOD",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": 0.24716706055394239,
+    "intercept": -0.24600219748444344
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "Fluency",
+    "split": "ID",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": -0.19562502367933815,
+    "intercept": -0.1619054214553522
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "Fluency",
+    "split": "OOD",
+    "n_models": 5,
+    "expected_models": 5,
+    "slope": -0.02947540220237096,
+    "intercept": -0.28383838084242463
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "AXBench overall",
+    "split": "ID",
+    "n_models": 2,
+    "expected_models": 5,
+    "slope": 0.3568992583954983,
+    "intercept": -0.2375666296480599
+  },
+  {
+    "benchmark": "TruthfulQA",
+    "measure": "AXBench overall",
+    "split": "OOD",
+    "n_models": 2,
+    "expected_models": 5,
+    "slope": -0.2876423147549511,
+    "intercept": -0.07733945959378488
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "ASR",
+    "split": "ID",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.022962783614780113,
+    "intercept": -0.5619916115493674
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "ASR",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.01146066494421585,
+    "intercept": -0.7780128753379207
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "Safe-concept relevance",
+    "split": "ID",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.006337991945415262,
+    "intercept": 0.07780380464406342
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "Safe-concept relevance",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.007564739703543657,
+    "intercept": 0.07636334152914448
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "Instruction relevance",
+    "split": "ID",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.04519116401834045,
+    "intercept": 0.09095634212951832
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "Instruction relevance",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.0635000624554487,
+    "intercept": 0.04445831782558038
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "Fluency",
+    "split": "ID",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.015145569436594088,
+    "intercept": 0.05843306983827264
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "Fluency",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.04024293711791257,
+    "intercept": -0.00652222748190362
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "AXBench overall",
+    "split": "ID",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.04934323408570552,
+    "intercept": 0.14336802622026318
+  },
+  {
+    "benchmark": "HarmBench",
+    "measure": "AXBench overall",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": -0.10190775672522179,
+    "intercept": 0.26034604329372757
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Accuracy",
+    "split": "ID",
+    "n_models": 0,
+    "expected_models": 3,
+    "slope": null,
+    "intercept": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Accuracy",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": 0.2328650828889544,
+    "intercept": -0.2583379963888232
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Spanish relevance",
+    "split": "ID",
+    "n_models": 0,
+    "expected_models": 3,
+    "slope": null,
+    "intercept": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Spanish relevance",
+    "split": "OOD",
+    "n_models": 0,
+    "expected_models": 3,
+    "slope": null,
+    "intercept": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Instruction relevance",
+    "split": "ID",
+    "n_models": 0,
+    "expected_models": 3,
+    "slope": null,
+    "intercept": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Instruction relevance",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": 0.09369160955046882,
+    "intercept": -0.10155380656417241
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Fluency",
+    "split": "ID",
+    "n_models": 0,
+    "expected_models": 3,
+    "slope": null,
+    "intercept": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Fluency",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": 0.2676052621775524,
+    "intercept": -0.26235839676549527
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "AXBench overall",
+    "split": "ID",
+    "n_models": 0,
+    "expected_models": 3,
+    "slope": null,
+    "intercept": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "AXBench overall",
+    "split": "OOD",
+    "n_models": 0,
+    "expected_models": 3,
+    "slope": null,
+    "intercept": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Answer parse rate",
+    "split": "ID",
+    "n_models": 0,
+    "expected_models": 3,
+    "slope": null,
+    "intercept": null
+  },
+  {
+    "benchmark": "MGSM",
+    "measure": "Answer parse rate",
+    "split": "OOD",
+    "n_models": 3,
+    "expected_models": 3,
+    "slope": 0.009151175530445808,
+    "intercept": -0.0015998316868565017
+  }
+]

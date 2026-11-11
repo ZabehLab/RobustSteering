@@ -9,7 +9,7 @@ from pathlib import Path
 import xlsxwriter
 
 
-UNIT = Path(__file__).resolve().parent
+UNIT = Path(__file__).resolve().parents[1]
 TABLES = UNIT / "tables"
 OUTPUT = TABLES / "srob_truthful_harm_rebuttal.xlsx"
 INPUTS = (

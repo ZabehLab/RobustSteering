@@ -18,11 +18,11 @@ import numpy as np
 from scipy.stats import linregress
 
 
-UNIT = Path(__file__).resolve().parent
+UNIT = Path(__file__).resolve().parents[1]
 REPO = UNIT.parents[1]
 FIGURE_POINTS = REPO / "parking/gamma_star_organization/plots/srob_parameter_size_truthfulness_main.csv"
 TABLES = UNIT / "tables"
-PLOTS = UNIT / "plots"
+PLOTS = UNIT / "archive/figures"
 sys.path.insert(0, str(REPO / "parking/gamma_star_addition"))
 from build_truthfulness_comparison import MODELS, metric, result_path
 
