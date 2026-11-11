@@ -28,8 +28,8 @@ MEASURES = {
              "AXBench overall": "mgsm_axbench_overall.score", "Answer parse rate": "mgsm_exact_match.valid_rate"},
 }
 MODEL_COUNTS = {"TruthfulQA": 5, "HarmBench": 3, "MGSM": 3}
-LANGUAGES = ("zh", "fr", "ja", "sw", "te")
-PANELS = (("TruthfulQA", "T", (0.1, 0.85)), ("TruthfulQA", "T×I", (-0.05, 1.65)),
+LANGUAGES = {"zh": "Chinese", "fr": "French", "ja": "Japanese", "sw": "Swahili", "te": "Telugu"}
+PANELS = (("TruthfulQA", "T", (0.1, 0.85)),
           ("HarmBench", "ASR", (-1.02, -0.38)))
 
 
@@ -56,7 +56,7 @@ def load_signals() -> tuple[list[dict], dict]:
 
     points = []
 
-    def append_gains(benchmark, model, srob, split, original_values, hinf_values):
+    def append_gains(benchmark, model, srob, split, original_values, hinf_values, language=None):
         for measure in MEASURES[benchmark]:
             original = original_values[measure]
             hinf = hinf_values[measure]
@@ -69,6 +69,7 @@ def load_signals() -> tuple[list[dict], dict]:
             else:
                 gain = (hinf - original) / original
             points.append({"benchmark": benchmark, "model": model, "split": split, "srob": srob,
+                           "language": language,
                            "measure": measure, "original": original, "hinf": hinf,
                            "behavior_gain": gain, "status": status})
 
@@ -91,37 +92,35 @@ def load_signals() -> tuple[list[dict], dict]:
 
     for row in read_json(TABLES / "mgsm_srob_accuracy_vs_alqr.json"):
         cache_key = (REPO / row["selection_path"]).parents[3].name
-        aggregates = {}
-        for method in ("original", "h_infinity"):
-            language_results = []
-            for language in LANGUAGES:
+        for language in LANGUAGES:
+            results = {}
+            for method in ("original", "h_infinity"):
                 path = REPO / "benchmarks/mgsm/results/kv_cache_off" / cache_key / f"mgsm_{language}" / f"{method}.json"
                 result = read_json(path)
                 if (result["model"] != [row["model_id"], row["model_revision"]]
                         or result["method"] != method or result["input_language"] != language):
                     raise ValueError(f"MGSM result identity mismatch in {path}")
-                language_results.append(result)
-            aggregates[method] = {}
-            for measure, key in MEASURES["MGSM"].items():
-                values = [metric_value(result, key) for result in language_results]
-                aggregates[method][measure] = None if None in values else sum(values) / len(values)
-        append_gains("MGSM", row["model"], row["srob"], "OOD", aggregates["original"], aggregates["h_infinity"])
+                results[method] = {measure: metric_value(result, key) for measure, key in MEASURES["MGSM"].items()}
+            append_gains("MGSM", row["model"], row["srob"], "OOD", results["original"], results["h_infinity"], language)
     return points, sources
 
 
 def fit_signals(points: list[dict]) -> list[dict]:
     slopes = []
     for benchmark, measures in MEASURES.items():
+        conditions = [("OOD", language) for language in LANGUAGES] if benchmark == "MGSM" else [(split, None) for split in COLORS]
         for measure in measures:
-            for split in COLORS:
+            for split, language in conditions:
                 selected = [point for point in points if point["benchmark"] == benchmark
                             and point["measure"] == measure and point["split"] == split
+                            and point["language"] == language
                             and point["behavior_gain"] is not None]
                 slope = intercept = None
                 if len(selected) >= 2:
                     fit = linregress([point["srob"] for point in selected], [point["behavior_gain"] for point in selected])
                     slope, intercept = float(fit.slope), float(fit.intercept)
                 slopes.append({"benchmark": benchmark, "measure": measure, "split": split,
+                               "language": language,
                                "n_models": len(selected), "expected_models": MODEL_COUNTS[benchmark],
                                "slope": slope, "intercept": intercept})
     return slopes
@@ -129,9 +128,9 @@ def fit_signals(points: list[dict]) -> list[dict]:
 
 def render(points: list[dict], slopes: list[dict]) -> None:
     configure_plot_style()
-    fig, axes = plt.subplots(1, 3, figsize=(15, 3.8))
+    fig, axes = plt.subplots(1, 2, figsize=(10, 3.8))
     labels = []
-    for panel, (ax, (benchmark, measure, y_limits)) in enumerate(zip(axes, PANELS, strict=True)):
+    for ax, (benchmark, measure, y_limits) in zip(axes, PANELS, strict=True):
         for split, color in COLORS.items():
             selected = [point for point in points if point["benchmark"] == benchmark
                         and point["measure"] == measure and point["split"] == split]
@@ -148,14 +147,14 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             label_x = float(x.min() + fraction * (x.max() - x.min()))
             labels.append((ax, label_x, fit, color, float(x.min()), float(x.max())))
         ax.set(title=f"{benchmark} · {measure}", xlabel=r"$S_{\mathrm{rob}}$", ylabel=f"{measure} behavior gain", ylim=y_limits)
-        if panel < 2:
+        if benchmark == "TruthfulQA":
             ax.set(xlim=(-0.007, 0.46), xticks=[0, 0.1, 0.2, 0.3, 0.4])
         else:
             ax.set(xlim=(1.9, 8.5), xticks=[2, 3, 4, 5, 6, 7, 8])
     handles = [Line2D([0], [0], color=color, marker="o", linewidth=1.5, markersize=6, label=split)
                for split, color in COLORS.items()]
     fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0), ncol=2, frameon=False)
-    fig.subplots_adjust(left=0.055, right=0.985, bottom=0.22, top=0.88, wspace=0.34)
+    fig.subplots_adjust(left=0.075, right=0.985, bottom=0.22, top=0.88, wspace=0.34)
     fig.canvas.draw()
     for ax, label_x, fit, color, x_min, x_max in labels:
         endpoints = ax.transData.transform([[x_min, fit["intercept"] + fit["slope"] * x_min],
@@ -172,24 +171,26 @@ def render(points: list[dict], slopes: list[dict]) -> None:
 
 def write_report(slopes: list[dict]) -> None:
     lines = ["# H∞ behavior gain", "", "Behavior gain = (H∞ − Original) / Original.", "",
-             "![T, T×I, and ASR behavior gain](hinf_behavior_gain.png)", "",
+             "![TruthfulQA T and HarmBench ASR behavior gain](hinf_behavior_gain.png)", "",
              "[PDF](hinf_behavior_gain.pdf) · [Signal values](tables/behavior_signal_points.csv) · "
              "[Slope data](tables/behavior_signal_slopes.csv) · [Methods](src/README.md#report_behavior_gain)", "",
              "Rows are ordered by the largest absolute available slope within each benchmark. "
              "Model counts are shown when a slope uses fewer than the full reported model set.", ""]
     for benchmark, measures in MEASURES.items():
-        lines.extend([f"## {benchmark}", "", "| Measure | ID slope | OOD slope |", "|---|---:|---:|"])
-        grouped = {measure: {row["split"]: row for row in slopes if row["benchmark"] == benchmark and row["measure"] == measure}
+        columns = [("OOD", language, name) for language, name in LANGUAGES.items()] if benchmark == "MGSM" else [
+            (split, None, f"{split} slope") for split in COLORS]
+        heading = "MGSM (OOD)" if benchmark == "MGSM" else benchmark
+        lines.extend([f"## {heading}", "", "| Measure | " + " | ".join(label for _, _, label in columns) + " |",
+                      "|---|" + "---:|" * len(columns)])
+        grouped = {measure: {(row["split"], row["language"]): row for row in slopes if row["benchmark"] == benchmark and row["measure"] == measure}
                    for measure in measures}
         def magnitude(measure):
             return max((abs(row["slope"]) for row in grouped[measure].values() if row["slope"] is not None), default=-1)
         for measure in sorted(measures, key=magnitude, reverse=True):
             values = []
-            for split in COLORS:
-                row = grouped[measure][split]
-                if benchmark == "MGSM" and split == "ID":
-                    value = "—"
-                elif row["slope"] is None:
+            for split, language, _ in columns:
+                row = grouped[measure][split, language]
+                if row["slope"] is None:
                     value = "Undefined"
                 else:
                     value = f"{row['slope']:+.6f}"
@@ -198,7 +199,7 @@ def write_report(slopes: list[dict]) -> None:
                 values.append(value)
             lines.append(f"| {measure} | {' | '.join(values)} |")
         lines.append("")
-    lines.extend(["MGSM uses the five-language OOD average and has no evaluated ID condition. "
+    lines.extend(["MGSM columns show slopes fitted separately for each OOD language. "
                   "Its Spanish relevance and AXBench overall gains are undefined because Original is zero.", "",
                   "TruthfulQA concept relevance has paired values for three models. AXBench overall has "
                   "two finite model pairs. Missing or non-finite values are excluded, with counts shown above.", "",

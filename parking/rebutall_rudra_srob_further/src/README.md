@@ -515,13 +515,15 @@ formula directly on each benchmark's native behavioral metric.
 Read the saved Original and H∞ evaluations for the five TruthfulQA models and
 three HarmBench models. For each cached behavioral measure, calculate
 `(H∞ − Original) / Original` and regress that relative gain on the model's Srob.
-The active figure contains T, T×I, and ASR panels, with ID and OOD fitted separately.
-T×I uses the benchmark convention of the product of aggregate True and Informative
-percentages divided by 100.
+The active figure contains TruthfulQA T and HarmBench ASR panels, with ID and OOD
+fitted separately. The TruthfulQA table also retains T×I, using the benchmark
+convention of the product of aggregate True and Informative percentages divided
+by 100.
 
-For the three MGSM models, first average each behavioral measure over Chinese,
-French, Japanese, Swahili, and Telugu separately for Original and H∞. Then calculate
-the relative gain. All five languages are OOD, so the ID column is blank.
+For the three MGSM models, calculate each behavioral measure's relative gain
+separately for Chinese, French, Japanese, Swahili, and Telugu. Fit a separate slope
+for each language. All five languages are OOD, and the MGSM table uses language
+columns in place of ID/OOD columns.
 
 ```bash
 /home/dev/miniconda3/envs/robust-steerability/bin/python \
@@ -532,10 +534,11 @@ the relative gain. All five languages are OOD, so the ID column is blank.
 
 - The active figure files are `../hinf_behavior_gain.png` and `.pdf`.
 - The unit's root `../README.md` is the slope report with three benchmark tables.
-- `../tables/behavior_signal_points.{csv,json}` contain 118 model/split/measure
+- `../tables/behavior_signal_points.{csv,json}` contain 190 model/split/measure
   records with Original values, H∞ values, relative gains, and availability status.
-- `../tables/behavior_signal_slopes.{csv,json}` contain the 36 benchmark/measure/split
-  summaries, with model counts, slopes, and intercepts.
+  MGSM records include a language code; other benchmarks use a null language.
+- `../tables/behavior_signal_slopes.{csv,json}` contain 54 benchmark/measure/condition
+  summaries, with language codes, model counts, slopes, and intercepts.
 - `../tables/behavior_signal_sources.json` records hashes for the 65 input files.
 
 ## Statistics
@@ -544,12 +547,13 @@ Use ordinary least squares between linear Srob and relative behavioral gain.
 Only slopes are displayed. A descriptive slope requires at least two finite
 model pairs with a positive Original denominator. The report shows the model
 count whenever it is smaller than the benchmark's full reported model set.
-Rows are ordered by the largest absolute available ID/OOD slope within each
-benchmark. The ranking retains the native sign and definition of every measure.
+Rows are ordered by the largest absolute available slope within each benchmark,
+across ID/OOD conditions or MGSM languages. The ranking retains the native sign
+and definition of every measure.
 
 ## Legends
 
-The panels are TruthfulQA T, TruthfulQA T×I, and HarmBench ASR. Blue `#2463EB`
+The panels are TruthfulQA T and HarmBench ASR. Blue `#2463EB`
 identifies ID, and dark red `#8B1E1E` identifies OOD. Slope labels sit along the
 corresponding lines and rotate with their displayed direction. Figure fonts and
 marker sizes follow the other unit plots, and the PNG uses 600 DPI.
@@ -557,13 +561,13 @@ marker sizes follow the other unit plots, and the PNG uses 600 DPI.
 ## Interpretation
 
 Every slope describes how the relative H∞ change varies with Srob for the
-available models. T and T×I use different behavioral outcomes. ASR remains a
+available models. The plotted T and ASR are the selected task outcomes. ASR remains a
 lower-is-better measure, so negative ASR gain indicates reduced attack success.
 
 ## Notes
 
-The earlier H∞ gain figure used T. The active figure includes both T and T×I
-explicitly. Old figures are retained under `../archive/figures`, and the existing
+The earlier three-panel T/T×I/ASR figure is retained under `../archive/figures`
+as `hinf_behavior_gain_t_txi_asr`. Other old figures are also retained there, and the existing
 plotting entry points now write their historical variants there.
 
 TruthfulQA concept relevance has three paired models, and AXBench overall has

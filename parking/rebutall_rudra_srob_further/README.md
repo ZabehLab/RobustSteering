@@ -2,7 +2,7 @@
 
 Behavior gain = (H∞ − Original) / Original.
 
-![T, T×I, and ASR behavior gain](hinf_behavior_gain.png)
+![TruthfulQA T and HarmBench ASR behavior gain](hinf_behavior_gain.png)
 
 [PDF](hinf_behavior_gain.pdf) · [Signal values](tables/behavior_signal_points.csv) · [Slope data](tables/behavior_signal_slopes.csv) · [Methods](src/README.md#report_behavior_gain)
 
@@ -30,18 +30,18 @@ Rows are ordered by the largest absolute available slope within each benchmark. 
 | ASR | -0.022963 | -0.011461 |
 | Safe-concept relevance | -0.006338 | -0.007565 |
 
-## MGSM
+## MGSM (OOD)
 
-| Measure | ID slope | OOD slope |
-|---|---:|---:|
-| Fluency | — | +0.267605 |
-| Accuracy | — | +0.232865 |
-| Instruction relevance | — | +0.093692 |
-| Answer parse rate | — | +0.009151 |
-| Spanish relevance | — | Undefined |
-| AXBench overall | — | Undefined |
+| Measure | Chinese | French | Japanese | Swahili | Telugu |
+|---|---:|---:|---:|---:|---:|
+| Accuracy | +0.419362 | +0.039946 | +0.262445 | +0.225965 | -0.335666 |
+| Fluency | +0.228143 | +0.296534 | +0.378349 | +0.246996 | +0.107089 |
+| Instruction relevance | +0.040467 | +0.013478 | +0.156566 | -0.250170 | +0.300734 |
+| Answer parse rate | +0.000000 | +0.000000 | +0.007858 | +0.015333 | +0.022743 |
+| Spanish relevance | Undefined | Undefined | Undefined | Undefined | Undefined |
+| AXBench overall | Undefined | Undefined | Undefined | Undefined | Undefined |
 
-MGSM uses the five-language OOD average and has no evaluated ID condition. Its Spanish relevance and AXBench overall gains are undefined because Original is zero.
+MGSM columns show slopes fitted separately for each OOD language. Its Spanish relevance and AXBench overall gains are undefined because Original is zero.
 
 TruthfulQA concept relevance has paired values for three models. AXBench overall has two finite model pairs. Missing or non-finite values are excluded, with counts shown above.
 
