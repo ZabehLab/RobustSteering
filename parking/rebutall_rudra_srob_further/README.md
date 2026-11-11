@@ -400,3 +400,60 @@ set for its benchmark and split.
 
 - [TruthfulQA values](tables/truthfulqa_srob_truthful.json)
 - [HarmBench values](tables/harmbench_srob_asr.json)
+
+# plot_behavior_gain_variants
+
+## Method
+
+Create two additional versions of the combined TruthfulQA/HarmBench plot.
+Behavior gain is `(method − Original) / Original`, using H∞ in one version and
+the paper's A-LQR baseline in the other. Values are dimensionless fractions.
+TruthfulQA uses True percentages, and HarmBench uses ASR percentages.
+
+Read the raw Original, H∞, and A-LQR result files matched to each saved table row.
+Check model and evaluation identities, finite values, positive denominators, and
+agreement with the existing tables. A-LQR results use the same result namespace
+as the Original baseline for each model and condition.
+
+```bash
+/home/dev/miniconda3/envs/robust-steerability/bin/python \
+  parking/rebutall_rudra_srob_further/plot_behavior_gain_variants.py
+```
+
+## Variables
+
+- `plots/srob_truthful_harm_hinf_behavior_gain.{png,pdf}` use H∞ behavior gain.
+- `plots/srob_truthful_harm_alqr_behavior_gain.{png,pdf}` use A-LQR behavior gain.
+- `tables/truthful_harm_behavior_gain.json` contains the 16 model/condition rows,
+  raw percentages, both gains, exact source paths and hashes, and fitted slopes.
+- The original ratio figure remains available as `plots/srob_truthful_harm_ratios.{png,pdf}`.
+
+## Statistics
+
+Fit a separate ordinary least-squares line for each benchmark and ID/OOD split.
+Each TruthfulQA fit has five models, and each HarmBench fit has three. Only slopes
+are annotated. Subtracting one from the H∞ / Original ratio preserves its slope
+and decreases the fitted intercept by one.
+
+## Legends
+
+Both variants use the same 1×2 layout and blue ID/red OOD styling as the ratio
+figure. Both y-axes are labeled Behavior gain. The H∞ figure uses the original
+ratio figure's y-ranges shifted down by one. The A-LQR figure's ranges contain
+its own gain values. PNG exports use 600 DPI.
+
+## Interpretation
+
+Positive TruthfulQA gain indicates a higher True percentage than Original.
+Negative HarmBench gain indicates reduced attack success relative to Original.
+
+## Notes
+
+The x-axis retains each model's Srob value from its selected H∞ specification
+for both controller comparisons. The saved paper A-LQR evaluation supplies the
+additional controller's behavioral values.
+
+## References
+
+- [Ratio plotting implementation](plot_truthful_harm_ratios.py)
+- [Behavior gain values and sources](tables/truthful_harm_behavior_gain.json)
