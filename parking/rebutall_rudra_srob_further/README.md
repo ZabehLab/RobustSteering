@@ -309,3 +309,46 @@ preserves the legacy declared counts for inspection.
 - [Paper MGSM jackknife report](../../figs/bench_table/mgsm/mgsm_jackknife.json)
 - [MGSM comparison table](tables/mgsm_srob_accuracy_vs_alqr.md)
 - [MGSM source manifest](tables/mgsm_source_manifest.json)
+
+# build_rebuttal_excel
+
+## Method
+
+Combine the saved TruthfulQA True-percentage and HarmBench ASR tables into
+`tables/srob_truthful_harm_rebuttal.xlsx`. Split the eight model–benchmark rows
+into separate ID and OOD sheets. Each ratio cell divides H∞ by Original and
+contains the saved value for immediate display in Excel.
+
+## Variables
+
+Both comparison sheets contain benchmark, model, metric, Srob, γ★, Original (%),
+H∞ (%), and H∞ / Original. The Sources sheet preserves the source CSV names and
+all original numeric strings, including their full saved precision.
+
+## Statistics
+
+The workbook organizes existing values and calculates the displayed ratios by
+division. It adds no statistical estimates.
+
+## Legends
+
+ID uses teal, and OOD uses dark red. Metric labels indicate that True percentage
+is higher-is-better and ASR is lower-is-better. Headers have filters, identifying
+columns remain frozen while scrolling, and numeric cells support Excel calculations.
+
+## Interpretation
+
+A TruthfulQA ratio above one indicates a higher True percentage. A HarmBench
+ratio below one indicates a lower attack success rate.
+
+## Notes
+
+The export requires XlsxWriter. Run `python build_rebuttal_excel.py` from this
+unit after installing that dependency. Display formats use ten decimal places
+for Srob and γ★, four for percentages, and six for ratios. Exact source strings
+remain available on the Sources sheet.
+
+## References
+
+- [TruthfulQA input](tables/truthfulqa_srob_truthful.csv)
+- [HarmBench input](tables/harmbench_srob_asr.csv)
