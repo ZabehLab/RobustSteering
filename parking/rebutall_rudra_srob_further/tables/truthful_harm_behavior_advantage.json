@@ -1,0 +1,387 @@
+{
+  "definition": "(H\u221e - A-LQR) / A-LQR",
+  "sources_sha256": {
+    "parking/rebutall_rudra_srob_further/tables/truthfulqa_srob_truthful.json": "5bd6bea9979b813c1caa17fb257c14c0ed79773df674426f9ba54b8337c38aaf",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/original.json": "c96d9f9995613a58130c42bdee5488d492c5a3bae4b42c791d7200dbf242459f",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/h_infinity.json": "8cbce791eb11a22b8ba086735884be4e8aec0e11276026149754de8c51055ee0",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/alqr.json": "528291ae2943a3af96b4abf0dc052c3d61a6579d810af035c8d39a523af64f33",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/original.json": "9ae1916aadd42718cee2a05b8650540082c684ccacb7d0999bd8909c785f3f4d",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/h_infinity.json": "8f9b8d856dbd8b23890eafccdf9eda1ed9e9b4ade032e903417a7c66dbaac51a",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/alqr.json": "bc8657c83cba91d6f91c4162896b6338f63e2d6fe3f1cb70075a2b4623b48a28",
+    "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/original.json": "8d1f6923721957cf3ab241eee15da0368b63cdc7d14f0e5a311ed5861aaa28cf",
+    "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/h_infinity.json": "2d907c2421cd6150127ffbcf6b5acfa82ef1a2ca47cbeddc3c31e4a7d98f3765",
+    "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/alqr.json": "0836d37a4cc87c841f5464fcde16cda891cd86b0a18867d563a3464e73d018af",
+    "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/original.json": "4257556318a08811b1690066895bf49e1c9d0234a001a16ea6c42f7235245ba9",
+    "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/h_infinity.json": "3404932f1efeeb37cbf2184c4757b644739404f3f16c0fbee9467bfd69e1c6c5",
+    "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/alqr.json": "16cdd354b13a2ebc197a5aadf283ce970a46dc99eb956e44688a1f3817ca3d30",
+    "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness/original.json": "ad6534242d3e7cf927df6a1c0d97d0c86fc428ee03df7dd51c351009d07ab283",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi_fluency_95_05/llama8b/truthfulness/h_infinity.json": "c37c7979fe9216ce549fcd3309892530317dcec8fed1588ee7122972ecd0706b",
+    "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness/alqr.json": "0f66ba0d2bc3c9e4e05d6103a5ee8021e72fbf6968526ea54e2b2307f2f1fa89",
+    "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness_spanish/original.json": "89f229f0b1d93cef5eb14f93078920870313630772579e376bd73f433ad9e6d6",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi_fluency_95_05/llama8b/truthfulness_spanish/h_infinity.json": "e12ac8d76c1563786e9dff37ba81e181ee4aab59188252d6111fd7197eb5caae",
+    "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness_spanish/alqr.json": "4427d0122d56f5c815fcd7b59bb157fa3d189b1bf10a4662e2aafdef91388f84",
+    "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/original.json": "8a310939979e1277f8c492573ffc50e7a59e3000db2b25d28914b7334709ff31",
+    "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/h_infinity.json": "1847c3c89a46e718069229d67fbdb888e36f376744713178b7372b867c05d9be",
+    "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/alqr.json": "74b1756917dcd3c66c6abd69bb1d520f398d64394fc6cbae7e3045f7503bd1e0",
+    "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/original.json": "8152e6efe2ed0adfa8b4f15ec54817c74ada922cc5c182e9ae4e8ecb8ce54fbe",
+    "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/h_infinity.json": "f0253596a4690068ca6e341a7bcc35351901d1e419f3fa6396f6bcd3ea5397dd",
+    "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/alqr.json": "d2de3c58d7f880f7aabc4076687af69b74bda962f372babd3fa96567553626da",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/original.json": "83dca8a1c59df70c68ff3e43411ae5c503eff70b97180f699b9f10a0b2e1e48e",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/h_infinity.json": "5069e0ec6a474977370fcb647c03e6f01a59a23c42ea176c9006dd9faad8cc6d",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/alqr.json": "eba27fa5028084d352d2ceeade696f77add403f7bc5d121c633880ce35a01c39",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/original.json": "3f292eab059b07c2199d478d3f7128bd269a30d68afb34fe1c8c73f895e680f1",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/h_infinity.json": "c67e7c88d0a252c42632aa920b0f95cb2a2cf41d22a9c0f7b6e2230f3226ae95",
+    "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/alqr.json": "6ccb060d0e3a131949ae9077a5537e52441faf7f42cade9365f4b47c4d63e596",
+    "parking/rebutall_rudra_srob_further/tables/harmbench_srob_asr.json": "14cc2d11252a07c14b553cbeee5ec9c8af55e8ee549bf9d6c9147f5669f1eb69",
+    "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/original.json": "efa0d7df197a5350967745a654b2c37af9d415b5f7b5c2caa2bfe75ea2a46a8a",
+    "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/h_infinity.json": "003014fdbce4e411bcb4f06d3d4e80177291e1be361389a20910ac06883d02c6",
+    "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/alqr.json": "410d988d92623ebc41310f3d7cc525fe187b455a7fcbcf3908606aa3a345ed1d",
+    "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/original.json": "1d2710790421e526501032f7f09238713c063ab768b73e129d8f26f851bed111",
+    "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/h_infinity.json": "d5ce2b6ff83ee5f26cdadede567b52ccc1c4a2e24a192294a2ef9f6765338e6d",
+    "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/alqr.json": "565cad85fd1c5e75a6abcb09a41b34bf0643e9a1e9141c269974f4f37ffe02a8",
+    "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/original.json": "566fac611d17ee281f8f675e964f068ff3a1be70d0da401684291253adc5e308",
+    "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/h_infinity.json": "000bdea34f4791fe5e9723bdb20324590e95db5645e2598882ecba9fc0baa000",
+    "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/alqr.json": "a7430963b3514006b2b5af50f886093f0bcb760955b4fbb18810fde33a3ab731",
+    "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/original.json": "88c1ccdcc74d6e612f54f0da0dad8a97bd2856448169eacfe69db2fcc183392c",
+    "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/h_infinity.json": "06e23aa0d7bea486db8c40e8de88147f80ba19f26a1e3c17cbb4dbb1227be06f",
+    "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/alqr.json": "ce9f9c7d8e49869c845b2d1423f8e9ef9178502b12a9e9a81f60351166eeff22",
+    "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/original.json": "0022ea2db7dbf3243840c056f07c254538c143de4454f10065a1d648f582e6b8",
+    "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/h_infinity.json": "6ca699353412e9872fde23bd6572e5c289c655f8cdd04517cf9a28148d7aa909",
+    "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/alqr.json": "be61e6cfc0655a038cfcea44ddaa4bfc07a8370aa11956626723da046575ed1a",
+    "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/original.json": "d4950738b3b9c70ada322df7f835744bd37e99031d4c56775bb96b0d021a3fe7",
+    "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/h_infinity.json": "c60a4dbffb6a9d4397e4696e5330dbcf22dca31a7ccbd19a061c6e563f957435",
+    "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/alqr.json": "a173e051176163e3ef04dc7f87e7c3d17c78396d10bc2d7fb5fc9b09c0b4ebbd"
+  },
+  "points": [
+    {
+      "benchmark": "TruthfulQA",
+      "model": "GPT-2 XL",
+      "condition": "English (ID)",
+      "srob": 0.03242640805761803,
+      "gamma_star": 30.839061737060547,
+      "metric": "Truthful (%)",
+      "original_pct": 28.886168910648713,
+      "hinf_pct": 46.51162790697674,
+      "alqr_pct": 31.21175030599755,
+      "hinf_behavior_gain": 0.6101694915254238,
+      "alqr_behavior_gain": 0.08050847457627121,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness/alqr.json"
+      },
+      "behavior_advantage": 0.49019607843137253
+    },
+    {
+      "benchmark": "TruthfulQA",
+      "model": "GPT-2 XL",
+      "condition": "Spanish-input (OOD)",
+      "srob": 0.03242640805761803,
+      "gamma_star": 30.839061737060547,
+      "metric": "Truthful (%)",
+      "original_pct": 66.09547123623011,
+      "hinf_pct": 84.21052631578948,
+      "alqr_pct": 74.29620563035496,
+      "hinf_behavior_gain": 0.27407407407407414,
+      "alqr_behavior_gain": 0.12407407407407413,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/gpt2_xl/truthfulness_spanish/alqr.json"
+      },
+      "behavior_advantage": 0.13344316309719936
+    },
+    {
+      "benchmark": "TruthfulQA",
+      "model": "Gemma-2-2B",
+      "condition": "English (ID)",
+      "srob": 0.02550682473994837,
+      "gamma_star": 39.205193519592285,
+      "metric": "Truthful (%)",
+      "original_pct": 49.791921664626685,
+      "hinf_pct": 70.11015911872705,
+      "alqr_pct": 62.325581395348834,
+      "hinf_behavior_gain": 0.40806293018682405,
+      "alqr_behavior_gain": 0.25172074729596844,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness/alqr.json"
+      },
+      "behavior_advantage": 0.12490180675569533
+    },
+    {
+      "benchmark": "TruthfulQA",
+      "model": "Gemma-2-2B",
+      "condition": "Spanish-input (OOD)",
+      "srob": 0.02550682473994837,
+      "gamma_star": 39.205193519592285,
+      "metric": "Truthful (%)",
+      "original_pct": 51.40758873929009,
+      "hinf_pct": 77.45410036719707,
+      "alqr_pct": 73.80660954712361,
+      "hinf_behavior_gain": 0.5066666666666667,
+      "alqr_behavior_gain": 0.4357142857142854,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/gemma2b/truthfulness_spanish/alqr.json"
+      },
+      "behavior_advantage": 0.04941956882255415
+    },
+    {
+      "benchmark": "TruthfulQA",
+      "model": "Llama-3-8B",
+      "condition": "English (ID)",
+      "srob": 0.20607235592808135,
+      "gamma_star": 4.852664470672607,
+      "metric": "Truthful (%)",
+      "original_pct": 49.277845777233786,
+      "hinf_pct": 76.49938800489596,
+      "alqr_pct": 58.94736842105264,
+      "hinf_behavior_gain": 0.5524093392945851,
+      "alqr_behavior_gain": 0.1962245404868356,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi_fluency_95_05/llama8b/truthfulness/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness/alqr.json"
+      },
+      "behavior_advantage": 0.2977574750830564
+    },
+    {
+      "benchmark": "TruthfulQA",
+      "model": "Llama-3-8B",
+      "condition": "Spanish-input (OOD)",
+      "srob": 0.20607235592808135,
+      "gamma_star": 4.852664470672607,
+      "metric": "Truthful (%)",
+      "original_pct": 42.864137086903305,
+      "hinf_pct": 68.54345165238678,
+      "alqr_pct": 55.569155446756426,
+      "hinf_behavior_gain": 0.599086236436322,
+      "alqr_behavior_gain": 0.2964020559680183,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness_spanish/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi_fluency_95_05/llama8b/truthfulness_spanish/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/llama8b/truthfulness_spanish/alqr.json"
+      },
+      "behavior_advantage": 0.2334801762114537
+    },
+    {
+      "benchmark": "TruthfulQA",
+      "model": "Qwen-2.5-14B",
+      "condition": "English (ID)",
+      "srob": 0.01394882293720001,
+      "gamma_star": 71.69063687324524,
+      "metric": "Truthful (%)",
+      "original_pct": 55.887392900856796,
+      "hinf_pct": 85.31211750305997,
+      "alqr_pct": 71.82374541003672,
+      "hinf_behavior_gain": 0.5265002190100743,
+      "alqr_behavior_gain": 0.28515111695137974,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness/alqr.json"
+      },
+      "behavior_advantage": 0.18779822767552812
+    },
+    {
+      "benchmark": "TruthfulQA",
+      "model": "Qwen-2.5-14B",
+      "condition": "Spanish-input (OOD)",
+      "srob": 0.01394882293720001,
+      "gamma_star": 71.69063687324524,
+      "metric": "Truthful (%)",
+      "original_pct": 68.12729498164015,
+      "hinf_pct": 88.7392900856793,
+      "alqr_pct": 85.23867809057528,
+      "hinf_behavior_gain": 0.30255120373697425,
+      "alqr_behavior_gain": 0.2511678045274883,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/qwen14b/truthfulness_spanish/alqr.json"
+      },
+      "behavior_advantage": 0.04106835152211354
+    },
+    {
+      "benchmark": "TruthfulQA",
+      "model": "OLMo-2-32B",
+      "condition": "English (ID)",
+      "srob": 0.38892416111272093,
+      "gamma_star": 2.571195363998413,
+      "metric": "Truthful (%)",
+      "original_pct": 56.91554467564259,
+      "hinf_pct": 92.65605875152998,
+      "alqr_pct": 87.76009791921665,
+      "hinf_behavior_gain": 0.6279569892473118,
+      "alqr_behavior_gain": 0.5419354838709678,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness/alqr.json"
+      },
+      "behavior_advantage": 0.05578800557880049
+    },
+    {
+      "benchmark": "TruthfulQA",
+      "model": "OLMo-2-32B",
+      "condition": "Spanish-input (OOD)",
+      "srob": 0.38892416111272093,
+      "gamma_star": 2.571195363998413,
+      "metric": "Truthful (%)",
+      "original_pct": 62.545899632802936,
+      "hinf_pct": 95.593635250918,
+      "alqr_pct": 90.45287637698898,
+      "hinf_behavior_gain": 0.528375733855186,
+      "alqr_behavior_gain": 0.44618395303326813,
+      "result_paths": {
+        "original": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/original.json",
+        "h_infinity": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/h_infinity.json",
+        "alqr": "benchmarks/truthfulness/results/kv_cache_off/calibrations/txi95_fluency05_n200_r1/olmo2_32b_instruct/truthfulness_spanish/alqr.json"
+      },
+      "behavior_advantage": 0.05683355886332891
+    },
+    {
+      "benchmark": "HarmBench",
+      "model": "Llama-3.2-1B",
+      "condition": "Direct (ID)",
+      "srob": 7.687859597672181,
+      "gamma_star": 0.13007521629333496,
+      "metric": "ASR (%)",
+      "original_pct": 10.0,
+      "hinf_pct": 2.9166666666666665,
+      "alqr_pct": 9.583333333333334,
+      "hinf_behavior_gain": -0.7083333333333334,
+      "alqr_behavior_gain": -0.04166666666666661,
+      "result_paths": {
+        "original": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/original.json",
+        "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/h_infinity.json",
+        "alqr": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_direct/alqr.json"
+      },
+      "behavior_advantage": -0.6956521739130436
+    },
+    {
+      "benchmark": "HarmBench",
+      "model": "Llama-3.2-1B",
+      "condition": "Jailbreak (OOD)",
+      "srob": 7.687859597672181,
+      "gamma_star": 0.13007521629333496,
+      "metric": "ASR (%)",
+      "original_pct": 5.583333333333333,
+      "hinf_pct": 0.9166666666666666,
+      "alqr_pct": 5.5,
+      "hinf_behavior_gain": -0.835820895522388,
+      "alqr_behavior_gain": -0.014925373134328306,
+      "result_paths": {
+        "original": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/original.json",
+        "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/h_infinity.json",
+        "alqr": "benchmarks/harmful/results/kv_cache_off/llama32_1b_instruct/harmbench_human_jailbreak/alqr.json"
+      },
+      "behavior_advantage": -0.8333333333333333
+    },
+    {
+      "benchmark": "HarmBench",
+      "model": "Llama-3.2-3B",
+      "condition": "Direct (ID)",
+      "srob": 2.404990825688073,
+      "gamma_star": 0.415802001953125,
+      "metric": "ASR (%)",
+      "original_pct": 16.666666666666664,
+      "hinf_pct": 8.333333333333332,
+      "alqr_pct": 20.0,
+      "hinf_behavior_gain": -0.5,
+      "alqr_behavior_gain": 0.20000000000000018,
+      "result_paths": {
+        "original": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/original.json",
+        "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/h_infinity.json",
+        "alqr": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_direct/alqr.json"
+      },
+      "behavior_advantage": -0.5833333333333334
+    },
+    {
+      "benchmark": "HarmBench",
+      "model": "Llama-3.2-3B",
+      "condition": "Jailbreak (OOD)",
+      "srob": 2.404990825688073,
+      "gamma_star": 0.415802001953125,
+      "metric": "ASR (%)",
+      "original_pct": 11.75,
+      "hinf_pct": 3.6666666666666665,
+      "alqr_pct": 11.583333333333332,
+      "hinf_behavior_gain": -0.6879432624113476,
+      "alqr_behavior_gain": -0.014184397163120668,
+      "result_paths": {
+        "original": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/original.json",
+        "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/h_infinity.json",
+        "alqr": "benchmarks/harmful/results/kv_cache_off/llama32_3b_instruct/harmbench_human_jailbreak/alqr.json"
+      },
+      "behavior_advantage": -0.6834532374100719
+    },
+    {
+      "benchmark": "HarmBench",
+      "model": "Llama-3.1-8B",
+      "condition": "Direct (ID)",
+      "srob": 3.487044249994804,
+      "gamma_star": 0.2867758274078369,
+      "metric": "ASR (%)",
+      "original_pct": 15.833333333333332,
+      "hinf_pct": 3.3333333333333335,
+      "alqr_pct": 15.833333333333332,
+      "hinf_behavior_gain": -0.7894736842105262,
+      "alqr_behavior_gain": 0.0,
+      "result_paths": {
+        "original": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/original.json",
+        "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/h_infinity.json",
+        "alqr": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_direct/alqr.json"
+      },
+      "behavior_advantage": -0.7894736842105262
+    },
+    {
+      "benchmark": "HarmBench",
+      "model": "Llama-3.1-8B",
+      "condition": "Jailbreak (OOD)",
+      "srob": 3.487044249994804,
+      "gamma_star": 0.2867758274078369,
+      "metric": "ASR (%)",
+      "original_pct": 14.666666666666666,
+      "hinf_pct": 0.5,
+      "alqr_pct": 10.833333333333334,
+      "hinf_behavior_gain": -0.9659090909090909,
+      "alqr_behavior_gain": -0.2613636363636363,
+      "result_paths": {
+        "original": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/original.json",
+        "h_infinity": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/h_infinity.json",
+        "alqr": "benchmarks/harmful/results/kv_cache_off/llama31_8b_instruct/harmbench_human_jailbreak/alqr.json"
+      },
+      "behavior_advantage": -0.9538461538461539
+    }
+  ],
+  "fits": {
+    "TruthfulQA": {
+      "ID": {
+        "n_models": 5,
+        "slope": -0.46385512681228663,
+        "intercept": 0.2931553276935322
+      },
+      "OOD": {
+        "n_models": 5,
+        "slope": 0.07302706362669736,
+        "intercept": 0.0931089269102574
+      }
+    },
+    "HarmBench": {
+      "ID": {
+        "n_models": 3,
+        "slope": -0.009037584811346753,
+        "intercept": -0.6485765805391002
+      },
+      "OOD": {
+        "n_models": 3,
+        "slope": -0.01237254435637212,
+        "intercept": -0.7675382917962041
+      }
+    }
+  }
+}

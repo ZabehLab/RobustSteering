@@ -457,3 +457,53 @@ additional controller's behavioral values.
 
 - [Ratio plotting implementation](plot_truthful_harm_ratios.py)
 - [Behavior gain values and sources](tables/truthful_harm_behavior_gain.json)
+
+# plot_behavior_advantage
+
+## Method
+
+Create a fourth variant using `(H∞ − A-LQR) / A-LQR`, labeled Behavior advantage
+against competitor. Reuse the matched result checks from
+`plot_behavior_gain_variants.py` and the shared 1×2 plotting implementation.
+
+```bash
+/home/dev/miniconda3/envs/robust-steerability/bin/python \
+  parking/rebutall_rudra_srob_further/plot_behavior_advantage.py
+```
+
+## Variables
+
+TruthfulQA uses True percentages for five paper models, and HarmBench uses ASR
+percentages for three paper models. `behavior_advantage` is the dimensionless
+relative change from A-LQR to H∞. All 16 rows have positive A-LQR denominators.
+Outputs are `plots/srob_truthful_harm_behavior_advantage.{png,pdf}` and
+`tables/truthful_harm_behavior_advantage.json`.
+
+## Statistics
+
+Fit separate ordinary least-squares lines for each benchmark and ID/OOD split.
+Only slopes are annotated. Exact slopes, intercepts, point values, source paths,
+and input hashes are saved in the JSON output.
+
+## Legends
+
+TruthfulQA is on the left, and HarmBench is on the right. The x-axis is Srob,
+using the same selected-controller values as the other variants. ID is blue,
+and OOD is dark red. Both y-axes read Behavior advantage against competitor.
+PNG exports use 600 DPI.
+
+## Interpretation
+
+Positive TruthfulQA advantage indicates a higher True percentage under H∞ than
+under A-LQR. Negative HarmBench advantage indicates lower attack success under
+H∞ than under A-LQR.
+
+## Notes
+
+The comparison uses the saved paper A-LQR baseline. Values follow the requested
+formula directly on each benchmark's native behavioral metric.
+
+## References
+
+- [Matched behavioral result loader](plot_behavior_gain_variants.py)
+- [Behavior advantage values and sources](tables/truthful_harm_behavior_advantage.json)
