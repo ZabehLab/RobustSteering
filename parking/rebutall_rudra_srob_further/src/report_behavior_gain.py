@@ -32,8 +32,8 @@ MODEL_COUNTS = {"TruthfulQA": 5, "HarmBench": 3, "MGSM": 3}
 LANGUAGES = {"zh": "Chinese", "fr": "French", "ja": "Japanese", "sw": "Swahili", "te": "Telugu"}
 JAILBREAKS = {0: "John", 1: "DNE", 2: "Jailbreak Bot", 3: "YOJA/Nona", 4: "APM"}
 PANELS = (("TruthfulQA", "T", "ID"), ("TruthfulQA", "T", "OOD"),
-          ("MGSM", "Accuracy", "OOD"),
-          ("HarmBench", "ASR", "ID"), ("HarmBench", "ASR", "OOD"))
+          ("HarmBench", "ASR", "ID"), ("HarmBench", "ASR", "OOD"),
+          ("MGSM", "Accuracy", "OOD"))
 
 
 def metric_value(result: dict, key: str) -> float | None:
@@ -179,7 +179,7 @@ def render(points: list[dict], slopes: list[dict]) -> None:
     panel_width = (25 * (0.995 - 0.028) / (5 + 4 * 0.40)) / 3
     panel_height = 4 * (0.87 - 0.30)
     positions = [0.65]
-    for gap in (0.60, 0.95, 0.95, 0.60):
+    for gap in (0.60, 0.95, 0.60, 0.95):
         positions.append(positions[-1] + panel_width + gap)
     figure_width = positions[-1] + panel_width + 0.15
     fig = plt.figure(figsize=(figure_width, 4))
@@ -233,7 +233,7 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             ax.set(xlim=(1.9, 8.5), xticks=[2, 5, 8])
         else:
             ax.set(xlim=(0, 1), xticks=[0, 0.5, 1])
-    for first, last, name in ((0, 1, "TruthfulQA"), (2, 2, "MGSM"), (3, 4, "HarmBench")):
+    for first, last, name in ((0, 1, "TruthfulQA"), (2, 3, "HarmBench"), (4, 4, "MGSM")):
         center = (positions[first] + positions[last] + panel_width) / (2 * figure_width)
         fig.text(center, 0.98, name, ha="center", va="center", fontsize=12)
     for suffix in ("png", "pdf"):
