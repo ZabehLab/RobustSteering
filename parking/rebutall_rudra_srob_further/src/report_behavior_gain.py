@@ -226,6 +226,7 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             ax.margins(y=0.20)
         ax.set(title=split, xlabel=r"$S_{\mathrm{rob}}$", ylabel=f"{measure} behavior gain")
         ax.title.set_color(color)
+        ax.title.set_fontweight("bold")
         ax.yaxis.set_major_locator(plt.MaxNLocator(4))
         if benchmark == "TruthfulQA":
             ax.set(xlim=(-0.007, 0.46), xticks=[0, 0.2, 0.4])
@@ -235,7 +236,7 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             ax.set(xlim=(0, 1), xticks=[0, 0.5, 1])
     for first, last, name in ((0, 1, "TruthfulQA"), (2, 3, "HarmBench"), (4, 4, "MGSM")):
         center = (positions[first] + positions[last] + panel_width) / (2 * figure_width)
-        fig.text(center, 0.98, name, ha="center", va="center", fontsize=12)
+        fig.text(center, 0.98, name, ha="center", va="center", fontsize=12, fontweight="bold")
     for suffix in ("png", "pdf"):
         fig.savefig(UNIT / f"hinf_behavior_gain.{suffix}", dpi=600, bbox_inches="tight", facecolor="white")
     plt.close(fig)
