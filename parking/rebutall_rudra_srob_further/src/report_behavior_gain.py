@@ -175,13 +175,13 @@ def mean_ood_slopes(slopes: list[dict]) -> list[dict]:
 def render(points: list[dict], slopes: list[dict]) -> None:
     configure_plot_style()
     red = "#8B1E1E"
-    markers = ("o", "s", "^", "D", "v")
+    markers = ("o", "x", "+", "s", "^")
     panel_width = (25 * (0.995 - 0.028) / (5 + 4 * 0.40)) / 3
     panel_height = 4 * (0.87 - 0.30)
     positions = [0.65]
-    for gap in (0.60, 0.95, 0.60, 0.95):
+    for gap in (0.60, 0.95, 0.60, 2.10):
         positions.append(positions[-1] + panel_width + gap)
-    figure_width = positions[-1] + panel_width + 0.15
+    figure_width = positions[-1] + panel_width + 1.10
     fig = plt.figure(figsize=(figure_width, 4))
     axes = [fig.add_axes([left / figure_width, 0.30, panel_width / figure_width, panel_height / 4])
             for left in positions]
@@ -208,9 +208,15 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             curve_x = np.linspace(float(x.min()), float(x.max()), 100)
             ax.plot(curve_x, fit["intercept"] + fit["slope"] * curve_x,
                     color="#c9c9c9" if multiple else color, linewidth=1 if multiple else 1.8, zorder=1)
-            ax.scatter(x, y, s=29 if multiple else 36, color="black", marker=marker, zorder=3)
+            marker_style = {"color": "black"}
+            if multiple:
+                marker_style = {"linewidths": 1.1, **({"color": "black"} if marker in ("x", "+") else
+                                {"facecolors": "none", "edgecolors": "black"})}
+            ax.scatter(x, y, s=29 if multiple else 36, marker=marker,
+                       zorder=5 if multiple else 3, **marker_style)
             fits.append(fit)
-            handles.append(Line2D([0], [0], color="black", marker=marker, linestyle="none", markersize=3, label=name))
+            handles.append(Line2D([0], [0], color="black", marker=marker, linestyle="none",
+                                  markerfacecolor="none" if multiple else "black", markersize=4, label=name))
         if multiple:
             mean_fit = {key: float(np.mean([fit[key] for fit in fits])) for key in ("slope", "intercept")}
             ax.plot(curve_x, mean_fit["intercept"] + mean_fit["slope"] * curve_x,
@@ -219,8 +225,8 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             lower, upper = ax.dataLim.ymin, ax.dataLim.ymax
             span = upper - lower
             ax.set_ylim(lower - 0.12 * span, upper + 0.20 * span)
-            ax.legend(handles=handles, loc="upper right", frameon=True, facecolor="white", edgecolor="none",
-                      framealpha=0.95, fontsize=6, borderpad=0.20, labelspacing=0.15,
+            ax.legend(handles=handles, loc="upper left", bbox_to_anchor=(1.10, 1), frameon=False,
+                      fontsize=6, borderpad=0.20, labelspacing=0.15,
                       handlelength=0.8, handletextpad=0.30)
         else:
             ax.margins(y=0.20)
