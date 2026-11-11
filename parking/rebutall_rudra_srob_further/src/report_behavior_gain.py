@@ -31,8 +31,11 @@ MEASURES = {
 MODEL_COUNTS = {"TruthfulQA": 5, "HarmBench": 3, "MGSM": 3}
 LANGUAGES = {"zh": "Chinese", "fr": "French", "ja": "Japanese", "sw": "Swahili", "te": "Telugu"}
 JAILBREAKS = {0: "John", 1: "DNE", 2: "Jailbreak Bot", 3: "YOJA/Nona", 4: "APM"}
-PANELS = (("TruthfulQA", "T", (0.1, 0.85)),
-          ("HarmBench", "ASR", (-1.02, -0.38)))
+PANELS = (("TruthfulQA", "T", "ID", (0.1, 0.85)),
+          ("TruthfulQA", "T", "OOD", (0.1, 0.85)),
+          ("HarmBench", "ASR", "ID", (-1.02, -0.38)),
+          ("HarmBench", "ASR", "OOD", (-1.02, -0.38)),
+          ("MGSM", "Accuracy", "OOD", None))
 
 
 def metric_value(result: dict, key: str) -> float | None:
@@ -173,42 +176,65 @@ def mean_ood_slopes(slopes: list[dict]) -> list[dict]:
 
 def render(points: list[dict], slopes: list[dict]) -> None:
     configure_plot_style()
-    fig, axes = plt.subplots(1, 2, figsize=(10, 3.8))
+    fig, axes = plt.subplots(1, 5, figsize=(25, 4))
+    palette = ("#2463EB", "#D97706", "#008B8B", "#8B1E1E", "#7C3AED")
     labels = []
-    for ax, (benchmark, measure, y_limits) in zip(axes, PANELS, strict=True):
-        for split, color in COLORS.items():
+    for ax, (benchmark, measure, split, y_limits) in zip(axes, PANELS, strict=True):
+        multiple = split == "OOD" and benchmark in ("HarmBench", "MGSM")
+        conditions = JAILBREAKS if benchmark == "HarmBench" else LANGUAGES
+        series = [(key, name, palette[i]) for i, (key, name) in enumerate(conditions.items())] if multiple else [
+            (None, split, COLORS[split])]
+        fits = []
+        handles = []
+        for condition, name, color in series:
+            language = condition if multiple and benchmark == "MGSM" else None
+            template = condition if multiple and benchmark == "HarmBench" else None
             selected = [point for point in points if point["benchmark"] == benchmark
                         and point["measure"] == measure and point["split"] == split
-                        and point["language"] is None and point["template"] is None]
+                        and point["language"] == language and point["template"] == template]
             if len(selected) != MODEL_COUNTS[benchmark] or any(point["behavior_gain"] is None for point in selected):
-                raise ValueError(f"Incomplete main figure values for {benchmark}, {measure}, {split}")
-            fit = next(row for row in slopes if (row["benchmark"], row["measure"], row["split"]) == (benchmark, measure, split)
-                       and row["language"] is None and row["template"] is None)
+                raise ValueError(f"Incomplete figure values for {benchmark}, {measure}, {split}, {name}")
+            fit = next(row for row in slopes if (row["benchmark"], row["measure"], row["split"], row["language"], row["template"])
+                       == (benchmark, measure, split, language, template))
             x = np.array([point["srob"] for point in selected])
             y = np.array([point["behavior_gain"] for point in selected])
             curve_x = np.linspace(float(x.min()), float(x.max()), 100)
             ax.plot(curve_x, fit["intercept"] + fit["slope"] * curve_x, color=color,
-                    linewidth=1.5, alpha=0.8, zorder=1)
-            ax.scatter(x, y, s=48, color=color, zorder=3)
-            fraction = 0.70 if split == "ID" else 0.35
-            label_x = float(x.min() + fraction * (x.max() - x.min()))
-            labels.append((ax, label_x, fit, color, float(x.min()), float(x.max())))
-        ax.set(title=f"{benchmark} · {measure}", xlabel=r"$S_{\mathrm{rob}}$", ylabel=f"{measure} behavior gain", ylim=y_limits)
+                    linewidth=1.3 if multiple else 1.5, alpha=0.7 if multiple else 0.8, zorder=1)
+            ax.scatter(x, y, s=40 if multiple else 48, color=color, zorder=3)
+            fits.append(fit)
+            handles.append(Line2D([0], [0], color=color, marker="o", linewidth=1.3, markersize=4, label=name))
+            if not multiple:
+                fraction = 0.70 if split == "ID" else 0.35
+                label_x = float(x.min() + fraction * (x.max() - x.min()))
+                labels.append((ax, label_x, fit, color, float(x.min()), float(x.max()), "slope"))
+        if multiple:
+            mean_fit = {key: float(np.mean([fit[key] for fit in fits])) for key in ("slope", "intercept")}
+            ax.plot(curve_x, mean_fit["intercept"] + mean_fit["slope"] * curve_x, color="black", linewidth=2.1, zorder=4)
+            label_x = float(x.min() + 0.60 * (x.max() - x.min()))
+            labels.append((ax, label_x, mean_fit, "black", float(x.min()), float(x.max()), "mean slope"))
+            handles.append(Line2D([0], [0], color="black", linewidth=2.1, label="Mean"))
+            ax.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, -0.29),
+                      ncol=3, frameon=False, fontsize=9, columnspacing=0.9, handletextpad=0.4)
+        ax.set(title=f"{benchmark} · {split}", xlabel=r"$S_{\mathrm{rob}}$", ylabel=f"{measure} behavior gain")
+        if y_limits is not None:
+            ax.set_ylim(y_limits)
+        else:
+            ax.margins(y=0.16)
         if benchmark == "TruthfulQA":
             ax.set(xlim=(-0.007, 0.46), xticks=[0, 0.1, 0.2, 0.3, 0.4])
-        else:
+        elif benchmark == "HarmBench":
             ax.set(xlim=(1.9, 8.5), xticks=[2, 3, 4, 5, 6, 7, 8])
-    handles = [Line2D([0], [0], color=color, marker="o", linewidth=1.5, markersize=6, label=split)
-               for split, color in COLORS.items()]
-    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0), ncol=2, frameon=False)
-    fig.subplots_adjust(left=0.075, right=0.985, bottom=0.22, top=0.88, wspace=0.34)
+        else:
+            ax.set(xlim=(0, 1), xticks=[0, 0.2, 0.4, 0.6, 0.8, 1])
+    fig.subplots_adjust(left=0.028, right=0.995, bottom=0.30, top=0.87, wspace=0.40)
     fig.canvas.draw()
-    for ax, label_x, fit, color, x_min, x_max in labels:
+    for ax, label_x, fit, color, x_min, x_max, prefix in labels:
         endpoints = ax.transData.transform([[x_min, fit["intercept"] + fit["slope"] * x_min],
                                           [x_max, fit["intercept"] + fit["slope"] * x_max]])
         dx, dy = endpoints[1] - endpoints[0]
         angle = np.degrees(np.arctan2(dy, dx))
-        ax.text(label_x, fit["intercept"] + fit["slope"] * label_x, f"slope = {fit['slope']:.3f}",
+        ax.text(label_x, fit["intercept"] + fit["slope"] * label_x, f"{prefix} = {fit['slope']:.3f}",
                 ha="center", va="center", color=color, rotation=angle, rotation_mode="anchor", fontsize=11,
                 bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.88, "pad": 1.3}, zorder=5)
     for suffix in ("png", "pdf"):
