@@ -208,9 +208,9 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             curve_x = np.linspace(float(x.min()), float(x.max()), 100)
             ax.plot(curve_x, fit["intercept"] + fit["slope"] * curve_x,
                     color="#c9c9c9" if multiple else color, linewidth=1 if multiple else 1.8, zorder=1)
-            ax.scatter(x, y, s=29 if multiple else 36, color=color, marker=marker, zorder=3)
+            ax.scatter(x, y, s=29 if multiple else 36, color="black", marker=marker, zorder=3)
             fits.append(fit)
-            handles.append(Line2D([0], [0], color=color, marker=marker, linestyle="none", markersize=4, label=name))
+            handles.append(Line2D([0], [0], color="black", marker=marker, linestyle="none", markersize=3, label=name))
         if multiple:
             mean_fit = {key: float(np.mean([fit[key] for fit in fits])) for key in ("slope", "intercept")}
             ax.plot(curve_x, mean_fit["intercept"] + mean_fit["slope"] * curve_x,
@@ -218,10 +218,10 @@ def render(points: list[dict], slopes: list[dict]) -> None:
             handles.append(Line2D([0], [0], color=red, linewidth=3.2, label="Mean"))
             lower, upper = ax.dataLim.ymin, ax.dataLim.ymax
             span = upper - lower
-            ax.set_ylim(lower - 0.12 * span, upper + 0.80 * span)
+            ax.set_ylim(lower - 0.12 * span, upper + 0.20 * span)
             ax.legend(handles=handles, loc="upper right", frameon=True, facecolor="white", edgecolor="none",
-                      framealpha=0.95, fontsize=7.5, borderpad=0.35, labelspacing=0.35,
-                      handlelength=1.1, handletextpad=0.45)
+                      framealpha=0.95, fontsize=6, borderpad=0.20, labelspacing=0.15,
+                      handlelength=0.8, handletextpad=0.30)
         else:
             ax.margins(y=0.20)
         ax.set(title=split, xlabel=r"$S_{\mathrm{rob}}$", ylabel=f"{measure} behavior gain")
