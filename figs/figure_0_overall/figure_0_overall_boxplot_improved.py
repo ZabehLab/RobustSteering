@@ -23,7 +23,7 @@ DATA_LOGO_DARKEN = 0.80
 LOGO_SCALE = 0.70
 LOGO_JITTER = 0.28
 BASELINE_LOGO_GRAY = "#72777F"
-FONT_SCALE = 1.15
+FONT_SCALE = 1.20
 EXPORT_BOUNDS = (0.0586779513888889, 0.17116666666666663,
                  15.964165185866014, 5.524083333333334)
 
@@ -215,10 +215,10 @@ def draw_model_legend(ax: plt.Axes, logo_images: dict[str, np.ndarray]) -> None:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.text(
-        0.5,
+        0.0,
         1.02,
         "Model family",
-        ha="center",
+        ha="left",
         va="bottom",
         fontsize=14.5,
         fontweight="bold",
@@ -253,7 +253,7 @@ def hierarchy_heading(
         label,
         ha="center",
         va="top",
-        fontsize=21.5,
+        fontsize=16.5,
         fontweight="bold",
         color="black",
     )
@@ -401,14 +401,28 @@ def main() -> None:
         if clearance > 0:
             x, y = label.get_position()
             label.set_position((x, y + clearance / fig.dpi / fig.get_figheight()))
-    # Keep larger legend text inside the original export without moving any axes.
-    for text in axes[4].texts:
-        bounds = text.get_window_extent(renderer)
-        excess = bounds.x1 - (export_bbox.x1 - 0.05) * fig.dpi
-        if excess > 0:
-            anchor = text.get_transform().transform(text.get_position())
-            text.set_position(text.get_transform().inverted().transform(
-                (anchor[0] - excess, anchor[1])))
+    # Align the heading's M and the visible left edges of all model logos.
+    legend_ax = axes[4]
+    heading, *model_names = legend_ax.texts
+    heading_width = heading.get_window_extent(renderer).width
+    column_left = min(legend_ax.get_window_extent(renderer).x0,
+                      (export_bbox.x1 - 0.05) * fig.dpi - heading_width)
+    heading.set_x(legend_ax.transData.inverted().transform((column_left, 0))[0])
+    model_logos = legend_ax.artists
+    logo_widths = []
+    for logo in model_logos:
+        image = logo.offsetbox.get_data()
+        _, xs = np.where(image[..., 3] > 10)
+        bounds = logo.offsetbox.get_window_extent(renderer)
+        visible_left = bounds.x0 + xs.min() / image.shape[1] * bounds.width
+        logo_widths.append((xs.max() - xs.min() + 1) / image.shape[1] * bounds.width)
+        anchor = legend_ax.transData.transform(logo.xy)
+        logo.xy = tuple(legend_ax.transData.inverted().transform(
+            (anchor[0] + column_left - visible_left, anchor[1])))
+        logo.xybox = logo.xy
+    name_x = legend_ax.transData.inverted().transform((column_left + max(logo_widths) + 12, 0))[0]
+    for name in model_names:
+        name.set_x(name_x)
 
     for suffix in ["pdf", "png"]:
         fig.savefig(
