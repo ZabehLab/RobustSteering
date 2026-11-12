@@ -167,21 +167,14 @@ def main():
         rule_y = heading.get_position()[1] - 0.14 / height
         fig.add_artist(Line2D([group_left, group_right], [rule_y, rule_y],
                               transform=fig.transFigure, color='#c9c9c9', linewidth=0.8))
-    panel_labels = [panel.annotate(label, xy=(0, 1), xycoords='axes fraction',
-                                    xytext=(-12, 6), textcoords='offset points',
-                                    ha='left', va='bottom', fontsize=FONT,
-                                    fontweight='bold', annotation_clip=False)
-                    for panel, label in zip(fig.axes, 'abcdefgh', strict=True)]
-    fig.canvas.draw()
-    renderer = fig.canvas.get_renderer()
-    for panel, label in zip(fig.axes, panel_labels, strict=True):
-        bounds = label.get_window_extent(renderer)
-        label.xy = fig.transFigure.inverted().transform(
-            (panel.yaxis.label.get_window_extent(renderer).x0, (bounds.y0 + bounds.y1) / 2))
-        label.xycoords = 'figure fraction'
-        label.set_position((0, 0))
-        label.set_verticalalignment('center')
-        label.set_fontsize(2 * FONT)
+    for label, heading, first in zip('abc', tuple(fig.texts), (0, 2, 4), strict=True):
+        label_x = top_axes[first].get_position().x0 - 12 / 72 / width
+        fig.text(label_x, heading.get_position()[1], label, ha='left', va='center',
+                  fontsize=1.5 * FONT, fontweight='bold')
+    for panel, label in ((ax, 'd'), (transfer_ax, 'e')):
+        panel.annotate(label, xy=(0, 1), xycoords='axes fraction', xytext=(-12, 6),
+                        textcoords='offset points', ha='left', va='bottom',
+                        fontsize=1.5 * FONT, fontweight='bold', annotation_clip=False)
     PLOTS.mkdir(exist_ok=True)
     for suffix in ('png', 'pdf'):
         fig.savefig(PLOTS / f'fig_srob_extend.{suffix}', dpi=600, facecolor='white')
