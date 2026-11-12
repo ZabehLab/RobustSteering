@@ -8,6 +8,7 @@ import numpy as np
 import seaborn as sns
 from matplotlib.colors import to_rgba
 from matplotlib.patches import Patch
+from matplotlib.text import Text
 
 import figure_0_overall as base
 
@@ -21,6 +22,7 @@ DATA_LOGO_DARKEN = 0.80
 LOGO_SCALE = 0.70
 LOGO_JITTER = 0.28
 BASELINE_LINESTYLE = (0, (3, 2))
+FONT_SCALE = 1.15
 
 
 def darken(color: str, factor: float = DATA_LOGO_DARKEN) -> str:
@@ -174,6 +176,7 @@ def draw_box_panel(
     ax.yaxis.grid(True, color="#E2E5E8", linewidth=0.7, zorder=0)
     ax.set_axisbelow(True)
     sns.despine(ax=ax, trim=True, offset=6)
+    # Restore the full bottom spine after trimming the original left spine.
     ax.spines["bottom"].set_bounds(*ax.get_xlim())
     ax.spines["bottom"].set_position(("outward", 0))
 
@@ -360,11 +363,45 @@ def main() -> None:
         handletextpad=0.65,
     )
 
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    export_bbox = fig.get_tightbbox(renderer).padded(0.05)
+    label_centers = []
+    for ax in axes[:4]:
+        bounds = ax.yaxis.label.get_window_extent(renderer)
+        label_centers.append(fig.transFigure.inverted().transform(
+            ((bounds.x0 + bounds.x1) / 2, (bounds.y0 + bounds.y1) / 2)))
+    for text in fig.findobj(Text):
+        text.set_fontsize(text.get_fontsize() * FONT_SCALE)
+    for ax, center in zip(axes[:4], label_centers, strict=True):
+        ax.yaxis.label.set_verticalalignment("center")
+        ax.yaxis.set_label_coords(*center, transform=fig.transFigure)
+        ax.tick_params(axis="y", pad=max(0, ax.yaxis.majorTicks[0].get_pad() - 4))
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    for ax in axes[:4]:
+        label = ax.yaxis.label
+        bounds = label.get_window_extent(renderer)
+        tick_bounds = [text.get_window_extent(renderer) for panel in axes[:4]
+                       for text in panel.get_xticklabels()]
+        clearance = max([0] + [box.y1 + 4 - bounds.y0 for box in tick_bounds
+                               if box.x0 < bounds.x1 and box.x1 > bounds.x0])
+        if clearance > 0:
+            x, y = label.get_position()
+            label.set_position((x, y + clearance / fig.dpi / fig.get_figheight()))
+    # Keep larger legend text inside the original export without moving any axes.
+    for text in axes[4].texts:
+        bounds = text.get_window_extent(renderer)
+        excess = bounds.x1 - (export_bbox.x1 - 0.05) * fig.dpi
+        if excess > 0:
+            anchor = text.get_transform().transform(text.get_position())
+            text.set_position(text.get_transform().inverted().transform(
+                (anchor[0] - excess, anchor[1])))
+
     for suffix in ["pdf", "png"]:
         fig.savefig(
             PLOTS / f"figure_0_overall_boxplot_improved.{suffix}",
-            bbox_inches="tight",
-            pad_inches=0.05,
+            bbox_inches=export_bbox,
             facecolor="white",
             transparent=False,
         )
