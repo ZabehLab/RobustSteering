@@ -1,0 +1,7 @@
+srob_task,srob_model,behavior_task,behavior_model,pairing,split,srob,original_truthful_pct,hinf_truthful_pct,truthfulness_gain
+HarmBench,Llama-3.2-1B,TruthfulQA,GPT-2 XL,user-defined model proxy,ID,7.687859597672181,28.886168910648713,46.51162790697674,0.6101694915254238
+HarmBench,Llama-3.2-3B,TruthfulQA,Gemma-2-2B,user-defined model proxy,ID,2.404990825688073,49.791921664626685,70.11015911872705,0.40806293018682405
+HarmBench,Llama-3.1-8B,TruthfulQA,Llama-3-8B,user-defined model proxy,ID,3.487044249994804,49.277845777233786,76.49938800489596,0.5524093392945851
+HarmBench,Llama-3.2-1B,TruthfulQA,GPT-2 XL,user-defined model proxy,OOD,7.687859597672181,66.09547123623011,84.21052631578948,0.27407407407407414
+HarmBench,Llama-3.2-3B,TruthfulQA,Gemma-2-2B,user-defined model proxy,OOD,2.404990825688073,51.40758873929009,77.45410036719707,0.5066666666666667
+HarmBench,Llama-3.1-8B,TruthfulQA,Llama-3-8B,user-defined model proxy,OOD,3.487044249994804,42.864137086903305,68.54345165238678,0.599086236436322
