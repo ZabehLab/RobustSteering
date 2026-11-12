@@ -244,7 +244,7 @@ def run(stage: str) -> None:
     ROOT.mkdir(parents=True, exist_ok=True)
     with (ROOT / '.run.lock').open('a') as lock:
         fcntl.flock(lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-        logs = ROOT / 'logs' / default_run_id('gamma-sweep', stage)
+        logs = ROOT / 'logs' / default_run_id('gamma-sweep', MODEL, stage)
         record = {'stage': stage, 'status': 'running', 'started_at_utc': utc_now(),
                   'devices': ['cuda:0', 'cuda:1']}
         write_json(logs / 'run.json', record)
