@@ -369,7 +369,7 @@ def main() -> None:
             ),
         ],
         loc="lower center",
-        bbox_to_anchor=(0.49, 0.07),
+        bbox_to_anchor=(0.49, 0.045),
         ncol=2,
         fontsize=15,
         handlelength=1.2,
