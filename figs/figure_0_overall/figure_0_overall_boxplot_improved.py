@@ -259,7 +259,7 @@ def hierarchy_heading(
         color="black",
     )
     fig.add_artist(Line2D([left, right], [0.905, 0.905], transform=fig.transFigure,
-                          color="#C9C9C9", linewidth=0.8))
+                          color="#B5B5B5", linewidth=0.8))
 
 
 def main() -> None:
@@ -285,7 +285,7 @@ def main() -> None:
     grid = fig.add_gridspec(
         1,
         9,
-        width_ratios=[1.48, 0.68, 1.48, 0.8625, 3.4675, 0.68, 1.48, 0.68, 0.92],
+        width_ratios=[1.48, 0.68, 1.48, 0.68, 3.65, 0.68, 1.48, 0.68, 0.92],
         left=0.055,
         right=0.985,
         bottom=0.225,
