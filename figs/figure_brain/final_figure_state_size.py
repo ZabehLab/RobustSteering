@@ -57,9 +57,12 @@ def main():
         axis.scatter(row["n_ch"], row["med_resid"], s=125,
                      color=AREA_COLORS[row["area"]], zorder=3)
         position = label_positions.get(lead, dict(xytext=(7, 6)))
+        leader = (dict(arrowstyle="-", color="#777777", linewidth=0.55,
+                       shrinkA=1, shrinkB=0)
+                  if lead in {"LAO", "LAF", "RVF", "LPO", "RAT"} else None)
         axis.annotate(lead, (row["n_ch"], row["med_resid"]),
                       fontsize=10, textcoords="offset points",
-                      **position)
+                      arrowprops=leader, zorder=2, **position)
 
     # Deliberately padded so edge labels such as RMF, LVF, and LPT remain
     # entirely inside the plotting box.
