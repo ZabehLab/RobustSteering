@@ -97,6 +97,8 @@ def main():
            ylim=(min(row['srob'] for row in rows) / 1.25, max(row['srob'] for row in rows) * 1.3))
     ax.set_xlabel(r'Model size (billions of parameters; $\log_{10}$ scale)', fontsize=FONT)
     ax.set_ylabel(r'TruthfulQA $S_{\mathrm{rob}}$ ($\log_{10}$ scale)', fontsize=FONT)
+    ax.set_title(r'Consistent $S_{\mathrm{rob}}$ patterns', fontsize=FONT,
+                 fontweight='bold', pad=8)
     ax.tick_params(labelsize=FONT)
     ax.spines[['top', 'right']].set_visible(False)
     q_values = sorted({float(trace['q_over_r']) for trace in traces})
@@ -110,6 +112,7 @@ def main():
     key_ax.set_yticks(range(8), [f'{value:.3g}' for value in q_values], fontsize=FONT)
     key_ax.set_xlabel(r'$Q_f/R$', fontsize=FONT)
     key_ax.set_ylabel(r'$Q/R$', fontsize=FONT)
+    key_ax.set_title('Cost settings', fontsize=FONT, fontweight='bold', pad=8)
     for i, j in np.ndindex(ranks.shape):
         rank = ranks[i, j]
         key_ax.text(j, i, str(rank + 1), ha='center', va='center', fontsize=7,
