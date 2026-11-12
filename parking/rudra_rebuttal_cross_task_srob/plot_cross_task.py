@@ -59,7 +59,7 @@ def main() -> None:
         ax.title.set_fontweight("bold")
         ax.yaxis.set_major_locator(plt.MaxNLocator(4))
         ax.margins(y=0.20)
-    fig.suptitle("TruthfulQA", fontsize=12, fontweight="bold", y=0.98)
+    fig.suptitle("Cross task Srob transfer", fontsize=12, fontweight="bold", y=0.98)
     fig.subplots_adjust(left=0.18, right=0.96, bottom=0.23, top=0.84, wspace=0.75)
     plots, tables = UNIT / "plots", UNIT / "tables"
     plots.mkdir(exist_ok=True)
