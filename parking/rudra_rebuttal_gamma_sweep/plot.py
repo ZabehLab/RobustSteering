@@ -1,7 +1,7 @@
 """Plot only completed, officially scored operating points."""
 
 import csv
-from pathlib import Path
+from math import sqrt
 
 import matplotlib
 matplotlib.use('Agg')
@@ -39,10 +39,12 @@ def collect_results():
             if any(not r['valid'] or r['score'] not in (0, 1) for r in rows):
                 raise ValueError(f'Invalid classifier result: {point}/{condition}')
             successes = sum(r['score'] for r in rows)
+            proportion = successes / len(rows)
             values.append({'point': point, 'rho': rho,
                            'gamma': None if rho == 0 else manifest['gamma_star'] / rho,
                            'condition': condition, 'n': len(rows),
-                           'successes': successes, 'asr_percent': 100. * successes / len(rows)})
+                           'successes': successes, 'asr_percent': 100. * proportion,
+                           'asr_se_percent': 100. * sqrt(proportion * (1. - proportion) / len(rows))})
         if len(values) == 2:
             results.extend(values)
     return results
@@ -64,19 +66,28 @@ def make_plot():
     for condition, label, color in [('direct', 'ID · Direct', 'black'),
                                      ('human_jailbreak', 'OOD · Jailbreak', '#8B1E1E')]:
         subset = [r for r in results if r['condition'] == condition]
+        ax.fill_between(
+            [r['rho'] for r in subset],
+            [max(0., r['asr_percent'] - r['asr_se_percent']) for r in subset],
+            [min(100., r['asr_percent'] + r['asr_se_percent']) for r in subset],
+            color=color, alpha=.12, linewidth=0,
+        )
         ax.plot([r['rho'] for r in subset], [r['asr_percent'] for r in subset],
-                '-o', color=color, label=label, linewidth=1.8, markersize=5)
+                '-o', color=color, label=label, linewidth=1.8, markersize=5, zorder=3)
     ax.set(xlabel=r'Robustness level $\rho_{\mathrm{rob}}=\gamma^\star/\gamma$',
-           ylabel='Attack success rate (%)', xlim=(-.03, 1.03), ylim=(0, None))
+           ylabel='Attack success rate (%)', xlim=(-.025, 1.025), ylim=(0, None))
     ax.set_xticks([0, .2, .4, .6, .8, 1.])
     ax.grid(axis='y', alpha=.18)
     ax.legend(frameon=False)
     ax.set_title('Qwen2.5-0.5B-Instruct · HarmBench', fontsize=12, fontweight='bold', pad=12)
-    ax.annotate('LQR (8D)', xy=(0, 0), xycoords=('data', 'axes fraction'),
-                xytext=(0, -51), textcoords='offset points', ha='center', fontsize=10)
-    ax.annotate('H∞', xy=(results[-1]['rho'], 0), xycoords=('data', 'axes fraction'),
-                xytext=(0, -51), textcoords='offset points', ha='center', fontsize=10)
-    fig.subplots_adjust(left=.14, right=.97, top=.88, bottom=.27)
+    for x, label, rotation, offset in [(0., 'LQR (8D)', 90, 11), (1., 'H∞', 270, -11)]:
+        ax.axvline(x, color='#454545', linewidth=1.1, zorder=1)
+        ax.annotate(label, xy=(x, .95), xycoords=('data', 'axes fraction'),
+                    xytext=(offset, 0), textcoords='offset points', rotation=rotation,
+                    ha='center', va='top', fontsize=14, fontweight='bold')
+    fig.text(.55, .055, 'Shading: ±1 binomial SE · 100 behaviors per condition',
+             ha='center', fontsize=9, color='#454545')
+    fig.subplots_adjust(left=.14, right=.97, top=.88, bottom=.21)
     fig.savefig(plots / 'gamma_sweep.png', dpi=600)
     fig.savefig(plots / 'gamma_sweep.pdf')
     plt.close(fig)

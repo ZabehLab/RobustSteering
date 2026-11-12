@@ -53,6 +53,30 @@ class FixedGammaTests(unittest.TestCase):
 
 
 class SweepTests(unittest.TestCase):
+    def test_plot_reports_binomial_standard_error_on_the_matched_sample(self):
+        from . import plot, sweep
+        from parking.rudra_rebuttal_mached_calib.inputs import write_json
+        from robust_steerability.judges.specs import scorer_cache_path
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            write_json(root / 'inputs/manifest.json', {'gamma_star': .3, 'endpoint_rho': 1 / 1.01})
+            records = {condition: [{'prompt_id': f'p{i}'} for i in range(100)]
+                       for condition in sweep.CONDITIONS}
+            write_json(root / 'inputs/records.json', records)
+            with patch.object(plot, 'ROOT', root), patch.object(sweep, 'ROOT', root):
+                for point in ('lqr', 'hinf'):
+                    for condition in sweep.CONDITIONS:
+                        path = sweep.generation_path(root, sweep.task_for(point, condition, 0))
+                        write_json(scorer_cache_path(sweep.evaluation_root(), path, sweep.SCORER), {
+                            'status': 'complete', 'rows': [
+                                {'prompt_id': f'p{i}', 'score': int(i < 10), 'valid': True}
+                                for i in range(100)]})
+                results = plot.collect_results()
+            self.assertEqual(len(results), 4)
+            for row in results:
+                self.assertEqual(row['asr_percent'], 10.)
+                self.assertAlmostEqual(row['asr_se_percent'], 3.)
+
     def test_sampling_is_matched_balanced_and_deterministic(self):
         from .sweep import select_records
         source = {'evaluation': {
