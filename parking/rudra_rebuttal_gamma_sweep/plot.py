@@ -62,7 +62,8 @@ def make_plot():
         writer.writerows(results)
     plt.rcParams.update({'font.family': 'sans-serif', 'font.sans-serif': ['Arial', 'DejaVu Sans'],
                          'font.size': 12, 'axes.spines.top': False, 'axes.spines.right': False})
-    fig, ax = plt.subplots(figsize=(4.96, 3.44))
+    fig, ax = plt.subplots(figsize=(4.96, 4.96))
+    ax.set_box_aspect(1)
     for condition, label, color in [('direct', 'ID · Direct', 'black'),
                                      ('human_jailbreak', 'OOD · Jailbreak', '#8B1E1E')]:
         subset = [r for r in results if r['condition'] == condition]
@@ -75,16 +76,16 @@ def make_plot():
         ax.plot([r['rho'] for r in subset], [r['asr_percent'] for r in subset],
                 '-o', color=color, label=label, linewidth=1.8, markersize=5, zorder=3)
     ax.set(xlabel=r'$\rho_{\mathrm{rob}}$',
-           ylabel='Attack success rate (%)', xlim=(-.13, 1.13), ylim=(0, None))
-    ax.set_xticks([0, .2, .4, .6, .8, 1.])
-    ax.spines['bottom'].set_bounds(0., 1.)
+           ylabel='Attack success rate (%) ↓', xlim=(-.025, 1.025), ylim=(0, None))
+    ax.set_xticks([0, .2, .4, .6, .8, 1.],
+                  labels=['0.00\nLQR', '0.2', '0.4', '0.6', '0.8', '1.0\nH∞'])
+    ticks = ax.get_xticklabels()
+    ticks[0].set_fontweight('bold')
+    ticks[-1].set_fontweight('bold')
+    ticks[-1].set_color('#007C7C')
     ax.grid(axis='y', alpha=.18)
-    ax.legend(frameon=False, loc='lower left', bbox_to_anchor=(.115, .04), borderaxespad=0)
-    for x, text_x, label, rotation in [(0., -.065, 'LQR', 90), (1., 1.065, 'H∞', 270)]:
-        ax.axvline(x, color='#454545', linewidth=1.1, zorder=1)
-        ax.text(text_x, .95, label, transform=ax.get_xaxis_transform(), rotation=rotation,
-                ha='center', va='top', fontsize=14, fontweight='bold')
-    fig.subplots_adjust(left=.20, right=.97, top=.96, bottom=.20)
+    ax.legend(frameon=False, loc='lower left')
+    fig.subplots_adjust(left=.21, right=.97, top=.97, bottom=.21)
     fig.savefig(plots / 'gamma_sweep.png', dpi=600)
     fig.savefig(plots / 'gamma_sweep.pdf')
     plt.close(fig)
