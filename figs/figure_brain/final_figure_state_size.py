@@ -45,11 +45,21 @@ def main():
     leads = table[table["area"].notna()].copy()
 
     fig, axis = plt.subplots(figsize=(3.6, 3.1))
+    label_positions = {
+        "LAO": dict(xytext=(-9, 1), ha="right", va="bottom"),
+        "LAF": dict(xytext=(7, 8), ha="left", va="bottom"),
+        "RVF": dict(xytext=(-8, 0), ha="right", va="center"),
+        "LPO": dict(xytext=(7, 7), ha="left", va="bottom"),
+        "RAT": dict(xytext=(7, -4), ha="left", va="top"),
+        "LVF": dict(xytext=(6, 6)),
+    }
     for lead, row in leads.iterrows():
         axis.scatter(row["n_ch"], row["med_resid"], s=125,
                      color=AREA_COLORS[row["area"]], zorder=3)
+        position = label_positions.get(lead, dict(xytext=(7, 6)))
         axis.annotate(lead, (row["n_ch"], row["med_resid"]),
-                      fontsize=10, xytext=(5, 4), textcoords="offset points")
+                      fontsize=10, textcoords="offset points",
+                      **position)
 
     # Deliberately padded so edge labels such as RMF, LVF, and LPT remain
     # entirely inside the plotting box.
