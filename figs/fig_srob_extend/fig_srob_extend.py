@@ -10,6 +10,7 @@ from unittest.mock import patch
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from matplotlib.figure import Figure
+from matplotlib.lines import Line2D
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter, NullLocator
 import numpy as np
 from scipy.interpolate import PchipInterpolator
@@ -18,6 +19,7 @@ UNIT = Path(__file__).resolve().parent
 REPO = UNIT.parents[1]
 BEHAVIOR = REPO / 'parking/rudra_rebuttal_srob_further'
 TREND = REPO / 'parking/rudra_rebuttal_trend_of_srob'
+TRANSFER = REPO / 'parking/rudra_rebuttal_cross_task_srob'
 PLOTS = UNIT / 'plots'
 FONT = 11
 
@@ -70,9 +72,11 @@ def main():
         traces = list(csv.DictReader(handle))
     plot_height = bottom_height - 0.98
     key_width = plot_height / 2
-    key_left = width - key_width - 0.25
+    transfer_left = fig.axes[4].get_position().x0 * width
+    transfer_width = fig.axes[4].get_position().width * width
+    key_left = transfer_left - 0.75 - key_width
     ax = fig.add_axes([0.67 / width, 0.80 / height,
-                       (key_left - 1.15 - 0.67) / width, plot_height / height])
+                       (key_left - 0.85 - 0.67) / width, plot_height / height])
     key_ax = fig.add_axes([key_left / width, 0.80 / height, key_width / width, plot_height / height])
     x = np.array([model['parameter_billions'] for model in models])
     dense_x = np.geomspace(x.min(), x.max(), 250)
@@ -111,6 +115,37 @@ def main():
         key_ax.text(j, i, str(rank + 1), ha='center', va='center', fontsize=7,
                     color='white' if rank < 16 else 'black')
     key_ax.spines[['top', 'right']].set_visible(True)
+    transfer_ax = fig.add_axes([transfer_left / width, 0.80 / height,
+                                transfer_width / width, plot_height / height])
+    with (TRANSFER / 'tables/cross_task_truthful_to_harmbench_points.csv').open() as handle:
+        transfer_points = list(csv.DictReader(handle))
+    with (TRANSFER / 'tables/cross_task_truthful_to_harmbench_slopes.csv').open() as handle:
+        transfer_fits = {row['split']: row for row in csv.DictReader(handle)}
+    handles = []
+    for split, color in (('ID', 'black'), ('OOD', '#8B1E1E')):
+        selected = [row for row in transfer_points if row['split'] == split]
+        transfer_x = np.array([float(row['srob']) for row in selected])
+        transfer_y = np.array([float(row['asr_gain']) for row in selected])
+        fit = transfer_fits[split]
+        line_x = np.array([transfer_x.min(), transfer_x.max()])
+        transfer_ax.plot(line_x, float(fit['intercept']) + float(fit['slope']) * line_x,
+                         color=color, linewidth=1.8)
+        transfer_ax.scatter(transfer_x, transfer_y, s=9, color=color, zorder=3)
+        handles.append(Line2D([0], [0], color=color, linewidth=1.8, marker='o',
+                              markersize=3, label=split))
+    transfer_ax.set_title('Cross-task\n$S_{\\mathrm{rob}}$ transfer', fontsize=FONT,
+                          fontweight='bold', pad=8)
+    transfer_ax.set_xlabel(r'TruthfulQA $S_{\mathrm{rob}}$', fontsize=FONT)
+    transfer_ax.set_ylabel('ASR behavior gain', fontsize=FONT)
+    transfer_ax.set_xlim(0, 0.225)
+    transfer_ax.set_xticks([0, 0.1, 0.2])
+    transfer_ax.yaxis.set_major_locator(plt.MaxNLocator(4))
+    transfer_ax.tick_params(labelsize=FONT)
+    transfer_ax.margins(y=0.20)
+    transfer_ax.spines[['top', 'right']].set_visible(False)
+    transfer_ax.legend(handles=handles, loc='upper right', frameon=False, fontsize=7,
+                        handlelength=1.0, handletextpad=0.3, borderpad=0.1,
+                        labelspacing=0.1)
     PLOTS.mkdir(exist_ok=True)
     for suffix in ('png', 'pdf'):
         fig.savefig(PLOTS / f'fig_srob_extend.{suffix}', dpi=600, facecolor='white')
