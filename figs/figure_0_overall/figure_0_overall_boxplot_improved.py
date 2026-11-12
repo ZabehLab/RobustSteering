@@ -5,10 +5,10 @@ from itertools import permutations
 
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 from matplotlib.colors import to_rgba
 from matplotlib.patches import Patch
 from matplotlib.text import Text
+from matplotlib.transforms import Bbox
 
 import figure_0_overall as base
 
@@ -23,6 +23,8 @@ LOGO_SCALE = 0.70
 LOGO_JITTER = 0.28
 BASELINE_LINESTYLE = (0, (3, 2))
 FONT_SCALE = 1.15
+EXPORT_BOUNDS = (0.0586779513888889, 0.17116666666666663,
+                 15.964165185866014, 5.524083333333334)
 
 
 def darken(color: str, factor: float = DATA_LOGO_DARKEN) -> str:
@@ -68,6 +70,11 @@ def logo_offsets(ax: plt.Axes, points: list[dict], images: dict[str, np.ndarray]
         heights.append((ys.max() - ys.min() + 1) * pixels_per_source_pixel)
     y = ax.transData.transform([(0, float(point["score"])) for point in points])[:, 1]
     x_scale = ax.transData.transform((1, 0))[0] - ax.transData.transform((0, 0))[0]
+    # Include the visible logo width when reserving each series' own column.
+    limits = 0.39 - np.array(widths) / (2 * x_scale)
+    if np.any(limits < 0):
+        raise ValueError("A logo is wider than its reserved series column")
+    candidates = [tuple(np.clip(offsets, -limits, limits)) for offsets in permutations(slots)]
 
     def overlap(offsets: tuple[float, ...]) -> float:
         area = 0.0
@@ -79,7 +86,7 @@ def logo_offsets(ax: plt.Axes, points: list[dict], images: dict[str, np.ndarray]
                     0, (heights[i] + heights[j]) / 2 + 2 - dy)
         return area
 
-    return min(permutations(slots), key=overlap)
+    return min(candidates, key=overlap)
 
 
 def draw_box_panel(
@@ -97,7 +104,7 @@ def draw_box_panel(
 ) -> None:
     if group_gap is None:
         group_gap = 2.42 if len(conditions) <= 2 else 2.08
-    width = 0.46
+    width = 0.23
     centers = np.arange(len(conditions), dtype=float) * group_gap
     displayed_range = ymax - ymin
     ax.set_xlim(centers[0] - 0.86, centers[-1] + 0.86)
@@ -130,13 +137,13 @@ def draw_box_panel(
                 widths=width,
                 patch_artist=True,
                 showfliers=False,
+                showcaps=False,
                 whis=(0, 100),
                 manage_ticks=False,
                 boxprops={
-                    "facecolor": "none",
-                    "edgecolor": color,
-                    "linewidth": BOX_LINEWIDTH,
-                    "linestyle": linestyle,
+                    "facecolor": to_rgba(color, 0.30),
+                    "edgecolor": "none",
+                    "linewidth": 0,
                 },
                 medianprops={"color": color, "linewidth": MEDIAN_LINEWIDTH},
                 whiskerprops={"color": color, "linewidth": BOX_LINEWIDTH, "linestyle": linestyle},
@@ -175,8 +182,11 @@ def draw_box_panel(
     )
     ax.yaxis.grid(True, color="#E2E5E8", linewidth=0.7, zorder=0)
     ax.set_axisbelow(True)
-    sns.despine(ax=ax, trim=True, offset=6)
-    # Restore the full bottom spine after trimming the original left spine.
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.spines[["left", "bottom"]].set_visible(True)
+    ax.spines[["left", "bottom"]].set_linewidth(1.0)
+    ax.spines["left"].set_bounds(*ax.get_ylim())
+    ax.spines["left"].set_position(("outward", 0))
     ax.spines["bottom"].set_bounds(*ax.get_xlim())
     ax.spines["bottom"].set_position(("outward", 0))
 
@@ -210,11 +220,11 @@ def draw_model_legend(ax: plt.Axes, logo_images: dict[str, np.ndarray]) -> None:
         color="black",
     )
     families = ["GPT", "LLaMA", "Qwen", "Phi", "Granite", "OLMo"]
-    y_positions = np.linspace(0.84, 0.32, len(families))
+    y_positions = np.linspace(0.90, 0.36, len(families))
     for family, y in zip(families, y_positions, strict=True):
-        base.add_logo(ax, logo_images, family, 0.22, float(y), LOGO_SCALE * 0.084)
+        base.add_logo(ax, logo_images, family, 0.20, float(y), LOGO_SCALE * 0.084)
         ax.text(
-            0.40,
+            0.32,
             y,
             family,
             ha="left",
@@ -340,32 +350,29 @@ def main() -> None:
     fig.legend(
         handles=[
             Patch(
-                facecolor="none",
-                edgecolor=base.GRAY,
-                linewidth=BOX_LINEWIDTH,
-                linestyle=BASELINE_LINESTYLE,
+                facecolor=to_rgba(base.GRAY, 0.30),
+                edgecolor="none",
                 label="Best competitor",
             ),
             Patch(
-                facecolor="none",
-                edgecolor=base.TEAL,
-                linewidth=BOX_LINEWIDTH,
+                facecolor=to_rgba(base.TEAL, 0.30),
+                edgecolor="none",
                 label=r"$H_\infty$ (ours)",
             ),
         ],
         loc="lower center",
-        bbox_to_anchor=(0.49, 0.02),
+        bbox_to_anchor=(0.49, 0.07),
         ncol=2,
         fontsize=15,
-        handlelength=1.9,
-        handleheight=0.95,
-        columnspacing=2.4,
-        handletextpad=0.65,
+        handlelength=1.2,
+        handleheight=0.70,
+        columnspacing=1.0,
+        handletextpad=0.35,
     )
 
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
-    export_bbox = fig.get_tightbbox(renderer).padded(0.05)
+    export_bbox = Bbox.from_bounds(*EXPORT_BOUNDS)
     label_centers = []
     for ax in axes[:4]:
         bounds = ax.yaxis.label.get_window_extent(renderer)
