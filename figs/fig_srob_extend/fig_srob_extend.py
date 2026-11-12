@@ -149,6 +149,24 @@ def main():
     transfer_ax.legend(handles=handles, loc='upper right', frameon=False, fontsize=7,
                         handlelength=1.0, handletextpad=0.3, borderpad=0.1,
                         labelspacing=0.1)
+    # Reserve space for y-axis labels, with larger gaps between benchmarks.
+    top_axes = fig.axes[:5]
+    left = top_axes[0].get_position().x0
+    right = top_axes[-1].get_position().x1
+    gutters = np.array([0.78, 1.08, 0.78, 1.08]) / width
+    panel_width = (right - left - gutters.sum()) / len(top_axes)
+    for index, top_ax in enumerate(top_axes):
+        position = top_ax.get_position()
+        top_ax.set_position([left, position.y0, panel_width, position.height])
+        if index < len(gutters):
+            left += panel_width + gutters[index]
+    for heading, (first, last) in zip(fig.texts, ((0, 1), (2, 3), (4, 4)), strict=True):
+        group_left = top_axes[first].get_position().x0
+        group_right = top_axes[last].get_position().x1
+        heading.set_x((group_left + group_right) / 2)
+        rule_y = heading.get_position()[1] - 0.14 / height
+        fig.add_artist(Line2D([group_left, group_right], [rule_y, rule_y],
+                              transform=fig.transFigure, color='#c9c9c9', linewidth=0.8))
     PLOTS.mkdir(exist_ok=True)
     for suffix in ('png', 'pdf'):
         fig.savefig(PLOTS / f'fig_srob_extend.{suffix}', dpi=600, facecolor='white')
