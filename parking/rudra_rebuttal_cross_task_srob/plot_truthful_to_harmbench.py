@@ -8,6 +8,7 @@ import json
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import numpy as np
 from scipy.stats import linregress
 
@@ -26,8 +27,8 @@ def main() -> None:
     plt.rcParams.update({"font.family": "Arial", "font.size": 11, "axes.labelsize": 12,
                          "axes.titlesize": 12, "axes.spines.top": False,
                          "axes.spines.right": False, "pdf.fonttype": 42})
-    fig, axes = plt.subplots(1, 2, figsize=(4.3, 3.8))
-    for ax, split, color in zip(axes, ("ID", "OOD"), ("black", "#8B1E1E"), strict=True):
+    fig, ax = plt.subplots(figsize=(3.4, 3.8))
+    for split, color in zip(("ID", "OOD"), ("black", "#8B1E1E"), strict=True):
         selected = []
         for source_model, target_model in PAIRS:
             srob_values = {row["srob"] for row in truthful if row["benchmark"] == "TruthfulQA"
@@ -53,15 +54,18 @@ def main() -> None:
                      "slope": float(fit.slope), "intercept": float(fit.intercept)})
         curve_x = np.linspace(x.min(), x.max(), 100)
         ax.plot(curve_x, fit.intercept + fit.slope * curve_x, color=color, linewidth=1.8)
-        ax.scatter(x, y, color="black", s=9, zorder=3)
-        ax.set(title=split, xlabel=r"TruthfulQA $S_{\mathrm{rob}}$", ylabel="ASR gain",
-               xlim=(0.01, 0.225), xticks=[0, 0.1, 0.2])
-        ax.title.set_color(color)
-        ax.title.set_fontweight("bold")
-        ax.yaxis.set_major_locator(plt.MaxNLocator(4))
-        ax.margins(y=0.20)
-    fig.suptitle("Cross task Srob transfer", fontsize=12, fontweight="bold", y=0.98)
-    fig.subplots_adjust(left=0.18, right=0.96, bottom=0.23, top=0.84, wspace=0.75)
+        ax.scatter(x, y, color=color, s=9, zorder=3)
+    ax.set(xlabel=r"TruthfulQA $S_{\mathrm{rob}}$", ylabel="ASR gain",
+           xlim=(0.01, 0.225), xticks=[0, 0.1, 0.2])
+    ax.yaxis.set_major_locator(plt.MaxNLocator(4))
+    ax.margins(y=0.20)
+    ax.legend(handles=[Line2D([0], [0], color=color, linewidth=1.8, marker="o",
+                              markersize=3, label=split)
+                       for split, color in (("ID", "black"), ("OOD", "#8B1E1E"))],
+              loc="upper right", frameon=False, fontsize=9)
+    fig.suptitle(r"Cross-task $S_{\mathrm{rob}}$ transfer", fontsize=12,
+                 fontweight="bold", y=0.98)
+    fig.subplots_adjust(left=0.23, right=0.96, bottom=0.20, top=0.87)
     plots, tables = UNIT / "plots", UNIT / "tables"
     plots.mkdir(exist_ok=True)
     tables.mkdir(exist_ok=True)
