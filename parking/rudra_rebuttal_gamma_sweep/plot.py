@@ -43,7 +43,7 @@ def collect_results():
             values.append({'point': point, 'rho': rho,
                            'gamma': None if rho == 0 else manifest['gamma_star'] / rho,
                            'condition': condition, 'n': len(rows),
-                           'successes': successes, 'asr_percent': 100. * proportion,
+                           'successes': successes, 'asr_percent': 100. * successes / len(rows),
                            'asr_se_percent': 100. * sqrt(proportion * (1. - proportion) / len(rows))})
         if len(values) == 2:
             results.extend(values)
@@ -57,7 +57,7 @@ def make_plot():
     tables.mkdir(exist_ok=True)
     plots.mkdir(exist_ok=True)
     with (tables / 'gamma_sweep.csv').open('w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=list(results[0]))
+        writer = csv.DictWriter(f, fieldnames=list(results[0]), lineterminator='\n')
         writer.writeheader()
         writer.writerows(results)
     plt.rcParams.update({'font.family': 'sans-serif', 'font.sans-serif': ['Arial', 'DejaVu Sans'],
@@ -80,7 +80,7 @@ def make_plot():
     ax.grid(axis='y', alpha=.18)
     ax.legend(frameon=False)
     ax.set_title('Qwen2.5-0.5B-Instruct · HarmBench', fontsize=12, fontweight='bold', pad=12)
-    for x, label, rotation, offset in [(0., 'LQR (8D)', 90, 11), (1., 'H∞', 270, -11)]:
+    for x, label, rotation, offset in [(0., 'LQR', 90, 11), (1., 'H∞', 270, -11)]:
         ax.axvline(x, color='#454545', linewidth=1.1, zorder=1)
         ax.annotate(label, xy=(x, .95), xycoords=('data', 'axes fraction'),
                     xytext=(offset, 0), textcoords='offset points', rotation=rotation,
