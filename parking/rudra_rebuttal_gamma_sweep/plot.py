@@ -62,7 +62,7 @@ def make_plot():
         writer.writerows(results)
     plt.rcParams.update({'font.family': 'sans-serif', 'font.sans-serif': ['Arial', 'DejaVu Sans'],
                          'font.size': 12, 'axes.spines.top': False, 'axes.spines.right': False})
-    fig, ax = plt.subplots(figsize=(6.2, 4.3))
+    fig, ax = plt.subplots(figsize=(4.96, 3.44))
     for condition, label, color in [('direct', 'ID · Direct', 'black'),
                                      ('human_jailbreak', 'OOD · Jailbreak', '#8B1E1E')]:
         subset = [r for r in results if r['condition'] == condition]
@@ -75,19 +75,16 @@ def make_plot():
         ax.plot([r['rho'] for r in subset], [r['asr_percent'] for r in subset],
                 '-o', color=color, label=label, linewidth=1.8, markersize=5, zorder=3)
     ax.set(xlabel=r'$\rho_{\mathrm{rob}}$',
-           ylabel='Attack success rate (%)', xlim=(-.025, 1.025), ylim=(0, None))
+           ylabel='Attack success rate (%)', xlim=(-.13, 1.13), ylim=(0, None))
     ax.set_xticks([0, .2, .4, .6, .8, 1.])
-    ax.yaxis.set_label_coords(-.145, .5)
+    ax.spines['bottom'].set_bounds(0., 1.)
     ax.grid(axis='y', alpha=.18)
-    ax.legend(frameon=False)
-    ax.set_title('Nominal and robust steering form a continuum',
-                 fontsize=12, fontweight='bold', pad=12)
-    for x, label, rotation, offset in [(0., 'LQR', 90, -40), (1., 'H∞', 270, 15)]:
+    ax.legend(frameon=False, loc='lower left', bbox_to_anchor=(.115, .04), borderaxespad=0)
+    for x, text_x, label, rotation in [(0., -.065, 'LQR', 90), (1., 1.065, 'H∞', 270)]:
         ax.axvline(x, color='#454545', linewidth=1.1, zorder=1)
-        ax.annotate(label, xy=(x, .95), xycoords=('data', 'axes fraction'),
-                    xytext=(offset, 0), textcoords='offset points', rotation=rotation,
-                    ha='center', va='top', fontsize=14, fontweight='bold')
-    fig.subplots_adjust(left=.20, right=.94, top=.87, bottom=.17)
+        ax.text(text_x, .95, label, transform=ax.get_xaxis_transform(), rotation=rotation,
+                ha='center', va='top', fontsize=14, fontweight='bold')
+    fig.subplots_adjust(left=.20, right=.97, top=.96, bottom=.20)
     fig.savefig(plots / 'gamma_sweep.png', dpi=600)
     fig.savefig(plots / 'gamma_sweep.pdf')
     plt.close(fig)
