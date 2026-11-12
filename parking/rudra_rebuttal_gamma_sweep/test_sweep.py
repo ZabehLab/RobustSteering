@@ -53,7 +53,7 @@ class FixedGammaTests(unittest.TestCase):
 
 
 class SweepTests(unittest.TestCase):
-    def test_plot_reports_binomial_standard_error_on_the_matched_sample(self):
+    def test_plot_reports_sample_sem_on_the_matched_sample(self):
         from . import plot, sweep
         from parking.rudra_rebuttal_mached_calib.inputs import write_json
         from robust_steerability.judges.specs import scorer_cache_path
@@ -75,7 +75,8 @@ class SweepTests(unittest.TestCase):
             self.assertEqual(len(results), 4)
             for row in results:
                 self.assertEqual(row['asr_percent'], 10.)
-                self.assertAlmostEqual(row['asr_se_percent'], 3.)
+                expected_sem = torch.tensor([1.] * 10 + [0.] * 90, dtype=torch.float64).std().item() * 10
+                self.assertAlmostEqual(row['asr_se_percent'], expected_sem)
 
     def test_sampling_is_matched_balanced_and_deterministic(self):
         from .sweep import select_records
