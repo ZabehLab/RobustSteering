@@ -76,13 +76,14 @@ def make_plot():
         ax.plot([r['rho'] for r in subset], [r['asr_percent'] for r in subset],
                 '-o', color=color, label=label, linewidth=1.8, markersize=5, zorder=3)
     ax.set(xlabel=r'$\rho_{\mathrm{rob}}$',
-           ylabel='Attack success rate (%) ↓', xlim=(-.025, 1.025), ylim=(0, None))
+           ylabel='Attack success rate (%) ↓', xlim=(0., 1.025), ylim=(0, None))
     ax.set_xticks([0, .2, .4, .6, .8, 1.],
                   labels=['0.00\nLQR', '0.2', '0.4', '0.6', '0.8', '1.0\nH∞'])
     ticks = ax.get_xticklabels()
     ticks[0].set_fontweight('bold')
     ticks[-1].set_fontweight('bold')
     ticks[-1].set_color('#007C7C')
+    ax.axvline(1., color='#007C7C', linewidth=2.2, zorder=2)
     ax.grid(axis='y', alpha=.18)
     ax.legend(frameon=False, loc='lower left')
     fig.subplots_adjust(left=.21, right=.97, top=.97, bottom=.21)
