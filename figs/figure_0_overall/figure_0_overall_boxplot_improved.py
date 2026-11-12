@@ -9,6 +9,7 @@ from matplotlib.colors import to_rgba
 from matplotlib.patches import Patch
 from matplotlib.text import Text
 from matplotlib.transforms import Bbox
+from PIL import Image, ImageFilter
 
 import figure_0_overall as base
 
@@ -21,7 +22,7 @@ MEDIAN_LINEWIDTH = 1.05
 DATA_LOGO_DARKEN = 0.80
 LOGO_SCALE = 0.70
 LOGO_JITTER = 0.28
-BASELINE_LINESTYLE = (0, (3, 2))
+BASELINE_LOGO_GRAY = "#72777F"
 FONT_SCALE = 1.15
 EXPORT_BOUNDS = (0.0586779513888889, 0.17116666666666663,
                  15.964165185866014, 5.524083333333334)
@@ -34,7 +35,7 @@ def darken(color: str, factor: float = DATA_LOGO_DARKEN) -> str:
     return "#" + "".join(f"{round(channel * factor * 255):02X}" for channel in rgb)
 
 
-def tinted_logo(image: np.ndarray, color: str) -> np.ndarray:
+def tinted_logo(image: np.ndarray, color: str, *, strengthen_strokes: bool = False) -> np.ndarray:
     """Tint a logo using its transparency and luminance as the silhouette mask.
 
     The older alpha-only transformation turned light and multicolour assets into
@@ -50,6 +51,9 @@ def tinted_logo(image: np.ndarray, color: str) -> np.ndarray:
         + 0.0722 * source[..., 2]
     )
     mask = alpha * np.clip(1.25 - luminance, 0.28, 1.0)
+    if strengthen_strokes:
+        mask = np.asarray(Image.fromarray(np.round(mask * 255).astype(np.uint8)).filter(
+            ImageFilter.MaxFilter(3)), dtype=np.float32) / 255
     output = np.empty_like(source)
     output[..., :3] = np.asarray(to_rgba(color)[:3])
     output[..., 3] = mask
@@ -104,18 +108,20 @@ def draw_box_panel(
 ) -> None:
     if group_gap is None:
         group_gap = 2.42 if len(conditions) <= 2 else 2.08
-    width = 0.23
+    width = 0.184
     centers = np.arange(len(conditions), dtype=float) * group_gap
     displayed_range = ymax - ymin
     ax.set_xlim(centers[0] - 0.86, centers[-1] + 0.86)
     ax.set_ylim(ymin - 0.055 * displayed_range, ymax)
     series_logo_images = {
         "baseline": {
-            family: tinted_logo(image, darken(base.GRAY))
+            family: tinted_logo(image, BASELINE_LOGO_GRAY,
+                                strengthen_strokes=family in {"GPT", "Granite"})
             for family, image in logo_images.items()
         },
         "ours": {
-            family: tinted_logo(image, darken(base.TEAL))
+            family: tinted_logo(image, darken(base.TEAL),
+                                strengthen_strokes=family in {"GPT", "Granite"})
             for family, image in logo_images.items()
         },
     }
@@ -130,7 +136,6 @@ def draw_box_panel(
         ):
             points = list(values[key])
             scores = [float(point["score"]) for point in points]
-            linestyle = BASELINE_LINESTYLE if key == "baseline" else "solid"
             ax.boxplot(
                 [scores],
                 positions=[position],
@@ -146,12 +151,12 @@ def draw_box_panel(
                     "linewidth": 0,
                 },
                 medianprops={"color": color, "linewidth": MEDIAN_LINEWIDTH},
-                whiskerprops={"color": color, "linewidth": BOX_LINEWIDTH, "linestyle": linestyle},
+                whiskerprops={"color": color, "linewidth": BOX_LINEWIDTH, "linestyle": "solid"},
                 capprops={"color": color, "linewidth": BOX_LINEWIDTH},
                 zorder=2,
             )
 
-            offsets = logo_offsets(ax, points, logo_images)
+            offsets = logo_offsets(ax, points, series_logo_images[key])
             for point, offset in zip(points, offsets, strict=True):
                 base.add_logo(
                     ax,
