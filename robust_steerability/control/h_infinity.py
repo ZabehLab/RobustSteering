@@ -9,6 +9,7 @@ collects gains and the complete diagnostic surface.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 
 import torch
 
@@ -244,6 +245,52 @@ class HInfinityController(SynthesizedController):
         self.diagnostics = diagnostics or {}
 
     @classmethod
+    def synthesize_at_gamma(
+        cls,
+        problem: FiniteHorizonControlProblem,
+        gamma: float,
+        *,
+        gamma_star: float | None = None,
+        device: str | torch.device | None = None,
+        numerical_tolerance: float = 1e-7,
+    ) -> HInfinityController:
+        """Solve at a specified attenuation level without searching for it.
+
+        ``gamma_star`` optionally records an independently computed feasibility
+        boundary; this method does not estimate that boundary or apply a margin.
+        An infeasible solve returns a controller whose online use is prohibited.
+        """
+
+        validate_control_problem(problem)
+        if problem.disturbance_channels is None:
+            raise ValueError("H-infinity synthesis requires disturbance_channels")
+        if not math.isfinite(gamma) or gamma <= 0:
+            raise ValueError("gamma must be finite and positive")
+        if not math.isfinite(numerical_tolerance) or numerical_tolerance <= 0:
+            raise ValueError("numerical_tolerance must be finite and positive")
+        if gamma_star is not None and (not math.isfinite(gamma_star) or gamma_star <= 0):
+            raise ValueError("gamma_star must be finite and positive when supplied")
+        target_device = device if device is not None else problem.dynamics.device
+        with torch.inference_mode():
+            result = _solve_prepared_gamma(
+                _prepare_problem(problem, target_device), gamma,
+                numerical_tolerance=numerical_tolerance, collect=True,
+            )
+        assert result.gains is not None and result.diagnostics is not None
+        diagnostics = {
+            **result.diagnostics,
+            "synthesis": "fixed_gamma",
+            "gamma_star": gamma_star,
+            "gamma_used": gamma,
+            "feedback_convention": "u[k] = K[k] x[k]",
+        }
+        solution = ControllerSolution(
+            controller="h_infinity", gains=result.gains.detach().cpu(),
+            feasible=result.feasible, gamma_star=gamma_star, diagnostics=diagnostics,
+        )
+        return cls.from_solution(problem, solution).to(target_device)
+
+    @classmethod
     def synthesize(
         cls,
         problem: FiniteHorizonControlProblem,
@@ -405,7 +452,8 @@ class HInfinityController(SynthesizedController):
         validate_controller_solution(problem, solution)
         if solution.controller != "h_infinity":
             raise ValueError("solution.controller must be 'h_infinity'")
-        if solution.feasible and solution.gamma_star is None:
+        if (solution.feasible and solution.gamma_star is None
+                and solution.diagnostics.get("synthesis") != "fixed_gamma"):
             raise ValueError("feasible H-infinity solution must report gamma_star")
         return cls(
             gains=solution.gains,

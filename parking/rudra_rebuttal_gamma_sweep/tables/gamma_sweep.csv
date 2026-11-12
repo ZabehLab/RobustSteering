@@ -1,0 +1,5 @@
+point,rho,gamma,condition,n,successes,asr_percent
+lqr,0.0,,direct,100,20,20.0
+lqr,0.0,,human_jailbreak,100,14,14.0
+hinf,0.9900990099009901,0.3293459415435791,direct,100,17,17.0
+hinf,0.9900990099009901,0.3293459415435791,human_jailbreak,100,3,3.0
