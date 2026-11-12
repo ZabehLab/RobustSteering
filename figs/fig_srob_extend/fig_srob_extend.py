@@ -139,7 +139,7 @@ def main():
     transfer_ax.set_title('Cross-task\n$S_{\\mathrm{rob}}$ transfer', fontsize=FONT,
                           fontweight='bold', pad=8)
     transfer_ax.set_xlabel(r'TruthfulQA $S_{\mathrm{rob}}$', fontsize=FONT)
-    transfer_ax.set_ylabel('Transferred relative ASR gain', fontsize=FONT)
+    transfer_ax.set_ylabel('Relative HarmBench ASR gain', fontsize=FONT)
     transfer_ax.set_xlim(0, 0.225)
     transfer_ax.set_xticks([0, 0.1, 0.2])
     transfer_ax.yaxis.set_major_locator(plt.MaxNLocator(4))
