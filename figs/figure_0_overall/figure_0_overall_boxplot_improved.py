@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import to_rgba
 from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
 from matplotlib.text import Text
 from matplotlib.transforms import Bbox
 from PIL import Image, ImageFilter
@@ -257,6 +258,8 @@ def hierarchy_heading(
         fontweight="bold",
         color="black",
     )
+    fig.add_artist(Line2D([left, right], [0.905, 0.905], transform=fig.transFigure,
+                          color="#C9C9C9", linewidth=0.8))
 
 
 def main() -> None:
@@ -282,7 +285,7 @@ def main() -> None:
     grid = fig.add_gridspec(
         1,
         9,
-        width_ratios=[1.48, 0.68, 1.48, 0.68, 3.65, 0.68, 1.48, 0.68, 0.92],
+        width_ratios=[1.48, 0.68, 1.48, 0.8625, 3.4675, 0.68, 1.48, 0.68, 0.92],
         left=0.055,
         right=0.985,
         bottom=0.225,
@@ -385,6 +388,9 @@ def main() -> None:
             ((bounds.x0 + bounds.x1) / 2, (bounds.y0 + bounds.y1) / 2)))
     for text in fig.findobj(Text):
         text.set_fontsize(text.get_fontsize() * FONT_SCALE)
+    for ax in axes[:4]:
+        for text in [ax.xaxis.label, ax.yaxis.label, *ax.get_xticklabels(), *ax.get_yticklabels()]:
+            text.set_fontsize(text.get_fontsize() * 0.95)
     for ax, center in zip(axes[:4], label_centers, strict=True):
         ax.yaxis.label.set_verticalalignment("center")
         ax.yaxis.set_label_coords(*center, transform=fig.transFigure)
