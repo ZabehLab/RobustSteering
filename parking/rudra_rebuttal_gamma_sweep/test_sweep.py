@@ -1,7 +1,10 @@
 """Checks for fixed-gamma synthesis, frozen sampling, and staged execution."""
 
 from dataclasses import replace
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 import torch
 
@@ -72,6 +75,83 @@ class SweepTests(unittest.TestCase):
         self.assertEqual(COARSE, (.2, .4, .6, .8))
         self.assertEqual(FINE, (.1, .3, .5, .7, .9))
         self.assertEqual(len(set(COARSE + FINE)), 9)
+
+    def test_worker_generates_matching_rows_and_resumes_without_regeneration(self):
+        from . import sweep
+        from parking.rudra_rebuttal_mached_calib import workers
+        from parking.rudra_rebuttal_mached_calib.inputs import write_json, read_json
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            records = {'direct': [
+                {'prompt_id': f'p{i}', 'behavior_id': f'b{i}', 'behavior': 'fixture',
+                 'context': '', 'functional_category': 'standard', 'semantic_category': 'fixture',
+                 'text': 'fixture', 'model_input': 'fixture'} for i in range(100)]}
+            write_json(root / 'inputs/records.json', records)
+            write_json(root / 'inputs/manifest.json', {'fixture': True})
+            point = 'rho_0.2'
+            (root / 'controllers').mkdir()
+            (root / 'controllers' / f'{point}.pt').write_bytes(b'fixture')
+            work = root / 'work.json'
+            write_json(work, {'kind': 'generate', 'items': [
+                {'point': point, 'condition': 'direct', 'shard': 0}]})
+            candidate = {'status': 'complete', 'rho': .2, 'gamma': 1.5}
+            def tensors(path):
+                if path.name == f'{point}.pt':
+                    return candidate
+                return {}
+            def completions(_model, _tokenizer, prompts, **kwargs):
+                self.assertFalse(kwargs['use_cache'])
+                self.assertEqual(kwargs['max_new_tokens'], 512)
+                return ['fixture response'] * len(prompts), [2] * len(prompts)
+            class Model:
+                class generation_config:
+                    eos_token_id = 1
+                class config:
+                    eos_token_id = 1
+            with patch.object(sweep, 'ROOT', root), \
+                 patch.object(sweep.torch.cuda, 'set_device'), \
+                 patch.object(sweep, 'load_tensors', side_effect=tensors), \
+                 patch.object(sweep, 'SetpointCalibration'), \
+                 patch.object(sweep, 'load_model', return_value=(Model(), None)), \
+                 patch.object(sweep, 'candidate_policy', return_value=None), \
+                 patch.object(workers, 'generate_completions', side_effect=completions) as generate:
+                sweep.worker(work, 'cuda:0')
+                path = workers.generation_path(root, sweep.task_for(point, 'direct', 0))
+                rows = read_json(path)['repetitions'][0]['rows']
+                self.assertEqual(len(rows), 50)
+                self.assertEqual(generate.call_count, 4)
+                sweep.worker(work, 'cuda:0')
+                self.assertEqual(generate.call_count, 4)
+
+    def test_run_schedules_only_missing_stage_points(self):
+        from . import sweep, plot
+        from parking.rudra_rebuttal_mached_calib.inputs import read_json, write_json
+        from robust_steerability.judges.specs import scorer_cache_path
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            calls = []
+            def launch(kind, items, logs):
+                calls.append((kind, len(items)))
+                if kind == 'generate':
+                    for item in items:
+                        path = sweep.generation_path(root, sweep.task_for(
+                            item['point'], item['condition'], item['shard']))
+                        write_json(path, {'status': 'complete'})
+                else:
+                    for item in items:
+                        write_json(scorer_cache_path(sweep.evaluation_root(), Path(item), sweep.SCORER),
+                                   {'status': 'complete'})
+            with patch.object(sweep, 'ROOT', root), patch.object(sweep, 'prepare'), \
+                 patch.object(plot, 'make_plot'), patch.object(sweep, 'launch', side_effect=launch):
+                sweep.run('coarse')
+                self.assertEqual(calls, [('generate', 16), ('classify', 16)])
+                self.assertEqual(read_json(next((root / 'logs').glob('*/run.json')))['status'], 'complete')
+                calls.clear()
+                sweep.run('coarse')
+                self.assertEqual(calls, [('generate', 0), ('classify', 0)])
+                calls.clear()
+                sweep.run('fine')
+                self.assertEqual(calls, [('generate', 20), ('classify', 20)])
 
 
 if __name__ == '__main__':

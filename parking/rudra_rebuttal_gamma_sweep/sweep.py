@@ -220,7 +220,7 @@ def worker(work: Path, device: str) -> None:
         selected = sorted(records[condition], key=lambda r: (len(r['text']), r['prompt_id']))[shard::2]
         identity = {'manifest': configuration_hash(manifest), 'rho': candidate['rho'],
                     'gamma': candidate['gamma'], 'controller_sha256': file_hash(ROOT / 'controllers' / f'{point}.pt'),
-                    'prompt_hash': configuration_hash(selected), 'shard': shard,
+                    'prompt_hash': configuration_hash({'records': selected}), 'shard': shard,
                     'batch_size': BATCH_SIZE, 'use_cache': False, 'max_new_tokens': 512}
         run_generation_task(ROOT, task_for(point, condition, shard), selected, identity,
                             model, tokenizer, policy, BATCH_SIZE)
