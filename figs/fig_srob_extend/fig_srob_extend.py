@@ -47,8 +47,8 @@ def main():
             for text in ax.get_legend().get_texts():
                 text.set_fontsize(7)
         position = ax.get_position()
-        ax.set_position([position.x0, position.y0 + .2 * position.height,
-                         position.width, .8 * position.height])
+        ax.set_position([position.x0, position.y0 + .28 * position.height,
+                         position.width, .72 * position.height])
     for text in fig.texts:
         text.set_fontsize(FONT)
     fig.canvas.draw()
