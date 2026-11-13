@@ -19,7 +19,7 @@ def draw_alignment(fig, ax, colorbar_axis):
     alignment = read(ROOT / 'alignment_n050.json')
     comparisons = {r['alternative']: r for r in
                    read(ROOT / 'alignment_comparisons_n050.json')['comparisons']}
-    variants = ('empirical', 'isotropic', 'rotated')
+    variants = METHODS[2:]
     values = [alignment['alignment'][v] for v in variants]
     layers = np.asarray(alignment['layers'])
     jitter = np.random.default_rng(SEED + 3).uniform(-.075, .075, size=len(layers))
@@ -36,7 +36,7 @@ def draw_alignment(fig, ax, colorbar_axis):
     for position, points in enumerate(values):
         dots = ax.scatter(position + jitter, points, c=layers, cmap=cmap, norm=norm,
                           s=24, edgecolors='none', linewidths=0, zorder=3)
-    ax.set(xticks=np.arange(3), xticklabels=['Empirical', 'Isotropic', 'Rotated'],
+    ax.set(xticks=np.arange(3), xticklabels=LABELS[2:],
            ylabel='OOD alignment w/ calibration', ylim=(0, 1.13))
     ax.set_yticks(np.linspace(0, 1, 6))
     for endpoint, y, alternative in zip((1, 2), (1.03, 1.08), variants[1:], strict=True):
@@ -45,6 +45,8 @@ def draw_alignment(fig, ax, colorbar_axis):
         ax.text(endpoint / 2, y, comparisons[alternative]['stars'], ha='center', va='center',
                 fontsize=9, bbox={'facecolor': 'white', 'edgecolor': 'none', 'pad': .2})
     plt.setp(ax.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor')
+    ax.get_xticklabels()[0].set_color(TEAL)
+    ax.get_xticklabels()[0].set_fontweight('bold')
     ax.tick_params(axis='both', direction='out', length=3.5, width=.8, pad=5)
     ax.grid(axis='y', color='#e5e7eb', linewidth=.7)
     ax.set_axisbelow(True)
@@ -69,12 +71,18 @@ def report():
                          'axes.spines.top': False, 'axes.spines.right': False,
                          'axes.linewidth': .8, 'axes.edgecolor': '#454545', 'pdf.fonttype': 42}):
         # Preserve the selected performance panels' physical width, height, and spacing.
-        fig = plt.figure(figsize=(8.0, 3.8))
         bottom, height = .33, .61
         width = 4.8 * (.98 - .17) / (2 + .55)
-        axes = [fig.add_axes([x / 8.0, bottom, width / 8.0, height])
-                for x in (.816, 3.2 + .816, 3.2 + .816 + width * 1.55)]
-        colorbar_axis = fig.add_axes([(.816 + width + .144) / 8.0, bottom, .08 / 8.0, height])
+        alignment_width = width * .6
+        saved_width = width - alignment_width
+        figure_width = 8.0 - saved_width
+        fig = plt.figure(figsize=(figure_width, 3.8))
+        alignment_axis = fig.add_axes([.816 / figure_width, bottom,
+                                      alignment_width / figure_width, height])
+        axes = [alignment_axis, *[fig.add_axes([x / figure_width, bottom, width / figure_width, height])
+                for x in (3.2 + .816 - saved_width, 3.2 + .816 + width * 1.55 - saved_width)]]
+        colorbar_axis = fig.add_axes([(.816 + alignment_width + .144) / figure_width,
+                                     bottom, .08 / figure_width, height])
         draw_alignment(fig, axes[0], colorbar_axis)
         for ax, (metric, label) in zip(axes[1:], [('asr_pct', 'Attack success rate (%) ↓'),
                                                 ('overall', 'AXBench overall ↑')], strict=True):
