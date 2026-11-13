@@ -38,8 +38,8 @@ def main():
         fig = plt.gcf()
     for ax in fig.axes:
         metric = ax.get_ylabel().split(' behavior gain')[0]
-        ax.set_ylabel({'T': 'Relative truthfulness gain', 'ASR': 'Relative ASR change',
-                       'Accuracy': 'Relative accuracy gain'}[metric], fontsize=FONT)
+        ax.set_ylabel({'T': 'Relative truthfulness gain ↑', 'ASR': 'Relative ASR change ↓',
+                       'Accuracy': 'Relative accuracy gain ↑'}[metric], fontsize=FONT)
         ax.xaxis.label.set_fontsize(FONT)
         ax.title.set_fontsize(FONT)
         ax.tick_params(labelsize=FONT)
@@ -161,7 +161,7 @@ def main():
     transfer_ax.set_title('Cross-task\n$S_{\\mathrm{rob}}$ transfer', fontsize=FONT,
                           fontweight='bold', pad=8)
     transfer_ax.set_xlabel(r'TruthfulQA $S_{\mathrm{rob}}$', fontsize=FONT)
-    transfer_ax.set_ylabel('Relative HarmBench ASR gain', fontsize=FONT)
+    transfer_ax.set_ylabel('Relative HarmBench ASR gain ↓', fontsize=FONT)
     transfer_ax.set_xlim(0, 0.225)
     transfer_ax.set_xticks([0, 0.1, 0.2])
     transfer_ax.yaxis.set_major_locator(plt.MaxNLocator(4))
