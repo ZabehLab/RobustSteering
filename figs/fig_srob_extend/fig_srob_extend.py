@@ -183,7 +183,7 @@ def main():
                        '-o', color=color, label=label, linewidth=1.6, markersize=3, zorder=3)
     sweep_ax.set(xlim=(0., 1.025), ylim=(0, None))
     sweep_ax.set_ylabel('Attack success rate (%) ↓', fontsize=FONT)
-    sweep_ax.set_title('Continuous\ncontroller family', fontsize=FONT, fontweight='bold', pad=8)
+    sweep_ax.set_title('LQR–H∞\ncontroller continuum', fontsize=FONT, fontweight='bold', pad=8)
     sweep_ax.set_xlabel(r'$\rho_{\mathrm{rob}}=\gamma^\star/\gamma$', fontsize=FONT)
     sweep_ax.set_xticks([0, .2, .4, .6, .8, 1.], ['0.00', '0.2', '0.4', '0.6', '0.8', '1.0'])
     sweep_ax.tick_params(labelsize=FONT)
