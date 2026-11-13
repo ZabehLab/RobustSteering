@@ -1,4 +1,4 @@
-"""Separate ASR and AXBench overall in ID/OOD columns."""
+"""ID/OOD ASR with separate overall and fluency views of the paper-judge scores."""
 
 import matplotlib
 matplotlib.use('Agg')
@@ -14,9 +14,9 @@ CONDITIONS = [('id', 'ID', GRAY), ('ood', 'OOD', RED)]
 METHOD_LABELS = [LABELS[method] for method in METHODS]
 
 
-def report():
-    source = read(ROOT / 'diagnostics/performance_with_baselines.json')['results']
+def plot_metric(source, bottom_metric):
     lookup = {(r['method'], r['condition']): r for r in source}
+    bottom_label = {'overall': 'AXBench overall ↑', 'fluency': 'Fluency ↑'}[bottom_metric]
     with plt.rc_context({'font.family': 'sans-serif', 'font.sans-serif': ['Arial', 'DejaVu Sans'],
                          'font.size': 12, 'axes.labelsize': 12, 'axes.titlesize': 13,
                          'xtick.labelsize': 12, 'ytick.labelsize': 12,
@@ -27,7 +27,7 @@ def report():
             selected = [lookup[method, condition] for method in METHODS]
             for row, (metric, ylabel) in enumerate([
                 ('asr_pct', 'Attack success rate (%) ↓'),
-                ('overall', 'AXBench overall ↑'),
+                (bottom_metric, bottom_label),
             ]):
                 ax = axes[row, column]
                 colors = [TEAL if method == 'empirical' else color for method in METHODS]
@@ -49,9 +49,22 @@ def report():
             axes[0, column].set_title(label, fontweight='bold', color='black' if column == 0 else RED, pad=12)
         fig.subplots_adjust(left=.10, right=.98, top=.92, bottom=.19, wspace=.16, hspace=.14)
         for extension in ('png', 'pdf'):
-            fig.savefig(UNIT / f'geometry_performance_2x2.{extension}', dpi=600)
+            fig.savefig(UNIT / f'geometry_performance_2x2_{bottom_metric}.{extension}', dpi=600)
         plt.close(fig)
-    print('Saved ID/OOD columns with separate ASR and AXBench overall rows.')
+
+
+def report():
+    payload = read(ROOT / 'paper_axbench_n200/results.json')
+    source = payload['results']
+    assert payload['status'] == 'complete'
+    assert payload['judge'] == 'gpt-4o-mini-2024-07-18'
+    assert len(source) == 2 * len(METHODS)
+    assert {(r['method'], r['condition']) for r in source} == {
+        (method, condition) for method in METHODS for condition, _, _ in CONDITIONS}
+    assert all(r['count'] == 200 for r in source)
+    for metric in ('overall', 'fluency'):
+        plot_metric(source, metric)
+    print('Saved 200-case paper-judge overall and fluency variants.')
 
 
 if __name__ == '__main__':
