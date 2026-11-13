@@ -37,7 +37,7 @@ def draw_alignment(fig, ax, colorbar_axis):
         dots = ax.scatter(position + jitter, points, c=layers, cmap=cmap, norm=norm,
                           s=24, edgecolors='none', linewidths=0, zorder=3)
     ax.set(xticks=np.arange(3), xticklabels=LABELS[2:],
-           ylabel='OOD cov. alignment\nw/ calib.', ylim=(0, 1.13))
+           ylabel='OOD alignment\nw/ calib.', ylim=(0, 1.13))
     ax.set_yticks(np.linspace(0, 1, 6))
     for endpoint, y, alternative in zip((1, 2), (1.03, 1.08), variants[1:], strict=True):
         ax.plot([0, 0, endpoint, endpoint], [y - .012, y, y, y - .012],
@@ -87,21 +87,24 @@ def report():
         colorbar_axis = fig.add_axes([(alignment_x + alignment_width + .144) / figure_width,
                                      bottom, .08 / figure_width, height])
         draw_alignment(fig, alignment_axis, colorbar_axis)
-        for ax, (metric, label) in zip(axes, [('asr_pct', 'Attack success\nrate (%) ↓'),
-                                                ('overall', 'AXBench overall ↑')], strict=True):
-            ax.bar(np.arange(len(METHODS)), [r[metric] for r in rows], width=.40,
-                   color=[TEAL if m == 'empirical' else GRAY for m in METHODS],
+        panels = [('asr_pct', 'Attack success\nrate (%) ↓', METHODS[:-1]),
+                  ('fluency', 'Fluency ↑', METHODS[2:])]
+        for ax, (metric, label, methods) in zip(axes, panels, strict=True):
+            panel_rows = [lookup[m] for m in methods]
+            labels = [LABELS[METHODS.index(m)] for m in methods]
+            ax.bar(np.arange(len(methods)), [r[metric] for r in panel_rows], width=.40,
+                   color=[TEAL if m == 'empirical' else GRAY for m in methods],
                    edgecolor='none', zorder=3)
-            ax.set_xticks(np.arange(len(METHODS)), LABELS)
+            ax.set_xticks(np.arange(len(methods)), labels)
             plt.setp(ax.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor')
-            ax.set_xlim(-.6, len(METHODS) - .4)
+            ax.set_xlim(-.6, len(methods) - .4)
             ax.tick_params(axis='both', direction='out', length=3.5, width=.8, pad=5)
             ax.grid(axis='y', color='#e5e7eb', linewidth=.7)
             ax.set_axisbelow(True)
-            ax.set_ylim(0, max(r[metric] for r in rows) * 1.10)
+            ax.set_ylim(0, max(r[metric] for r in panel_rows) * 1.10)
             ax.yaxis.set_major_locator(MaxNLocator(nbins=4, min_n_ticks=3, integer=metric == 'asr_pct'))
             ax.set_ylabel(label)
-            tick = ax.get_xticklabels()[METHODS.index('empirical')]
+            tick = ax.get_xticklabels()[methods.index('empirical')]
             tick.set_color(TEAL)
             tick.set_fontweight('bold')
         for extension in ('png', 'pdf'):
