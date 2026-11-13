@@ -61,15 +61,18 @@ def make_plot():
         writer.writeheader()
         writer.writerows(results)
     plt.rcParams.update({'font.family': 'sans-serif', 'font.sans-serif': ['Arial', 'DejaVu Sans'],
-                         'font.size': 12, 'axes.spines.top': False, 'axes.spines.right': False})
-    fig, ax = plt.subplots(figsize=(3.472, 3.472))
+                         'font.size': 12, 'axes.labelsize': 12,
+                         'xtick.labelsize': 12, 'ytick.labelsize': 12,
+                         'axes.spines.top': False, 'axes.spines.right': False,
+                         'axes.linewidth': .8, 'axes.edgecolor': '#454545', 'pdf.fonttype': 42})
+    fig, ax = plt.subplots(figsize=(4.2, 4.0))
     ax.set_box_aspect(1)
     for condition, label, color in [('direct', 'ID · Direct', 'black'),
                                      ('human_jailbreak', 'OOD · Jailbreak', '#8B1E1E')]:
         subset = [r for r in results if r['condition'] == condition]
         ax.plot([r['rho'] for r in subset], [r['asr_percent'] for r in subset],
-                '-o', color=color, label=label, linewidth=1.8, markersize=5, zorder=3)
-    ax.set(xlabel=r'$\rho_{\mathrm{rob}}$',
+                '-o', color=color, label=label, linewidth=1.6, markersize=4.5, zorder=3)
+    ax.set(xlabel=r'$\rho_{\mathrm{rob}}=\frac{\gamma^\star}{\gamma}$',
            ylabel='Attack success rate (%) ↓', xlim=(0., 1.025), ylim=(0, None))
     ax.set_xticks([0, .2, .4, .6, .8, 1.],
                   labels=['0.00', '0.2', '0.4', '0.6', '0.8', '1.0'])
@@ -77,14 +80,15 @@ def make_plot():
     ticks[-1].set_color('#007C7C')
     label_row = -.20
     ax.xaxis.set_label_coords(.5, label_row)
-    ax.xaxis.label.set_verticalalignment('baseline')
+    ax.xaxis.label.set_verticalalignment('center')
     for x, label, color in [(0., 'LQR', 'black'), (1., 'H∞', '#007C7C')]:
         ax.text(x, label_row, label, transform=ax.get_xaxis_transform(),
-                ha='center', va='baseline', fontsize=12, fontweight='bold', color=color)
-    ax.grid(axis='y', alpha=.18)
+                ha='center', va='center', fontsize=12, fontweight='bold', color=color)
+    ax.tick_params(axis='both', direction='out', length=3.5, width=.8, pad=5)
+    ax.grid(axis='y', color='#e5e7eb', linewidth=.7)
+    ax.set_axisbelow(True)
     ax.legend(frameon=False, loc='lower left')
-    # A 1.96-inch square matches the rendered ASR label at the fixed text size.
-    fig.subplots_adjust(left=.29, right=.855, top=.835, bottom=.27)
+    fig.subplots_adjust(left=.22, right=.95, top=.96, bottom=.23)
     fig.savefig(plots / 'gamma_sweep.png', dpi=600)
     fig.savefig(plots / 'gamma_sweep.pdf')
     plt.close(fig)
