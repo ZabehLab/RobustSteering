@@ -1,0 +1,13 @@
+method,condition,count,asr_pct,non_attack_rate,axbench_overall,non_attack_x_axbench_overall,axbench_score_source,asr_score_source
+original,id,50,30.0,0.7,1.004,0.7028,paper_judge,cached HarmBench test classifier
+lqr_8d,id,50,14.0,0.86,1.088,0.9356800000000001,paper_judge,cached HarmBench test classifier
+empirical,id,50,8.0,0.92,0.774,0.71208,assistant_audit,cached HarmBench test classifier
+isotropic,id,50,0.0,1.0,0.0,0.0,assistant_audit,cached HarmBench test classifier
+diagonal,id,50,8.0,0.92,0.578,0.53176,assistant_audit,cached HarmBench test classifier
+rotated,id,50,12.0,0.88,0.9,0.792,assistant_audit,cached HarmBench test classifier
+original,ood,50,24.0,0.76,0.16,0.1216,paper_judge,cached HarmBench test classifier
+lqr_8d,ood,50,16.0,0.84,0.08,0.0672,paper_judge,cached HarmBench test classifier
+empirical,ood,50,6.0,0.94,0.326,0.30644,assistant_audit,cached HarmBench test classifier
+isotropic,ood,50,0.0,1.0,0.0,0.0,assistant_audit,cached HarmBench test classifier
+diagonal,ood,50,0.0,1.0,0.152,0.152,assistant_audit,cached HarmBench test classifier
+rotated,ood,50,0.0,1.0,0.266,0.266,assistant_audit,cached HarmBench test classifier
