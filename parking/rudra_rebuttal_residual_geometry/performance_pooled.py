@@ -52,6 +52,12 @@ def pooled_results():
 def plot_metric(results, right_metric):
     right_label = {'fluency': 'Fluency ↑', 'overall': 'AXBench overall ↑'}[right_metric]
     stem = 'geometry_performance_1x2_pooled' + ('_overall' if right_metric == 'overall' else '')
+    methods, labels = list(METHODS), list(METHOD_LABELS)
+    if right_metric == 'overall':
+        methods[-2:] = ['rotated', 'isotropic']
+        labels[-2:] = ['H∞ (Rand. rot.)', 'H∞ (Isotropic)']
+    lookup = {row['method']: row for row in results}
+    selected = [lookup[method] for method in methods]
     with plt.rc_context({'font.family': 'sans-serif', 'font.sans-serif': ['Arial', 'DejaVu Sans'],
                          'font.size': 12, 'axes.labelsize': 12,
                          'xtick.labelsize': 12, 'ytick.labelsize': 12,
@@ -60,10 +66,10 @@ def plot_metric(results, right_metric):
         fig, axes = plt.subplots(1, 2, figsize=(4.8, 3.8), sharey=False)
         for ax, (metric, label) in zip(axes, [('asr_pct', 'Attack success rate (%) ↓'),
                                             (right_metric, right_label)], strict=True):
-            colors = [TEAL if method == 'empirical' else GRAY for method in METHODS]
-            ax.bar(np.arange(len(METHODS)), [r[metric] for r in results],
+            colors = [TEAL if method == 'empirical' else GRAY for method in methods]
+            ax.bar(np.arange(len(methods)), [r[metric] for r in selected],
                    width=.40, color=colors, edgecolor='none', zorder=3)
-            ax.set_xticks(np.arange(len(METHODS)), METHOD_LABELS)
+            ax.set_xticks(np.arange(len(methods)), labels)
             plt.setp(ax.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor')
             ax.set_xlim(-.6, len(METHODS) - .4)
             ax.tick_params(axis='both', direction='out', length=3.5, width=.8, pad=5)
@@ -72,7 +78,7 @@ def plot_metric(results, right_metric):
             ax.set_ylim(0, max(r[metric] for r in results) * 1.10)
             ax.yaxis.set_major_locator(MaxNLocator(nbins=4, min_n_ticks=3, integer=metric == 'asr_pct'))
             ax.set_ylabel(label)
-            tick = ax.get_xticklabels()[METHODS.index('empirical')]
+            tick = ax.get_xticklabels()[methods.index('empirical')]
             tick.set_color(TEAL)
             tick.set_fontweight('bold')
         fig.subplots_adjust(left=.17, right=.98, top=.94, bottom=.33, wspace=.55)
