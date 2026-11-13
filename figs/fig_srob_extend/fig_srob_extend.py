@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
-from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter, NullLocator
+from matplotlib.ticker import LogFormatterMathtext, LogLocator, NullFormatter, NullLocator
 import numpy as np
 from scipy.interpolate import PchipInterpolator
 
@@ -44,6 +44,9 @@ def main():
         if ax.get_legend() is not None:
             for text in ax.get_legend().get_texts():
                 text.set_fontsize(7)
+        position = ax.get_position()
+        ax.set_position([position.x0, position.y0 + .2 * position.height,
+                         position.width, .8 * position.height])
     for text in fig.texts:
         text.set_fontsize(FONT)
     fig.canvas.draw()
@@ -91,16 +94,16 @@ def main():
                s=9, color='#202020', alpha=0.65, linewidths=0, zorder=4)
     ax.set_xscale('log')
     ax.set_yscale('log')
-    ax.set_xticks(x, [f"{model['model']}\n{model['parameter_billions']:.2f}B" for model in models], fontsize=FONT)
-    plt.setp(ax.get_xticklabels(), rotation=45, ha='right', rotation_mode='anchor')
+    ax.set_xticks(x, ['GPT-2 XL', 'Gemma 2B', 'Llama 8B', 'Qwen 14B', 'OLMo 32B'], fontsize=FONT)
+    plt.setp(ax.get_xticklabels(), rotation=25, ha='right', rotation_mode='anchor')
     ax.xaxis.set_minor_locator(NullLocator())
     ax.yaxis.set_major_locator(LogLocator(base=10))
-    ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _: f'{value:g}'))
+    ax.yaxis.set_major_formatter(LogFormatterMathtext(base=10))
     ax.yaxis.set_minor_formatter(NullFormatter())
     ax.set(xlim=(x.min() / 1.13, x.max() * 1.13),
            ylim=(min(row['srob'] for row in rows) / 1.25, max(row['srob'] for row in rows) * 1.3))
-    ax.set_xlabel('Model size (billions of parameters;\n' + r'$\log_{10}$ scale)', fontsize=FONT)
-    ax.set_ylabel(r'TruthfulQA $S_{\mathrm{rob}}$ ($\log_{10}$ scale)', fontsize=FONT)
+    ax.set_xlabel('Model size (B; log scale)', fontsize=FONT)
+    ax.set_ylabel(r'TruthfulQA $S_{\mathrm{rob}}$', fontsize=FONT)
     ax.set_title(r'Consistent $S_{\mathrm{rob}}$ patterns', fontsize=FONT,
                  fontweight='bold', pad=8)
     ax.tick_params(labelsize=FONT)
