@@ -44,6 +44,7 @@ def main():
         ax.title.set_fontsize(FONT)
         ax.tick_params(labelsize=FONT)
         if ax.get_legend() is not None:
+            ax.get_legend().set_frame_on(False)
             for text in ax.get_legend().get_texts():
                 text.set_fontsize(7)
         position = ax.get_position()
