@@ -4,11 +4,12 @@ import hashlib
 
 from robust_steerability.judges.specs import scorer_cache_path
 
-from .geometry import VARIANTS
+from .geometry import VARIANTS, ACTIVE_VARIANTS
 from .pipeline import ROOT, SOURCE, SCORER, read, frozen_json, sha, blocks, generation_path
 
 BASELINES = ('original', 'lqr_8d')
 METHODS = (*BASELINES, *VARIANTS)
+ACTIVE_METHODS = (*BASELINES, *ACTIVE_VARIANTS)
 LABELS = {
     'original': 'Original', 'lqr_8d': 'LQR (8D)',
     'empirical': 'H∞ (Empirical)', 'isotropic': 'H∞ (Isotropic)',
@@ -59,8 +60,8 @@ def prepare_baselines(count=50):
             })
 
 
-def load_cases(method, condition, *, score_source='assistant_audit', count=50):
-    """Return matched scores without substituting a different judge for missing data."""
+def load_responses(method, condition, count=50):
+    """Read paired cached responses and their official HarmBench verdicts."""
     if method not in METHODS or condition not in ('id', 'ood'):
         raise ValueError('Unknown method or condition')
     ids = [pair[condition]['prompt_id'] for pair in read(ROOT / f'sample_n{count:03d}.json')]
@@ -78,6 +79,13 @@ def load_cases(method, condition, *, score_source='assistant_audit', count=50):
             assert scoring['status'] == 'complete' and all(r['valid'] for r in scoring['rows'])
             asr.update({r['prompt_id']: r['score'] for r in scoring['rows']})
     assert [r['prompt_id'] for r in responses] == ids
+    return [{**r, 'harmbench_attack_success': asr[r['prompt_id']]} for r in responses]
+
+
+def load_cases(method, condition, *, score_source='assistant_audit', count=50):
+    """Return matched scores without substituting a different judge for missing data."""
+    responses = load_responses(method, condition, count)
+    ids = [r['prompt_id'] for r in responses]
     if score_source == 'assistant_audit':
         audit = read(ROOT / 'manual_audit/scores.json')['rows']
         additional_path = ROOT / 'manual_audit/baseline_scores.json'
@@ -113,5 +121,5 @@ def load_cases(method, condition, *, score_source='assistant_audit', count=50):
         raise ValueError('Select assistant_audit or paper_judge explicitly')
     assert all(0 <= scores[pid][component] <= 2 for pid in ids for component in COMPONENTS)
     return [{**r, **{k: scores[r['prompt_id']][k] for k in COMPONENTS},
-             'harmbench_attack_success': asr[r['prompt_id']], 'score_source': score_source}
+             'score_source': score_source}
             for r in responses]

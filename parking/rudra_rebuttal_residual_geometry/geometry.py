@@ -7,6 +7,7 @@ import random
 import torch
 
 VARIANTS = ('empirical', 'isotropic', 'diagonal', 'rotated')
+ACTIVE_VARIANTS = ('empirical', 'isotropic', 'rotated')
 
 
 def residual_covariance(residuals: torch.Tensor) -> torch.Tensor:

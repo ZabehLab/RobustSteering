@@ -23,7 +23,7 @@ from robust_steerability.modeling.huggingface import load_access_token
 from robust_steerability.modeling.tokenization import tokenize_prompts, RAW_TEXT_TOKENIZATION
 from robust_steerability.runtime.policy import ReducedStateSetpointPolicy
 
-from .geometry import VARIANTS, covariance_variants, covariance_factor, residual_covariance, covariance_alignment, paired_sample
+from .geometry import VARIANTS, ACTIVE_VARIANTS, covariance_variants, covariance_factor, residual_covariance, covariance_alignment, paired_sample
 
 UNIT = Path(__file__).resolve().parent
 REPO = UNIT.parents[1]
@@ -353,6 +353,39 @@ def launch(tasks, devices, count):
         time.sleep(1)
 
 
+def run_performance(count, devices):
+    """Extend response blocks and official ASR scores without recomputing alignment."""
+    from .score_store import prepare_baselines
+    prepare(count)
+    prepare_baselines(count)
+    status_path = ROOT / f'performance_run_n{count:03d}.json'
+    status = {'status': 'generating', 'count': count, 'variants': list(ACTIVE_VARIANTS),
+              'devices': devices, 'pid': os.getpid(), 'started': time.time()}
+    save(status_path, status)
+    try:
+        tasks = [('generate', [v]) for v in ACTIVE_VARIANTS if v != 'empirical' and any(
+            not generation_path(v, c, i).exists()
+            or read(generation_path(v, c, i))['status'] != 'complete'
+            for c in ('id', 'ood') for i, _ in blocks(count, c))]
+        launch(tasks, devices, count)
+        status['status'] = 'asr_scoring'
+        save(status_path, status)
+        tasks = [('classify', [v]) for v in ACTIVE_VARIANTS if v != 'empirical' and any(
+            not scorer_cache_path(ROOT, generation_path(v, c, i), SCORER).exists()
+            or read(scorer_cache_path(ROOT, generation_path(v, c, i), SCORER))['status'] != 'complete'
+            for c in ('id', 'ood') for i, _ in blocks(count, c))]
+        launch(tasks, devices, count)
+        from .performance import asr_results
+        save(ROOT / f'asr_performance_n{count:03d}.json', {'results': asr_results(count)})
+        status.update(status='asr_complete', finished=time.time())
+    except BaseException as error:
+        status.update(status='failed', error=str(error), finished=time.time())
+        raise
+    finally:
+        save(status_path, status)
+    print(f'Performance ASR complete for {count} paired behaviors; no alignment recomputation.', flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', choices=['prepare', 'run', 'worker', 'report'])
@@ -361,24 +394,17 @@ def main():
     parser.add_argument('--device', default='cuda:0')
     parser.add_argument('--kind', choices=['geometry', 'generate', 'classify'])
     parser.add_argument('--variants', nargs='*', default=[])
+    parser.add_argument('--performance-only', action='store_true')
     args = parser.parse_args()
     torch.set_num_threads(4 if args.device == 'cpu' else 1)
     if args.command == 'prepare':
         prepare(args.count)
     elif args.command == 'run':
-        prepare(args.count)
-        save(ROOT / 'run_status.json', {'status': 'running', 'count': args.count, 'pid': os.getpid(), 'started': time.time()})
-        save(ROOT / 'implementation.json', {p.name: sha(p) for p in UNIT.glob('*.py')})
-        try:
-            launch([('geometry', []), *[('generate', [v]) for v in VARIANTS[1:]]], args.devices, args.count)
-            launch([('classify', ['isotropic', 'diagonal']), ('classify', ['rotated'])], args.devices, args.count)
-            from .plots import report
-            report(args.count)
-        except BaseException as error:
-            save(ROOT / 'run_status.json', {'status': 'failed', 'count': args.count,
-                                            'error': str(error), 'finished': time.time()})
-            raise
-        save(ROOT / 'run_status.json', {'status': 'complete', 'count': args.count, 'finished': time.time()})
+        run_performance(args.count, args.devices)
+        if not args.performance_only:
+            launch([('geometry', [])], args.devices, args.count)
+            from .plots import plot_alignment
+            plot_alignment(args.count)
     elif args.command == 'worker':
         if args.device.startswith('cuda:'):
             torch.cuda.set_device(args.device)
@@ -389,8 +415,10 @@ def main():
         else:
             classify_worker(args.variants, args.count, args.device)
     else:
-        from .plots import report
-        report(args.count)
+        from .plots import plot_alignment
+        from .performance_grid import report
+        plot_alignment(args.count)
+        report()
 
 
 if __name__ == '__main__':

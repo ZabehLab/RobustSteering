@@ -60,6 +60,20 @@ class GeometryTests(unittest.TestCase):
         self.assertEqual(len({p['id']['behavior_id'] for p in large}), 100)
         self.assertTrue(all(p['id']['behavior_id'] == p['ood']['behavior_id'] for p in large))
 
+    def test_performance_extension_to_200_keeps_pilot_and_drops_diagonal(self):
+        from .geometry import ACTIVE_VARIANTS
+        from .score_store import ACTIVE_METHODS
+        direct = [{'behavior_id': str(i), 'prompt_id': f'{i}-id'} for i in range(240)]
+        ood = [{**r, 'prompt_id': f"{r['behavior_id']}-{j}", 'template_index': j}
+               for r in direct for j in range(5)]
+        source = {'evaluation': {'direct': direct, 'human_jailbreak': ood}}
+        pilot = paired_sample(source, 50, seed=20261112)
+        extended = paired_sample(source, 200, seed=20261112)
+        self.assertEqual(pilot, extended[:50])
+        self.assertEqual(Counter(p['ood']['template_index'] for p in extended), {j: 40 for j in range(5)})
+        self.assertEqual(ACTIVE_VARIANTS, ('empirical', 'isotropic', 'rotated'))
+        self.assertNotIn('diagonal', ACTIVE_METHODS)
+
     def test_hidden_collector_matches_calibration_without_language_model_head(self):
         from transformers import Qwen2Config, Qwen2ForCausalLM
         from transformers.tokenization_utils_base import BatchEncoding

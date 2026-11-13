@@ -7,7 +7,7 @@ from matplotlib.ticker import MaxNLocator
 import numpy as np
 
 from .pipeline import ROOT, UNIT, read
-from .score_store import METHODS, LABELS
+from .score_store import ACTIVE_METHODS as METHODS, LABELS
 
 TEAL, GRAY, RED = '#007C7C', '#c9c9c9', '#8B1E1E'
 CONDITIONS = [('id', 'ID', GRAY), ('ood', 'OOD', RED)]

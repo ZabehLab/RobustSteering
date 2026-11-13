@@ -10,7 +10,7 @@ from matplotlib.patches import Patch, Rectangle
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 
-from .geometry import VARIANTS
+from .geometry import VARIANTS, ACTIVE_VARIANTS
 from .pipeline import ROOT, UNIT, SCORER, SEED, read, save, sample, blocks, generation_path, tensor_read
 from robust_steerability.judges.specs import scorer_cache_path
 
@@ -92,9 +92,10 @@ def plot_alignment(count):
         import torch
         tensor_save(ROOT / f'alignment_bootstrap_n{count:03d}.pt',
                     {'mean_alignment_differences': torch.from_numpy(bootstrap)})
-    comparisons = read(comparison_path)['comparisons']
+    comparison_lookup = {r['alternative']: r for r in read(comparison_path)['comparisons']}
+    comparisons = [comparison_lookup[v] for v in ACTIVE_VARIANTS if v != 'empirical']
     layers = np.asarray(alignment['layers'])
-    values = [alignment['alignment'][variant] for variant in VARIANTS]
+    values = [alignment['alignment'][variant] for variant in ACTIVE_VARIANTS]
     jitter = np.random.default_rng(SEED + 3).uniform(-.075, .075, size=len(layers))
     boundaries = np.arange(layers.min() - .5, layers.max() + 1.5)
     cmap = matplotlib.colormaps['viridis'].resampled(len(layers))
@@ -106,7 +107,7 @@ def plot_alignment(count):
         fig, ax = plt.subplots(figsize=(4.8, 4.8))
         ax.add_patch(Rectangle((-.35, 0), .7, 1, facecolor=to_rgba(TEAL, .14),
                                edgecolor='none', zorder=.1))
-        boxes = ax.boxplot(values, positions=np.arange(4), widths=.28, patch_artist=True,
+        boxes = ax.boxplot(values, positions=np.arange(len(ACTIVE_VARIANTS)), widths=.28, patch_artist=True,
                    whis=(0, 100), showfliers=False, manage_ticks=False,
                    boxprops={'facecolor': 'white', 'edgecolor': 'none', 'linewidth': 0},
                    medianprops={'color': '#202427', 'linewidth': 1.4},
@@ -117,11 +118,11 @@ def plot_alignment(count):
             dots = ax.scatter(position + jitter, points, c=layers, cmap=cmap,
                               norm=norm, s=24,
                               edgecolors='none', linewidths=0, zorder=3)
-        ax.set(xticks=np.arange(4), xticklabels=['Empirical', 'Isotropic', 'Diagonal', 'Rotated'],
-               ylabel='OOD alignment w/ calibration', ylim=(0, 1.18))
+        ax.set(xticks=np.arange(len(ACTIVE_VARIANTS)), xticklabels=['Empirical', 'Isotropic', 'Rotated'],
+               ylabel='OOD alignment w/ calibration', ylim=(0, 1.13))
         ax.set_yticks(np.linspace(0, 1, 6))
         ax.spines['left'].set_color('#777777')
-        for endpoint, y, comparison in zip((1, 2, 3), (1.03, 1.08, 1.13), comparisons):
+        for endpoint, y, comparison in zip((1, 2), (1.03, 1.08), comparisons):
             ax.plot([0, 0, endpoint, endpoint], [y - .012, y, y, y - .012],
                     color='#45494d', linewidth=1.4)
             ax.text(endpoint / 2, y, comparison['stars'],
