@@ -42,8 +42,8 @@ def draw_alignment(fig, ax, colorbar_axis):
     for endpoint, y, alternative in zip((1, 2), (1.03, 1.08), variants[1:], strict=True):
         ax.plot([0, 0, endpoint, endpoint], [y - .012, y, y, y - .012],
                 color='#45494d', linewidth=1.4)
-        ax.text(endpoint / 2, y, comparisons[alternative]['stars'], ha='center', va='center',
-                fontsize=9, bbox={'facecolor': 'white', 'edgecolor': 'none', 'pad': .2})
+        ax.text(endpoint / 2, y + .040, comparisons[alternative]['stars'],
+                ha='center', va='top', fontsize=8)
     plt.setp(ax.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor')
     ax.get_xticklabels()[0].set_color(TEAL)
     ax.get_xticklabels()[0].set_fontweight('bold')
