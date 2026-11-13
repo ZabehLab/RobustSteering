@@ -1,4 +1,4 @@
-"""Separate ASR and fluency in ID/OOD columns."""
+"""Separate ASR and AXBench overall in ID/OOD columns."""
 
 import matplotlib
 matplotlib.use('Agg')
@@ -27,7 +27,7 @@ def report():
             selected = [lookup[method, condition] for method in METHODS]
             for row, (metric, ylabel) in enumerate([
                 ('asr_pct', 'Attack success rate (%) ↓'),
-                ('fluency', 'Fluency ↑'),
+                ('overall', 'AXBench overall ↑'),
             ]):
                 ax = axes[row, column]
                 colors = [TEAL if method == 'empirical' else color for method in METHODS]
@@ -51,7 +51,7 @@ def report():
         for extension in ('png', 'pdf'):
             fig.savefig(UNIT / f'geometry_performance_2x2.{extension}', dpi=600)
         plt.close(fig)
-    print('Saved ID/OOD columns with separate ASR and fluency rows.')
+    print('Saved ID/OOD columns with separate ASR and AXBench overall rows.')
 
 
 if __name__ == '__main__':
