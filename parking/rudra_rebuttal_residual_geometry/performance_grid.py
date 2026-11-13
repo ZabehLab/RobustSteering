@@ -3,6 +3,7 @@
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 import numpy as np
 
 from .pipeline import ROOT, UNIT, read
@@ -21,7 +22,7 @@ def report():
                          'xtick.labelsize': 12, 'ytick.labelsize': 12,
                          'axes.spines.top': False, 'axes.spines.right': False,
                          'axes.linewidth': .8, 'axes.edgecolor': '#454545', 'pdf.fonttype': 42}):
-        fig, axes = plt.subplots(2, 2, figsize=(9.6, 6.4), sharex='col', sharey='row')
+        fig, axes = plt.subplots(2, 2, figsize=(9.6, 6.4), sharex='col', sharey=False)
         for column, (condition, label, color) in enumerate(CONDITIONS):
             selected = [lookup[method, condition] for method in METHODS]
             for row, (metric, ylabel) in enumerate([
@@ -38,8 +39,8 @@ def report():
                 ax.tick_params(axis='both', direction='out', length=3.5, width=.8, pad=5)
                 ax.grid(axis='y', color='#e5e7eb', linewidth=.7)
                 ax.set_axisbelow(True)
-                ax.set_ylim(0, 32 if row == 0 else 1.2)
-                ax.set_yticks([0, 10, 20, 30] if row == 0 else [0, .4, .8, 1.2])
+                ax.set_ylim(0, max(r[metric] for r in selected) * 1.10)
+                ax.yaxis.set_major_locator(MaxNLocator(nbins=4, min_n_ticks=3, integer=row == 0))
                 if column == 0:
                     ax.set_ylabel(ylabel)
                 if row == 1:
