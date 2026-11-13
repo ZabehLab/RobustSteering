@@ -107,9 +107,10 @@ def report():
             tick = ax.get_xticklabels()[methods.index('empirical')]
             tick.set_color(TEAL)
             tick.set_fontweight('bold')
-        for letter, ax in zip('ABC', [*axes, alignment_axis], strict=True):
-            ax.text(0, 1.025, letter, transform=ax.transAxes,
-                    ha='left', va='bottom', fontsize=12, fontweight='bold')
+        for letter, ax in zip('abc', [*axes, alignment_axis], strict=True):
+            ax.annotate(letter, xy=(0, 1), xycoords='axes fraction', xytext=(-12, 6),
+                        textcoords='offset points', ha='left', va='center',
+                        fontsize=16.5, fontweight='bold', annotation_clip=False)
         for extension in ('png', 'pdf'):
             fig.savefig(UNIT / f'geometry_final_for_paper.{extension}', dpi=600)
         plt.close(fig)
