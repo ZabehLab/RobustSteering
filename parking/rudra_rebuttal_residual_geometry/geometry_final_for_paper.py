@@ -88,7 +88,7 @@ def report():
                                      bottom, .08 / figure_width, height])
         draw_alignment(fig, alignment_axis, colorbar_axis)
         panels = [('asr_pct', 'Attack success\nrate (%) ↓', METHODS[:-1]),
-                  ('fluency', 'Fluency ↑', METHODS[2:])]
+                  ('overall', 'AXBench overall ↑', METHODS[2:])]
         for ax, (metric, label, methods) in zip(axes, panels, strict=True):
             panel_rows = [lookup[m] for m in methods]
             labels = [LABELS[METHODS.index(m)] for m in methods]
