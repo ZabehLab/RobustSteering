@@ -11,8 +11,10 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
+from matplotlib.offsetbox import AnnotationBbox, HPacker, OffsetImage, TextArea
 from matplotlib.ticker import LogFormatterMathtext, LogLocator, NullFormatter, NullLocator
 import numpy as np
+from PIL import Image
 from scipy.interpolate import PchipInterpolator
 
 UNIT = Path(__file__).resolve().parent
@@ -94,15 +96,27 @@ def main():
                s=9, color='#202020', alpha=0.65, linewidths=0, zorder=4)
     ax.set_xscale('log')
     ax.set_yscale('log')
-    ax.set_xticks(x, ['GPT-2 XL', 'Gemma 2B', 'Llama 8B', 'Qwen 14B', 'OLMo 32B'], fontsize=FONT)
-    plt.setp(ax.get_xticklabels(), rotation=25, ha='right', rotation_mode='anchor')
+    ax.set_xticks(x, [''] * len(x))
+    logo_names = ['openai_transparent.png', 'google_official.png', 'llama_transparent.png',
+                  'qwen_transparent.png', 'ai2_transparent.png']
+    for model, logo_name in zip(models, logo_names, strict=True):
+        logo = Image.open(REPO / 'figs/logos' / logo_name).convert('RGBA')
+        logo = logo.crop(logo.getchannel('A').getbbox())
+        label = HPacker(children=[OffsetImage(np.asarray(logo), zoom=10 / logo.height, resample=True),
+                                  TextArea(f"{model['parameter_billions']:.2f}",
+                                           textprops={'fontsize': FONT, 'fontfamily': 'Arial'})],
+                         align='center', pad=0, sep=3)
+        ax.add_artist(AnnotationBbox(label, (model['parameter_billions'], 0),
+                                     xycoords=ax.get_xaxis_transform(), xybox=(0, -8),
+                                     boxcoords='offset points', box_alignment=(.5, 1),
+                                     frameon=False, pad=0, annotation_clip=False))
     ax.xaxis.set_minor_locator(NullLocator())
     ax.yaxis.set_major_locator(LogLocator(base=10))
     ax.yaxis.set_major_formatter(LogFormatterMathtext(base=10))
     ax.yaxis.set_minor_formatter(NullFormatter())
     ax.set(xlim=(x.min() / 1.13, x.max() * 1.13),
            ylim=(min(row['srob'] for row in rows) / 1.25, max(row['srob'] for row in rows) * 1.3))
-    ax.set_xlabel('Model size (B; log scale)', fontsize=FONT)
+    ax.set_xlabel('Model size (B; log scale)', fontsize=FONT, labelpad=20)
     ax.set_ylabel(r'TruthfulQA $S_{\mathrm{rob}}$', fontsize=FONT)
     ax.set_title(r'Consistent $S_{\mathrm{rob}}$ patterns', fontsize=FONT,
                  fontweight='bold', pad=8)
