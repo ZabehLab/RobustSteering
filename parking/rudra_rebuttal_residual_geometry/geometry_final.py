@@ -77,14 +77,15 @@ def report():
         saved_width = width - alignment_width
         figure_width = 8.0 - saved_width
         fig = plt.figure(figsize=(figure_width, 3.8))
-        alignment_axis = fig.add_axes([.816 / figure_width, bottom,
+        axes = [fig.add_axes([x / figure_width, bottom, width / figure_width, height])
+                for x in (.816, .816 + width * 1.55)]
+        alignment_x = .816 + 2 * width * 1.55
+        alignment_axis = fig.add_axes([alignment_x / figure_width, bottom,
                                       alignment_width / figure_width, height])
-        axes = [alignment_axis, *[fig.add_axes([x / figure_width, bottom, width / figure_width, height])
-                for x in (3.2 + .816 - saved_width, 3.2 + .816 + width * 1.55 - saved_width)]]
-        colorbar_axis = fig.add_axes([(.816 + alignment_width + .144) / figure_width,
+        colorbar_axis = fig.add_axes([(alignment_x + alignment_width + .144) / figure_width,
                                      bottom, .08 / figure_width, height])
-        draw_alignment(fig, axes[0], colorbar_axis)
-        for ax, (metric, label) in zip(axes[1:], [('asr_pct', 'Attack success rate (%) ↓'),
+        draw_alignment(fig, alignment_axis, colorbar_axis)
+        for ax, (metric, label) in zip(axes, [('asr_pct', 'Attack success rate (%) ↓'),
                                                 ('overall', 'AXBench overall ↑')], strict=True):
             ax.bar(np.arange(len(METHODS)), [r[metric] for r in rows], width=.40,
                    color=[TEAL if m == 'empirical' else GRAY for m in METHODS],
