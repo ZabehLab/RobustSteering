@@ -71,7 +71,7 @@ def report():
                          'axes.spines.top': False, 'axes.spines.right': False,
                          'axes.linewidth': .8, 'axes.edgecolor': '#454545', 'pdf.fonttype': 42}):
         # Preserve horizontal placement and room for the rotated category labels.
-        figure_height = 3.8 * .70
+        figure_height = 3.8 * .75
         bottom = (3.8 * .33) / figure_height
         height = 1 - bottom - (3.8 * .06) / figure_height
         width = 4.8 * (.98 - .17) / (2 + .55)
@@ -87,7 +87,7 @@ def report():
         colorbar_axis = fig.add_axes([(alignment_x + alignment_width + .144) / figure_width,
                                      bottom, .08 / figure_width, height])
         draw_alignment(fig, alignment_axis, colorbar_axis)
-        for ax, (metric, label) in zip(axes, [('asr_pct', 'Attack\nsuccess rate (%) ↓'),
+        for ax, (metric, label) in zip(axes, [('asr_pct', 'Attack success\nrate (%) ↓'),
                                                 ('overall', 'AXBench overall ↑')], strict=True):
             ax.bar(np.arange(len(METHODS)), [r[metric] for r in rows], width=.40,
                    color=[TEAL if m == 'empirical' else GRAY for m in METHODS],
