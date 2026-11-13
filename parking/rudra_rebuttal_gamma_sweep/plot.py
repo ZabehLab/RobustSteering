@@ -67,8 +67,10 @@ def make_plot():
     for condition, label, color in [('direct', 'ID · Direct', 'black'),
                                      ('human_jailbreak', 'OOD · Jailbreak', '#8B1E1E')]:
         subset = [r for r in results if r['condition'] == condition]
-        ax.plot([r['rho'] for r in subset], [r['asr_percent'] for r in subset],
-                '-o', color=color, label=label, linewidth=1.8, markersize=5, zorder=3)
+        ax.errorbar([r['rho'] for r in subset], [r['asr_percent'] for r in subset],
+                    yerr=[r['asr_se_percent'] for r in subset], fmt='-o',
+                    color=color, label=label, linewidth=1.8, markersize=5,
+                    elinewidth=.8, capsize=2, capthick=.8, zorder=3)
     ax.set(xlabel=r'$\rho_{\mathrm{rob}}$',
            ylabel='Attack success rate (%) ↓', xlim=(0., 1.025), ylim=(0, None))
     ax.set_xticks([0, .2, .4, .6, .8, 1.],
