@@ -37,7 +37,7 @@ def draw_alignment(fig, ax, colorbar_axis):
         dots = ax.scatter(position + jitter, points, c=layers, cmap=cmap, norm=norm,
                           s=24, edgecolors='none', linewidths=0, zorder=3)
     ax.set(xticks=np.arange(3), xticklabels=LABELS[2:],
-           ylabel='OOD alignment\nw/ calib.', ylim=(0, 1.13))
+           ylabel='OOD alignment w/ calib.', ylim=(0, 1.13))
     ax.set_yticks(np.linspace(0, 1, 6))
     for endpoint, y, alternative in zip((1, 2), (1.03, 1.08), variants[1:], strict=True):
         ax.plot([0, 0, endpoint, endpoint], [y - .012, y, y, y - .012],
@@ -51,7 +51,7 @@ def draw_alignment(fig, ax, colorbar_axis):
     ax.grid(axis='y', color='#e5e7eb', linewidth=.7)
     ax.set_axisbelow(True)
     colorbar = fig.colorbar(dots, cax=colorbar_axis, boundaries=boundaries, drawedges=False)
-    colorbar.set_label('Qwen2.5-0.5B-\nInstruct layers')
+    colorbar.set_label('Qwen2.5-0.5B-Instruct layers')
     colorbar.set_ticks([1, 6, 12, 18, 24])
     colorbar.minorticks_off()
     colorbar.outline.set_visible(False)
@@ -87,7 +87,7 @@ def report():
         colorbar_axis = fig.add_axes([(alignment_x + alignment_width + .144) / figure_width,
                                      bottom, .08 / figure_width, height])
         draw_alignment(fig, alignment_axis, colorbar_axis)
-        panels = [('asr_pct', 'Attack success\nrate (%) ↓', METHODS[:-1]),
+        panels = [('asr_pct', 'Attack success rate (%) ↓', METHODS[:-1]),
                   ('overall', 'AXBench overall ↑', METHODS[2:])]
         for ax, (metric, label, methods) in zip(axes, panels, strict=True):
             panel_rows = [lookup[m] for m in methods]
@@ -107,6 +107,9 @@ def report():
             tick = ax.get_xticklabels()[methods.index('empirical')]
             tick.set_color(TEAL)
             tick.set_fontweight('bold')
+        for letter, ax in zip('ABC', [*axes, alignment_axis], strict=True):
+            ax.text(0, 1.025, letter, transform=ax.transAxes,
+                    ha='left', va='bottom', fontsize=12, fontweight='bold')
         for extension in ('png', 'pdf'):
             fig.savefig(UNIT / f'geometry_final_for_paper.{extension}', dpi=600)
         plt.close(fig)
