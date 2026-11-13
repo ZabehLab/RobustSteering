@@ -71,7 +71,7 @@ def report():
                          'axes.spines.top': False, 'axes.spines.right': False,
                          'axes.linewidth': .8, 'axes.edgecolor': '#454545', 'pdf.fonttype': 42}):
         # Preserve horizontal placement and room for the rotated category labels.
-        figure_height = 3.8 * .75
+        figure_height = 3.8 * .90
         bottom = (3.8 * .33) / figure_height
         height = 1 - bottom - (3.8 * .06) / figure_height
         width = 4.8 * (.98 - .17) / (2 + .55)
