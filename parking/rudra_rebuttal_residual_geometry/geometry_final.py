@@ -37,7 +37,7 @@ def draw_alignment(fig, ax, colorbar_axis):
         dots = ax.scatter(position + jitter, points, c=layers, cmap=cmap, norm=norm,
                           s=24, edgecolors='none', linewidths=0, zorder=3)
     ax.set(xticks=np.arange(3), xticklabels=LABELS[2:],
-           ylabel='OOD alignment w/ calibration', ylim=(0, 1.13))
+           ylabel='OOD covariance\nalignment with calibration', ylim=(0, 1.13))
     ax.set_yticks(np.linspace(0, 1, 6))
     for endpoint, y, alternative in zip((1, 2), (1.03, 1.08), variants[1:], strict=True):
         ax.plot([0, 0, endpoint, endpoint], [y - .012, y, y, y - .012],
