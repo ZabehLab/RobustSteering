@@ -20,6 +20,7 @@ REPO = UNIT.parents[1]
 BEHAVIOR = REPO / 'parking/rudra_rebuttal_srob_further'
 TREND = REPO / 'parking/rudra_rebuttal_trend_of_srob'
 TRANSFER = REPO / 'parking/rudra_rebuttal_cross_task_srob'
+SWEEP = REPO / 'parking/rudra_rebuttal_gamma_sweep'
 PLOTS = UNIT / 'plots'
 FONT = 11
 
@@ -72,8 +73,10 @@ def main():
         traces = list(csv.DictReader(handle))
     plot_height = bottom_height - 0.98
     key_width = plot_height / 2
-    transfer_left = fig.axes[4].get_position().x0 * width
+    sweep_width = 1.60
+    sweep_left = fig.axes[4].get_position().x1 * width - sweep_width
     transfer_width = fig.axes[4].get_position().width * width
+    transfer_left = sweep_left - 0.75 - transfer_width
     key_left = transfer_left - 0.75 - key_width
     ax = fig.add_axes([0.67 / width, 0.80 / height,
                        (key_left - 0.85 - 0.67) / width, plot_height / height])
@@ -89,13 +92,14 @@ def main():
     ax.set_xscale('log')
     ax.set_yscale('log')
     ax.set_xticks(x, [f"{model['model']}\n{model['parameter_billions']:.2f}B" for model in models], fontsize=FONT)
+    plt.setp(ax.get_xticklabels(), rotation=45, ha='right', rotation_mode='anchor')
     ax.xaxis.set_minor_locator(NullLocator())
     ax.yaxis.set_major_locator(LogLocator(base=10))
     ax.yaxis.set_major_formatter(FuncFormatter(lambda value, _: f'{value:g}'))
     ax.yaxis.set_minor_formatter(NullFormatter())
     ax.set(xlim=(x.min() / 1.13, x.max() * 1.13),
            ylim=(min(row['srob'] for row in rows) / 1.25, max(row['srob'] for row in rows) * 1.3))
-    ax.set_xlabel(r'Model size (billions of parameters; $\log_{10}$ scale)', fontsize=FONT)
+    ax.set_xlabel('Model size (billions of parameters;\n' + r'$\log_{10}$ scale)', fontsize=FONT)
     ax.set_ylabel(r'TruthfulQA $S_{\mathrm{rob}}$ ($\log_{10}$ scale)', fontsize=FONT)
     ax.set_title(r'Consistent $S_{\mathrm{rob}}$ patterns', fontsize=FONT,
                  fontweight='bold', pad=8)
@@ -149,6 +153,31 @@ def main():
     transfer_ax.legend(handles=handles, loc='upper right', frameon=False, fontsize=7,
                         handlelength=1.0, handletextpad=0.3, borderpad=0.1,
                         labelspacing=0.1)
+    sweep_ax = fig.add_axes([sweep_left / width, 0.80 / height,
+                             sweep_width / width, plot_height / height])
+    with (SWEEP / 'tables/gamma_sweep.csv').open() as handle:
+        sweep_points = list(csv.DictReader(handle))
+    for condition, label, color in (('direct', 'ID', 'black'),
+                                     ('human_jailbreak', 'OOD', '#8B1E1E')):
+        selected = [row for row in sweep_points if row['condition'] == condition]
+        sweep_ax.plot([float(row['rho']) for row in selected],
+                       [float(row['asr_percent']) for row in selected],
+                       '-o', color=color, label=label, linewidth=1.6, markersize=3, zorder=3)
+    sweep_ax.set(xlim=(0., 1.025), ylim=(0, None))
+    sweep_ax.set_ylabel('Attack success rate (%) ↓', fontsize=FONT)
+    sweep_ax.set_xlabel(r'$\rho_{\mathrm{rob}}=\gamma^\star/\gamma$', fontsize=FONT)
+    sweep_ax.set_xticks([0, .2, .4, .6, .8, 1.], ['0.00', '0.2', '0.4', '0.6', '0.8', '1.0'])
+    sweep_ax.tick_params(labelsize=FONT)
+    sweep_ax.get_xticklabels()[-1].set_color('#007C7C')
+    sweep_ax.xaxis.set_label_coords(.5, -.20)
+    sweep_ax.xaxis.label.set_verticalalignment('baseline')
+    for endpoint, label, color in ((0., 'LQR', 'black'), (1., 'H∞', '#007C7C')):
+        sweep_ax.text(endpoint, -.20, label, transform=sweep_ax.get_xaxis_transform(),
+                       ha='center', va='baseline', fontsize=FONT, fontweight='bold', color=color)
+    sweep_ax.spines[['top', 'right']].set_visible(False)
+    sweep_ax.grid(axis='y', alpha=.18)
+    sweep_ax.legend(loc='lower left', frameon=False, fontsize=7,
+                     handlelength=1.0, handletextpad=.3, borderpad=.1, labelspacing=.1)
     # Reserve space for y-axis labels, with larger gaps between benchmarks.
     top_axes = fig.axes[:5]
     left = top_axes[0].get_position().x0
@@ -171,10 +200,25 @@ def main():
         label_x = top_axes[first].get_position().x0 - 12 / 72 / width
         fig.text(label_x, heading.get_position()[1], label, ha='left', va='center',
                   fontsize=1.5 * FONT, fontweight='bold')
-    for panel, label in ((ax, 'd'), (transfer_ax, 'e')):
+    for panel, label in ((ax, 'd'), (transfer_ax, 'e'), (sweep_ax, 'f')):
         panel.annotate(label, xy=(0, 1), xycoords='axes fraction', xytext=(-12, 6),
                         textcoords='offset points', ha='left', va='bottom',
                         fontsize=1.5 * FONT, fontweight='bold', annotation_clip=False)
+    # Extend only the bottom margin if D's angled labels need it; retain every axis's physical height.
+    fig.canvas.draw()
+    extra_bottom = max(0., .08 - fig.get_tightbbox(fig.canvas.get_renderer()).y0)
+    if extra_bottom:
+        positions = [(panel, panel.get_position().bounds) for panel in fig.axes]
+        text_positions = [(text, text.get_position()) for text in fig.texts]
+        new_height = height + extra_bottom
+        fig.set_size_inches(width, new_height)
+        for panel, (left, bottom, w, h) in positions:
+            panel.set_position([left, (bottom * height + extra_bottom) / new_height, w, h * height / new_height])
+        for text, (x_text, y_text) in text_positions:
+            text.set_position((x_text, (y_text * height + extra_bottom) / new_height))
+        for rule in fig.artists:
+            if isinstance(rule, Line2D):
+                rule.set_ydata((np.asarray(rule.get_ydata()) * height + extra_bottom) / new_height)
     PLOTS.mkdir(exist_ok=True)
     for suffix in ('png', 'pdf'):
         fig.savefig(PLOTS / f'fig_srob_extend.{suffix}', dpi=600, facecolor='white')
