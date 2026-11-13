@@ -102,9 +102,9 @@ def main():
     for model, logo_name in zip(models, logo_names, strict=True):
         logo = Image.open(REPO / 'figs/logos' / logo_name).convert('RGBA')
         logo = logo.crop(logo.getchannel('A').getbbox())
-        label = VPacker(children=[TextArea(f"{model['parameter_billions']:.2f}",
-                                           textprops={'fontsize': FONT, 'fontfamily': 'Arial'}),
-                                  OffsetImage(np.asarray(logo), zoom=10 / logo.height, resample=True)],
+        label = VPacker(children=[OffsetImage(np.asarray(logo), zoom=10 / logo.height, resample=True),
+                                  TextArea(f"{model['parameter_billions']:.2f}",
+                                           textprops={'fontsize': FONT, 'fontfamily': 'Arial'})],
                          align='center', pad=0, sep=3)
         ax.add_artist(AnnotationBbox(label, (model['parameter_billions'], 0),
                                      xycoords=ax.get_xaxis_transform(), xybox=(0, -8),
