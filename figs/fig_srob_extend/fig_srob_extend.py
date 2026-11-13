@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from matplotlib.figure import Figure
 from matplotlib.lines import Line2D
-from matplotlib.offsetbox import AnnotationBbox, HPacker, OffsetImage, TextArea
+from matplotlib.offsetbox import AnnotationBbox, VPacker, OffsetImage, TextArea
 from matplotlib.ticker import LogFormatterMathtext, LogLocator, NullFormatter, NullLocator
 import numpy as np
 from PIL import Image
@@ -102,9 +102,9 @@ def main():
     for model, logo_name in zip(models, logo_names, strict=True):
         logo = Image.open(REPO / 'figs/logos' / logo_name).convert('RGBA')
         logo = logo.crop(logo.getchannel('A').getbbox())
-        label = HPacker(children=[OffsetImage(np.asarray(logo), zoom=10 / logo.height, resample=True),
-                                  TextArea(f"{model['parameter_billions']:.2f}",
-                                           textprops={'fontsize': FONT, 'fontfamily': 'Arial'})],
+        label = VPacker(children=[TextArea(f"{model['parameter_billions']:.2f}",
+                                           textprops={'fontsize': FONT, 'fontfamily': 'Arial'}),
+                                  OffsetImage(np.asarray(logo), zoom=10 / logo.height, resample=True)],
                          align='center', pad=0, sep=3)
         ax.add_artist(AnnotationBbox(label, (model['parameter_billions'], 0),
                                      xycoords=ax.get_xaxis_transform(), xybox=(0, -8),
@@ -116,7 +116,7 @@ def main():
     ax.yaxis.set_minor_formatter(NullFormatter())
     ax.set(xlim=(x.min() / 1.13, x.max() * 1.13),
            ylim=(min(row['srob'] for row in rows) / 1.25, max(row['srob'] for row in rows) * 1.3))
-    ax.set_xlabel('Model size (B; log scale)', fontsize=FONT, labelpad=20)
+    ax.set_xlabel('Model size (B; log scale)', fontsize=FONT, labelpad=34)
     ax.set_ylabel(r'TruthfulQA $S_{\mathrm{rob}}$', fontsize=FONT)
     ax.set_title(r'Consistent $S_{\mathrm{rob}}$ patterns', fontsize=FONT,
                  fontweight='bold', pad=8)
