@@ -1,4 +1,4 @@
-"""Pool individual ID/OOD responses before computing ASR and paper-judge fluency."""
+"""Pool ID/OOD responses for ASR with paper-judge fluency or AXBench overall."""
 
 import csv
 
@@ -34,11 +34,13 @@ def pooled_results():
         results.append({'method': method, 'count_id': 200, 'count_ood': 200,
                         'count_total': len(pooled), 'successful_attacks': attacks,
                         'asr_pct': 100 * attacks / len(pooled),
-                        'fluency': sum(r['fluency'] for r in pooled) / len(pooled)})
+                        'fluency': sum(r['fluency'] for r in pooled) / len(pooled),
+                        'overall': sum(r['overall'] for r in pooled) / len(pooled)})
     save(source / 'pooled_results.json', {
         'results': results, 'judge': metadata['judge'], 'input_sha256': inputs,
         'aggregation': 'Concatenate all 200 ID and 200 OOD response-level records per method; '
-                       'ASR is the fraction classified successful and fluency is the mean rating; no exclusions',
+                       'ASR is the fraction classified successful; fluency and overall are means of '
+                       'the response-level ratings and harmonic means, respectively; no exclusions',
     })
     with (source / 'pooled_results.csv').open('w', newline='') as stream:
         writer = csv.DictWriter(stream, fieldnames=list(results[0]), lineterminator='\n')
@@ -47,21 +49,22 @@ def pooled_results():
     return results
 
 
-def report():
-    results = pooled_results()
+def plot_metric(results, right_metric):
+    right_label = {'fluency': 'Fluency ↑', 'overall': 'AXBench overall ↑'}[right_metric]
+    stem = 'geometry_performance_1x2_pooled' + ('_overall' if right_metric == 'overall' else '')
     with plt.rc_context({'font.family': 'sans-serif', 'font.sans-serif': ['Arial', 'DejaVu Sans'],
                          'font.size': 12, 'axes.labelsize': 12,
                          'xtick.labelsize': 12, 'ytick.labelsize': 12,
                          'axes.spines.top': False, 'axes.spines.right': False,
                          'axes.linewidth': .8, 'axes.edgecolor': '#454545', 'pdf.fonttype': 42}):
-        fig, axes = plt.subplots(1, 2, figsize=(9.6, 3.8), sharey=False)
+        fig, axes = plt.subplots(1, 2, figsize=(4.8, 3.8), sharey=False)
         for ax, (metric, label) in zip(axes, [('asr_pct', 'Attack success rate (%) ↓'),
-                                            ('fluency', 'Fluency ↑')], strict=True):
+                                            (right_metric, right_label)], strict=True):
             colors = [TEAL if method == 'empirical' else GRAY for method in METHODS]
             ax.bar(np.arange(len(METHODS)), [r[metric] for r in results],
                    width=.40, color=colors, edgecolor='none', zorder=3)
             ax.set_xticks(np.arange(len(METHODS)), METHOD_LABELS)
-            plt.setp(ax.get_xticklabels(), rotation=30, ha='right', rotation_mode='anchor')
+            plt.setp(ax.get_xticklabels(), rotation=60, ha='right', rotation_mode='anchor')
             ax.set_xlim(-.6, len(METHODS) - .4)
             ax.tick_params(axis='both', direction='out', length=3.5, width=.8, pad=5)
             ax.grid(axis='y', color='#e5e7eb', linewidth=.7)
@@ -72,13 +75,19 @@ def report():
             tick = ax.get_xticklabels()[METHODS.index('empirical')]
             tick.set_color(TEAL)
             tick.set_fontweight('bold')
-        fig.subplots_adjust(left=.10, right=.98, top=.94, bottom=.33, wspace=.27)
+        fig.subplots_adjust(left=.17, right=.98, top=.94, bottom=.33, wspace=.55)
         for extension in ('png', 'pdf'):
-            fig.savefig(UNIT / f'geometry_performance_1x2_pooled.{extension}', dpi=600)
+            fig.savefig(UNIT / f'{stem}.{extension}', dpi=600)
         plt.close(fig)
+
+
+def report():
+    results = pooled_results()
+    for metric in ('fluency', 'overall'):
+        plot_metric(results, metric)
     print('Pooled 200 ID + 200 OOD response-level records per method:')
     for row in results:
-        print(row['method'], f"ASR={row['asr_pct']:.2f}%, fluency={row['fluency']:.4f}")
+        print(row['method'], f"ASR={row['asr_pct']:.2f}%, fluency={row['fluency']:.4f}, overall={row['overall']:.4f}")
 
 
 if __name__ == '__main__':
