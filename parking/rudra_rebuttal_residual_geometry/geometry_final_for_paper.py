@@ -77,18 +77,17 @@ def report():
         width = 4.8 * (.98 - .17) / (2 + .55)
         alignment_width = width * .6
         saved_width = width - alignment_width
-        figure_width = 8.0 - saved_width
+        figure_width = 8.0 - saved_width - width * 1.55
         fig = plt.figure(figsize=(figure_width, figure_height))
         axes = [fig.add_axes([x / figure_width, bottom, width / figure_width, height])
-                for x in (.816, .816 + width * 1.55)]
-        alignment_x = .816 + 2 * width * 1.55
+                for x in (.816,)]
+        alignment_x = .816 + width * 1.55
         alignment_axis = fig.add_axes([alignment_x / figure_width, bottom,
                                       alignment_width / figure_width, height])
         colorbar_axis = fig.add_axes([(alignment_x + alignment_width + .144) / figure_width,
                                      bottom, .08 / figure_width, height])
         draw_alignment(fig, alignment_axis, colorbar_axis)
-        panels = [('asr_pct', 'Attack success rate (%) ↓', METHODS[:-1]),
-                  ('overall', 'AXBench overall ↑', METHODS[2:])]
+        panels = [('overall', 'AXBench overall ↑', METHODS[2:])]
         for ax, (metric, label, methods) in zip(axes, panels, strict=True):
             panel_rows = [lookup[m] for m in methods]
             labels = [LABELS[METHODS.index(m)] for m in methods]
@@ -107,7 +106,7 @@ def report():
             tick = ax.get_xticklabels()[methods.index('empirical')]
             tick.set_color(TEAL)
             tick.set_fontweight('bold')
-        for letter, ax in zip('abc', [*axes, alignment_axis], strict=True):
+        for letter, ax in zip('ab', [*axes, alignment_axis], strict=True):
             ax.annotate(letter, xy=(0, 1), xycoords='axes fraction', xytext=(-12, 6),
                         textcoords='offset points', ha='left', va='center',
                         fontsize=16.5, fontweight='bold', annotation_clip=False)
@@ -118,9 +117,9 @@ def report():
     save(ROOT / 'geometry_final_for_paper_inputs.json', {
         'input_sha256': {str(p): sha(p) for p in inputs},
         'alignment_behaviors': 50, 'performance_id_responses': 200, 'performance_ood_responses': 200,
-        'performance_judge': payload['judge'], 'method_order_performance': list(METHODS),
+        'performance_judge': payload['judge'], 'method_order_performance': list(METHODS[2:]),
     })
-    print('Saved compact paper geometry 1×3 figure using cached alignment and pooled paper-judge performance.')
+    print('Saved compact paper geometry 1×2 figure using cached alignment and pooled paper-judge performance.')
 
 
 if __name__ == '__main__':

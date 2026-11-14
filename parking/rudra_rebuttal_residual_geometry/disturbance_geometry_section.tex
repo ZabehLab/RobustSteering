@@ -1,0 +1,66 @@
+\section{Effect of Disturbance Geometry on Robust Steering}
+\label{app:disturbance-geometry}
+
+We examine how the disturbance geometry used for robust synthesis affects
+steering quality. Using Qwen2.5-0.5B-Instruct on HarmBench, we hold the
+eight-dimensional state representation, fitted dynamics, steering target,
+and costs fixed and change only the disturbance covariance used for
+synthesis. At each layer, we compare the empirical covariance $C_k$ with a
+randomly rotated covariance $UC_kU^\top$ and an isotropic covariance
+$\operatorname{tr}(C_k)I/8$, where $U$ is a fixed orthogonal matrix.
+All three preserve total disturbance variance; rotation additionally
+preserves the covariance spectrum while changing its orientation.
+Each controller is synthesized using the same $H_\infty$ procedure.
+Performance is pooled over 200 direct prompts and 200 jailbreak prompts,
+with the same generation and scoring pipeline used in the main experiments.
+
+\begingroup
+\renewcommand{\thefigure}{R2}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\linewidth]
+        {Final_Figures/geometry_final_for_paper.pdf}
+    \caption{
+    \textbf{Disturbance geometry and robust steering on
+    Qwen2.5-0.5B-Instruct.}
+    \textbf{a}: AXBench overall for empirical, randomly rotated,
+    and isotropic disturbance geometries.
+    \textbf{b}: Normalized Frobenius alignment with held-out OOD
+    residual covariances. Dots identify layers; boxes summarize
+    their distribution. Statistical significance was assessed using
+    paired bootstrap tests with Bonferroni correction
+    ($^{***}p<0.001$).
+    }
+    \label{fig:disturbance-geometry}
+\end{figure}
+\endgroup
+
+Empirical geometry provides the highest steering quality among the three
+robust controllers: AXBench overall is $0.440$ for empirical geometry and
+$0.352$ after rotation (Figure~\ref{fig:disturbance-geometry}a).
+This joint score combines concept relevance, instruction relevance, and
+fluency. Rotation therefore reduces steering quality despite preserving
+the disturbance magnitude and covariance spectrum.
+We measure layer-wise covariance alignment using the normalized Frobenius
+inner product
+$\operatorname{Align}_k=\langle\widetilde C_k,\widehat C_k^{\mathrm{OOD}}\rangle_F/(\|\widetilde C_k\|_F\|\widehat C_k^{\mathrm{OOD}}\|_F)$,
+where $\widetilde C_k$ is the synthesis covariance derived from the
+calibration estimate $C_k=\widehat{\Sigma}_k$ and
+$\widehat C_k^{\mathrm{OOD}}$ is the held-out OOD residual covariance.
+An alignment of one indicates proportional covariance matrices.
+Empirical geometry also has the highest alignment with held-out OOD
+residual covariances, with mean alignment decreasing from $0.818$ to
+$0.416$ under rotation (Figure~\ref{fig:disturbance-geometry}b).
+These results show that the empirical orientation of model mismatch
+contributes to the quality of robust steering.
+
+Replacing the covariance with an isotropic model produces a more severe
+degradation. Despite preserving total disturbance variance, isotropic
+synthesis yields largely empty or corrupted responses and an AXBench
+overall score of $0.005$. Retaining disturbance magnitude alone is
+therefore insufficient to preserve useful generation.
+Together, these comparisons show that steering quality depends on how
+disturbance variance is distributed and oriented within the state space.
+Empirical disturbance geometry preserves the measured
+directional structure of model mismatch and yields higher steering
+quality than either alternative under the same robust synthesis procedure.
