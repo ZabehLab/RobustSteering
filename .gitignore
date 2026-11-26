@@ -54,3 +54,4 @@ debug/*/runs/*
 
 tmp/*
 !tmp/README.md
+/pages/assets/paper.pdf

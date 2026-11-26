@@ -39,12 +39,7 @@
   },
   "asset_policy": "Final figures copied verbatim from Overleaf; no PDF extraction or replotting",
   "teal": {"hex": "#007C7C", "source": "StateTeal definition in arXiv_AppleStyle.tex"},
-  "paper_reference": {
-    "file": "assets/paper.pdf",
-    "source": "User-supplied current PDF, not a new compilation of the bundle",
-    "sha256": "6a9a474126314bf1764f6f7255a0b25b3a7f05a661e33f9eaabd571473b49959"
-  },
-  "public_paper_link": {"provider": "arXiv", "url": "https://github.com/ZabehLab/RobustSteering", "status": "User-requested local preview placeholder; replace with arXiv release URL before publication"},
+  "public_paper_link": {"provider": "arXiv", "url": "https://arxiv.org/abs/2611.06418"},
   "code_link": "https://github.com/ZabehLab/RobustSteering",
   "math_renderer": {"name": "MathJax", "version": "3.2.2", "component": "Local TeX/SVG bundle"},
   "excluded_content_sources": ["alternate manuscript drafts", "rudra.tex", "old benchmark exports"],
